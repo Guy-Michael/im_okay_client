@@ -1,13 +1,16 @@
 import 'dart:convert';
-
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:signalr_netcore/signalr_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:http/http.dart' as http;
 import 'Models/user.dart';
+import 'Models/user.dart';
+import 'Utils/http_utils.dart';
 
 void main() async {
   runApp(const MyApp());
+  HttpUtils.reportOkay();
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +38,13 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => LoginState();
 }
 
 class LoginState extends State<LoginForm> {
@@ -87,11 +97,4 @@ class LoginState extends State<LoginForm> {
     passwordController.dispose();
     super.dispose();
   }
-}
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
-
-  @override
-  State<LoginForm> createState() => LoginState();
 }

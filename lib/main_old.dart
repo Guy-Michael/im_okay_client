@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'Models/user.dart';
 
 const localDomain = "http://localhost";
-const localPort = "5273";
+const localPort = "5129";
 const serverDomain = "http://20.217.28.18";
 const serverPort = "5000";
 const hubRoute = "report";

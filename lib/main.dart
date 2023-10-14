@@ -1,37 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-const localServerUrl = "http://localhost:5000/report";
-const serverUrl = "http://20.217.28.18:5000/report";
-const bool isProduction = bool.fromEnvironment('dart.vm.product');
-late HubConnection hubConnection;
+import 'Models/user.dart';
 
 void main() async {
   runApp(const MyApp());
-  await initHubConnection();
-}
-
-Future<void> initHubConnection() async {
-  String url = isProduction ? serverUrl : localServerUrl;
-  hubConnection = HubConnectionBuilder().withUrl(url).build();
-  hubConnection.on("ReceiveMessage", onMessageReceived);
-  await hubConnection.start();
-  checkConnectionState();
-}
-
-void onMessageReceived(List<Object?>? list) {
-  String user = list?[0] as String;
-  String message = list?[1] as String;
-  Fluttertoast.showToast(msg: "$user sent $message");
-}
-
-void checkConnectionState() {
-  if (hubConnection.state != HubConnectionState.Connected) {
-    Fluttertoast.showToast(msg: "NOT Connected :(");
-    return;
-  }
-  Fluttertoast.showToast(msg: "Connected!");
 }
 
 class MyApp extends StatelessWidget {
@@ -61,8 +37,10 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+class LoginState extends State<LoginForm> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +50,16 @@ class LoginForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: usernameController,
+            decoration: const InputDecoration(
               labelText: 'Username',
             ),
           ),
           const SizedBox(height: 20),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: passwordController,
+            decoration: const InputDecoration(
               labelText: 'Password',
             ),
             obscureText: true,
@@ -87,14 +67,31 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () async {
-              await hubConnection
-                  .send("SendMessage", args: ["username", "test message"]);
-              Fluttertoast.showToast(msg: "Sending message..");
+              String username = usernameController.text;
+              String password = passwordController.text;
             },
+            child: const Text('Login'),
+          ),
+          ElevatedButton(
+            onPressed: () async {},
             child: const Text('send message'),
           ),
         ],
       ),
     );
   }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => LoginState();
 }

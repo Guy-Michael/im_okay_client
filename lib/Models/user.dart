@@ -5,7 +5,7 @@ class User {
   String hebName;
   String location;
   String password;
-  DateTime lastSeen;
+  int lastSeen;
 
   User(
       this.username, this.hebName, this.location, this.password, this.lastSeen);

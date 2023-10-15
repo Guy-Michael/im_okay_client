@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay_client/Pages/reports_page.dart';
+import 'package:im_okay_client/Utils/http_utils.dart';
+import 'package:im_okay_client/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,9 +18,6 @@ class LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -44,6 +44,8 @@ class LoginState extends State<LoginPage> {
                 onPressed: () async {
                   String username = usernameController.text;
                   String password = passwordController.text;
+
+                  onButtonLoginClicked(username, password);
                 },
                 child: const Text('Login'),
               ),
@@ -63,5 +65,19 @@ class LoginState extends State<LoginPage> {
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void onButtonLoginClicked(String username, String password) async {
+    bool loggedIn =
+        await HttpUtils.loginAndStoreCredentials(username, password);
+    debugPrint("conneted? : $loggedIn");
+    if (loggedIn) {
+      debugPrint("navigating to reports page..");
+
+      /*
+        MISSING NAVIGATION HERE!
+        HOW DO I DO THIS GODDDDD
+      */
+    }
   }
 }

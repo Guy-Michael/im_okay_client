@@ -2,31 +2,35 @@ import 'dart:convert';
 
 class User {
   String username;
-  String hebName;
+  String nameHeb;
   String location;
-  String password;
   int lastSeen;
+  String gender;
 
-  User(
-      this.username, this.hebName, this.location, this.password, this.lastSeen);
+  User(this.username, this.nameHeb, this.location, this.lastSeen, this.gender);
 
   User.fromJson(Map<String, dynamic> json)
       : username = getValueOrDefault(json, 'username'),
-        hebName = getValueOrDefault(json, 'hebName'),
+        nameHeb = getValueOrDefault(json, 'nameHeb'),
         location = getValueOrDefault(json, 'location'),
         lastSeen = getValueOrDefault(json, 'lastSeen'),
-        password = '' {}
+        gender = getValueOrDefault(json, 'gender');
 
-  static getValueOrDefault(Map<String, dynamic> json, key) {
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'nameHeb': nameHeb,
+      'location': location,
+      'lastSeen': lastSeen,
+      'gender': gender
+    };
+  }
+
+  static dynamic getValueOrDefault(Map<String, dynamic> json, key) {
     return json.containsKey(key) ? json[key] : '';
   }
 
-  getAccessToken() {
-    String accessToken = base64.encode(utf8.encode("$username:$password"));
-    return accessToken;
-  }
-
-  static generateAccessToken(String username, String password) {
+  static String generateAccessToken(String username, String password) {
     String accessToken = base64.encode(utf8.encode("$username:$password"));
     return accessToken;
   }

@@ -1,52 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Models/user.dart';
-import 'package:im_okay_client/Utils/http_utils.dart';
 
 class PersonList extends StatelessWidget {
-  late Future<List<User>> futureUsers;
+  final List<User> users;
+  const PersonList(this.users, {super.key});
 
-  PersonList({super.key}) {
-    futureUsers = HttpUtils.getAllUsers();
+  List<PersonWidget> generatePersonList() {
+    return users.map((User u) {
+      return PersonWidget(u.nameHeb, u.lastSeen);
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<User>>(
-      future: futureUsers,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<User>? users = snapshot.data;
-          List<Person>? people =
-              users?.map((User u) => Person(u.username)).toList();
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: people!);
-        }
-        return const CircularProgressIndicator();
-      },
-    );
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: generatePersonList());
   }
 }
 
-class Person extends StatefulWidget {
+class PersonWidget extends StatefulWidget {
   final String name;
-  final String lastSeen = "0";
+  final int? lastSeen;
 
-  Person(this.name, {super.key});
-
-  // void setLastSeen(int lastTimeSeen) {
-  //   lastSeen = Random().nextInt(10).toString();
-  // }
+  const PersonWidget(this.name, this.lastSeen, {super.key});
 
   @override
-  State<StatefulWidget> createState() => PersonState();
+  State<PersonWidget> createState() => PersonWidgetState();
 }
 
-class PersonState extends State<Person> {
-  PersonState();
+class PersonWidgetState extends State<PersonWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(Object context) {
+    String lastSeenDisplayVal = '0';
+    // lastSeenDisplayVal = widget.lastSeen!.toString();
+    if (widget.lastSeen! > -1) {
+      DateTime now = DateTime.now();
+      DateTime lastSeenTime =
+          DateTime.fromMillisecondsSinceEpoch(widget.lastSeen!);
+      int deltaInMinutes = now.difference(lastSeenTime).inSeconds;
+      lastSeenDisplayVal = deltaInMinutes.toString();
+    }
     return Container(
         height: 50.0,
         margin: const EdgeInsetsDirectional.only(top: 1),
@@ -58,7 +58,7 @@ class PersonState extends State<Person> {
           Text(widget.name, textScaleFactor: 2),
           const Spacer(flex: 1),
           Text(
-            '${widget.lastSeen} minutes ago',
+            '$lastSeenDisplayVal seconds ago',
             textScaleFactor: 2,
           )
         ]));

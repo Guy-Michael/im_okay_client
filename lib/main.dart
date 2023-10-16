@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Pages/reports_page.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';
-import 'package:im_okay_client/Utils/storage_utils.dart';
 import 'package:im_okay_client/Widgets/app_bar.dart';
 import 'package:im_okay_client/Pages/login_page.dart';
-
-GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+import 'package:provider/provider.dart';
 
 void main() async {
-  runApp(const ImOkayApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<UserList>(create: (context) => UserList())
+  ], child: const ImOkayApp()));
 }
 
 class ImOkayApp extends StatefulWidget {
@@ -30,18 +30,12 @@ class ImOkayAppState extends State<ImOkayApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
       home: const ReportsPage(),
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/reports': (context) => const ReportsPage()
-      },
       builder: (context, child) => Base(
           child: FutureBuilder<bool>(
         future: futureLoggedIn,
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data!) {
-            debugPrint('access token is: ${snapshot.data!}');
             return const ReportsPage();
           } else {
             return const LoginPage();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -44,15 +45,17 @@ class LoginState extends State<LoginPage> {
                             onPressed: () async {
                               String username = usernameController.text;
                               String password = passwordController.text;
-
                               onButtonLoginClicked(username, password);
                             },
-                            child: const Text('Login'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {},
-                            child: const Text('send message'),
-                          ),
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(200, 70),
+                                maximumSize: const Size(400, 200),
+                                backgroundColor: Colors.deepPurpleAccent),
+                            child: const Text(
+                              LoginConsts.loginCaption,
+                              textScaleFactor: 1.5,
+                            ),
+                          )
                         ],
                       ),
                     ),

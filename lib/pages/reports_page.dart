@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay_client/Models/user.dart';
@@ -35,29 +33,27 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-          Consumer<UserList>(builder: (context, value, child) {
-            return PersonList(value.users);
-          })
-        ]),
-        bottomSheet: Container(
-          height: 50,
-          margin: const EdgeInsets.only(bottom: 50),
-          alignment: Alignment.bottomCenter,
-          child: ElevatedButton(
-            onPressed: onReportButtonClicked,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(300, 100),
-              maximumSize: const Size(500, 300),
-              backgroundColor: Colors.deepPurpleAccent,
-            ),
-            child: Text(
-              ReportsPageConsts.reportButtonCaption(Gender.female),
-              style: const TextStyle(fontSize: 25),
-            ),
-          ),
-        ));
+    return Consumer<UserList>(
+        builder: (context, value, child) => Scaffold(
+            body: Column(children: [PersonList(value.users)]),
+            bottomSheet: Container(
+              height: 50,
+              margin: const EdgeInsets.only(bottom: 50),
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: onReportButtonClicked,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(300, 100),
+                  maximumSize: const Size(500, 300),
+                  backgroundColor: Colors.deepPurpleAccent,
+                ),
+                child: Text(
+                  ReportsPageConsts.reportButtonCaption(
+                      value.activeUser!.nameHeb, value.activeUser!.gender),
+                  style: const TextStyle(fontSize: 25),
+                ),
+              ),
+            )));
   }
 }
 

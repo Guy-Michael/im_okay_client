@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:im_okay_client/Models/user.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +13,7 @@ class HttpUtils {
   static bool _isProduction = const bool.fromEnvironment('dart.vm.product');
 
   static Uri composeUri(String endpoint) {
-    _isProduction = false;
+    _isProduction = true;
     String domain = _isProduction ? _serverDomain : _localDomain;
     String port = _isProduction ? _serverPort : _localPort;
     String url = "$domain:$port/api/login/$endpoint";

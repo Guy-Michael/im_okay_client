@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Models/user.dart';
+import 'package:im_okay_client/Utils/Consts/consts.dart';
 
 class PersonList extends StatelessWidget {
   final List<User> users;
@@ -7,7 +8,7 @@ class PersonList extends StatelessWidget {
 
   List<PersonWidget> generatePersonList() {
     return users.map((User u) {
-      return PersonWidget(u.nameHeb, u.lastSeen);
+      return PersonWidget(u.nameHeb, u.lastSeen, u.gender);
     }).toList();
   }
 
@@ -22,9 +23,10 @@ class PersonList extends StatelessWidget {
 
 class PersonWidget extends StatefulWidget {
   final String name;
+  final String gender;
   final int? lastSeen;
 
-  const PersonWidget(this.name, this.lastSeen, {super.key});
+  const PersonWidget(this.name, this.lastSeen, this.gender, {super.key});
 
   @override
   State<PersonWidget> createState() => PersonWidgetState();
@@ -38,14 +40,12 @@ class PersonWidgetState extends State<PersonWidget> {
 
   @override
   Widget build(Object context) {
-    String lastSeenDisplayVal = '0';
-    // lastSeenDisplayVal = widget.lastSeen!.toString();
-    if (widget.lastSeen! > -1) {
+    String lastSeenDisplayVal = LastSeenConsts.notReportedYet(widget.gender);
+    if (widget.lastSeen! > 0) {
       DateTime now = DateTime.now();
-      DateTime lastSeenTime =
-          DateTime.fromMillisecondsSinceEpoch(widget.lastSeen!);
-      int deltaInMinutes = now.difference(lastSeenTime).inSeconds;
-      lastSeenDisplayVal = deltaInMinutes.toString();
+      DateTime lastTime = DateTime.fromMillisecondsSinceEpoch(widget.lastSeen!);
+      int deltaInMinutes = now.difference(lastTime).inMinutes;
+      lastSeenDisplayVal = LastSeenConsts.xMinutesAgo(deltaInMinutes);
     }
     return Container(
         height: 50.0,
@@ -58,7 +58,7 @@ class PersonWidgetState extends State<PersonWidget> {
           Text(widget.name, textScaleFactor: 2),
           const Spacer(flex: 1),
           Text(
-            '$lastSeenDisplayVal seconds ago',
+            lastSeenDisplayVal,
             textScaleFactor: 2,
           )
         ]));

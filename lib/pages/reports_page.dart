@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay_client/Models/user.dart';
+import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Utils/storage_utils.dart';
 import 'package:im_okay_client/Widgets/person_list.dart';
+import 'package:im_okay_client/Widgets/purple_button.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends ChangeNotifier {
@@ -22,7 +24,7 @@ class UserList extends ChangeNotifier {
 
   UserList.params(List<User> users, User? user) {
     _users = users;
-    activeUser = user ?? User("", "", "", 0, "");
+    activeUser = user ?? User();
   }
 
   Future<void> updateAll() async {
@@ -48,30 +50,31 @@ class ReportsPage extends StatelessWidget {
     return Consumer<UserList>(
         builder: (context, value, child) => Scaffold(
             body: Column(children: [PersonList(value.users)]),
-            bottomSheet: Container(
-              height: 50,
-              margin: const EdgeInsets.only(bottom: 50),
-              alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                onPressed: onReportButtonClicked,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(300, 100),
-                  maximumSize: const Size(500, 300),
-                  backgroundColor: Colors.deepPurpleAccent,
-                ),
-                child: Text(
-                  ReportsPageConsts.reportButtonCaption(
-                      value.activeUser!.nameHeb, value.activeUser!.gender),
-                  style: const TextStyle(fontSize: 25),
-                ),
-              ),
+            bottomSheet: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PurpleButton(
+                    callback: onLogoutButtonClicked,
+                    caption:
+                        Consts.logoutButtonCaption(value.activeUser!.gender)),
+                PurpleButton(
+                    callback: onReportButtonClicked,
+                    caption: Consts.reportButtonCaption(
+                        value.activeUser!.nameHeb, value.activeUser!.gender))
+              ],
             )));
   }
-}
 
-void onReportButtonClicked() async {
-  bool reportedSuccessfully = await HttpUtils.reportOkay();
-  if (reportedSuccessfully) {
-    Fluttertoast.showToast(msg: ReportsPageConsts.reportedSuccessfully);
+  void onReportButtonClicked() async {
+    bool reportedSuccessfully = await HttpUtils.reportOkay();
+    if (reportedSuccessfully) {
+      Fluttertoast.showToast(msg: Consts.reportedSuccessfully);
+    }
+  }
+
+  void onLogoutButtonClicked() async {
+    debugPrint('logging out..');
+    await StorageUtils.removeCredentials();
+    RouterService.router.go(Routes.loginPage);
   }
 }

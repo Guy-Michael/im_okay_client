@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:im_okay_client/Models/user.dart';
 import 'package:http/http.dart' as http;
@@ -10,10 +11,9 @@ class HttpUtils {
   static const String _localPort = "5129";
   static const String _serverDomain = "http://20.217.26.29";
   static const String _serverPort = "80";
-  static bool _isProduction = const bool.fromEnvironment('dart.vm.product');
+  static const bool _isProduction = kReleaseMode;
 
   static Uri composeUri(String endpoint) {
-    _isProduction = true;
     String domain = _isProduction ? _serverDomain : _localDomain;
     String port = _isProduction ? _serverPort : _localPort;
     String url = "$domain:$port/api/login/$endpoint";
@@ -91,15 +91,21 @@ class HttpUtils {
     return users;
   }
 
-  static Future<T?> sendGetRequest<T>(String endpoint) async {
-    Uri uri = composeUri((endpoint));
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return null;
-    }
-    var headers = _getAuthorizationHeader(accessToken);
+  static Future<void> registerNewUser(
+      String name, String email, String password) async {
+    Uri uri = composeUri('register');
+    String body =
+        json.encode({'username': email, 'nameHeb': name, 'password': password});
+    Response response = await http.post(uri,
+        body: body,
+        headers: {HttpHeaders.contentTypeHeader: "application/json"});
 
-    // T? result = http.
+    if (response.statusCode == HttpStatus.ok) {
+      debugPrint('registration successful! OMG!');
+    } else {
+      debugPrint('registration failed :(');
+    }
+    return;
   }
 
   static Map<String, String> _getAuthorizationHeader(String accessToken) {

@@ -75,7 +75,7 @@ class HttpUtils {
   }
 
   static Future<List<User>> getOtherUsers() async {
-    Uri uri = composeUri("status");
+    Uri uri = composeUri("statusAll");
     String? accessToken = await StorageUtils.fetchAccessToken();
     if (accessToken == null) {
       return List.empty();
@@ -89,6 +89,17 @@ class HttpUtils {
     }).toList();
 
     return users;
+  }
+
+  static Future<T?> sendGetRequest<T>(String endpoint) async {
+    Uri uri = composeUri((endpoint));
+    String? accessToken = await StorageUtils.fetchAccessToken();
+    if (accessToken == null) {
+      return null;
+    }
+    var headers = _getAuthorizationHeader(accessToken);
+
+    // T? result = http.
   }
 
   static Map<String, String> _getAuthorizationHeader(String accessToken) {

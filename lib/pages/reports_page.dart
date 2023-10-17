@@ -20,11 +20,23 @@ class UserList extends ChangeNotifier {
     });
   }
 
+  UserList.params(List<User> users, User? user) {
+    _users = users;
+    activeUser = user ?? User("", "", "", 0, "");
+  }
+
   Future<void> updateAll() async {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
     _users = updatedUsers;
     activeUser = await StorageUtils.fetchUser();
     notifyListeners();
+  }
+
+  static Future<UserList> getUserList() async {
+    List<User> updatedUsers = await HttpUtils.getOtherUsers();
+    User? activeUser = await StorageUtils.fetchUser();
+
+    return UserList.params(updatedUsers, activeUser);
   }
 }
 

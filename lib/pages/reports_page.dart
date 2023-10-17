@@ -24,7 +24,7 @@ class UserList extends ChangeNotifier {
 
   UserList.params(List<User> users, User? user) {
     _users = users;
-    activeUser = user ?? User("", "", "", 0, "");
+    activeUser = user ?? User();
   }
 
   Future<void> updateAll() async {

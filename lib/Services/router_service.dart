@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class RouterService {
   static GoRouter router = GoRouter(
+    initialLocation: Routes.loginPage,
     routes: [
       GoRoute(
           path: Routes.loginPage,

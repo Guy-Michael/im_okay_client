@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
+import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Widgets/my_text_field.dart';
 import 'package:im_okay_client/Widgets/purple_button.dart';
 
@@ -51,6 +52,9 @@ class RegisterPage extends StatelessWidget {
     String lastName = _lastNameController.text;
     String password = _passwordController.text;
     String email = _emailController.text;
+    String fullName = '$firstName $lastName';
+
+    await HttpUtils.registerNewUser(fullName, email, password);
   }
 
   void navigateToLoginPage() async {

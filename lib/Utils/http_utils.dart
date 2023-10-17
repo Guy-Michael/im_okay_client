@@ -91,6 +91,23 @@ class HttpUtils {
     return users;
   }
 
+  static Future<void> registerNewUser(
+      String name, String email, String password) async {
+    Uri uri = composeUri('register');
+    String body =
+        json.encode({'username': email, 'nameHeb': name, 'password': password});
+    Response response = await http.post(uri,
+        body: body,
+        headers: {HttpHeaders.contentTypeHeader: "application/json"});
+
+    if (response.statusCode == HttpStatus.ok) {
+      debugPrint('registration successful! OMG!');
+    } else {
+      debugPrint('registration failed :(');
+    }
+    return;
+  }
+
   static Map<String, String> _getAuthorizationHeader(String accessToken) {
     return {'Authorization': accessToken};
   }

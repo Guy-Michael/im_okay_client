@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay_client/Utils/Consts/consts.dart';
 
 class PurpleButton extends StatelessWidget {
   late final Function() callback;

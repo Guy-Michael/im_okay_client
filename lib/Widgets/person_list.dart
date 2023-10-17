@@ -40,12 +40,12 @@ class PersonWidgetState extends State<PersonWidget> {
 
   @override
   Widget build(Object context) {
-    String lastSeenDisplayVal = LastSeenConsts.notReportedYet(widget.gender);
+    String lastSeenDisplayVal = Consts.notReportedYet(widget.gender);
     if (widget.lastSeen! > 0) {
       DateTime now = DateTime.now();
       DateTime lastTime = DateTime.fromMillisecondsSinceEpoch(widget.lastSeen!);
       int deltaInMinutes = now.difference(lastTime).inMinutes;
-      lastSeenDisplayVal = LastSeenConsts.xMinutesAgo(deltaInMinutes);
+      lastSeenDisplayVal = Consts.xMinutesAgo(deltaInMinutes);
     }
     return Container(
         height: 50.0,

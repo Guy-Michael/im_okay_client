@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js_interop_unsafe';
 
 import 'package:im_okay_client/Models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,5 +33,11 @@ class StorageUtils {
     }
     User user = User.fromJson(json.decode(userJson));
     return user;
+  }
+
+  static Future<void> removeCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(_accessTokenStorageKey);
+    prefs.remove(_userStorageKey);
   }
 }

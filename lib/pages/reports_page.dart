@@ -57,6 +57,7 @@ class ReportsPage extends StatelessWidget {
                     callback: onLogoutButtonClicked,
                     caption:
                         Consts.logoutButtonCaption(value.activeUser!.gender)),
+                const SizedBox(width: 20),
                 PurpleButton(
                     callback: onReportButtonClicked,
                     caption: Consts.reportButtonCaption(
@@ -73,7 +74,6 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onLogoutButtonClicked() async {
-    debugPrint('logging out..');
     await StorageUtils.removeCredentials();
     RouterService.router.go(Routes.loginPage);
   }

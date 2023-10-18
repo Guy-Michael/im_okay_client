@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Consts {
   static const String loginCaption = r'התחברות';
   static const String registerCaption = r'הרשמה';
@@ -39,4 +37,5 @@ class Routes {
   static const String loginPage = "/login";
   static const String reportsPage = "/report";
   static const String registrationPage = '/register';
+  static const String contactsPage = '/contacts';
 }

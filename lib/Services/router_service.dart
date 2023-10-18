@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
+import 'package:im_okay_client/Widgets/contact_list.dart';
 import 'package:im_okay_client/pages/login_page.dart';
 import 'package:im_okay_client/pages/register_page.dart';
 import 'package:im_okay_client/pages/reports_page.dart';
@@ -22,6 +23,10 @@ class RouterService {
       GoRoute(
         path: Routes.registrationPage,
         builder: (context, state) => RegisterPage(),
+      ),
+      GoRoute(
+        path: Routes.contactsPage,
+        builder: (context, state) => ContactListPage(),
       )
     ],
   );

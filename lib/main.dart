@@ -8,9 +8,8 @@ import 'package:im_okay_client/pages/reports_page.dart';
 
 void main() async {
   RouterService.router;
-  runApp(MaterialApp.router(
-      routerConfig: RouterService.router,
-      builder: (context, child) => ImOkayApp()));
+  runApp(MaterialApp(
+      home: MaterialApp.router(routerConfig: RouterService.router)));
 }
 
 class ImOkayApp extends StatefulWidget {
@@ -28,6 +27,6 @@ class ImOkayAppState extends State<ImOkayApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: AddFriendsPage());
+    return Scaffold(body: LoginPage());
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';
@@ -36,7 +37,7 @@ class LoginState extends State<LoginPage> {
             const SizedBox(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               PurpleButton(
-                  callback: onButtonRegisterClicked,
+                  callback: () => onButtonRegisterClicked(context),
                   caption: Consts.registerCaption),
               const SizedBox(width: 20),
               PurpleButton(
@@ -55,12 +56,13 @@ class LoginState extends State<LoginPage> {
         await HttpUtils.loginAndStoreCredentials(username, password);
     if (loggedIn) {
       debugPrint('logging in!');
-      RouterService.router.go(Routes.reportsPage);
+      RouterService.router.push(Routes.reportsPage);
     }
   }
 
-  void onButtonRegisterClicked() {
-    RouterService.router.go(Routes.registrationPage);
+  void onButtonRegisterClicked(BuildContext context) {
+    context.push(Routes.registrationPage);
+    // RouterService.router.push(Routes.registrationPage);
   }
 
   @override

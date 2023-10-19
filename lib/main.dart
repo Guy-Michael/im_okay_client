@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Services/router_service.dart';
-import 'package:im_okay_client/Utils/Consts/consts.dart';
-import 'package:im_okay_client/Utils/http_utils.dart';
-import 'package:im_okay_client/pages/add_friends_page.dart';
 import 'package:im_okay_client/pages/login_page.dart';
-import 'package:im_okay_client/pages/reports_page.dart';
 
 void main() async {
-  RouterService.router;
-  runApp(MaterialApp(
-      home: MaterialApp.router(routerConfig: RouterService.router)));
+  globalRouter;
+  runApp(const MaterialApp(home: ImOkayApp()));
 }
 
 class ImOkayApp extends StatefulWidget {
@@ -27,6 +22,8 @@ class ImOkayAppState extends State<ImOkayApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: LoginPage());
+    return MaterialApp.router(routerConfig: globalRouter);
+    // builder: (context, child) =>
+    //     Scaffold(body: LoginPage(key: widget.key)));
   }
 }

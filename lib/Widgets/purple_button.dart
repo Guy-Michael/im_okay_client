@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PurpleButton extends StatelessWidget {
-  late final Function() callback;
-  late final String caption;
+  final Function() callback;
+  final String caption;
 
-  PurpleButton({required this.callback, required this.caption, super.key});
+  const PurpleButton(
+      {required this.callback, required this.caption, super.key});
 
   @override
   Widget build(BuildContext context) {

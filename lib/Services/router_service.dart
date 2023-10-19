@@ -9,38 +9,44 @@ import 'package:im_okay_client/pages/register_page.dart';
 import 'package:im_okay_client/pages/reports_page.dart';
 import 'package:provider/provider.dart';
 
-class RouterService {
-  static GoRouter router = GoRouter(
-    initialLocation: Routes.loginPage,
-    overridePlatformDefaultLocation: true,
-    routes: [
-      GoRoute(
-          path: Routes.loginPage,
-          builder: (context, state) {
-            return LoginPage();
-          }),
-      GoRoute(
-          path: Routes.reportsPage,
-          builder: (context, state) => FutureProvider<UserList?>(
-                initialData: UserList.params([], null),
-                create: (context) => UserList.getUserList(),
-                child: const ReportsPage(),
-              )),
-      GoRoute(
-        path: Routes.registrationPage,
-        builder: (context, state) => RegisterPage(),
-      ),
-      GoRoute(
-        path: Routes.contactsPage,
-        builder: (context, state) => const ContactListPage(),
-      ),
-      GoRoute(
-          path: Routes.addFriendsPage,
-          builder: (context, state) => const AddFriendsPage()),
-    ],
-  );
-
-  static void routeFromIndex(int index) {
-    router.push(Routes.fromInt(index));
-  }
-}
+final _rootNavigationKey = GlobalKey<NavigatorState>();
+final GoRouter globalRouter = GoRouter(
+  initialLocation: Routes.loginPage,
+  navigatorKey: _rootNavigationKey,
+  routes: [
+    GoRoute(
+      parentNavigatorKey: _rootNavigationKey,
+      path: Routes.hub,
+      builder: (context, state) {
+        return const ImOkayApp();
+      },
+    ),
+    GoRoute(
+        parentNavigatorKey: _rootNavigationKey,
+        path: Routes.loginPage,
+        builder: (context, state) {
+          return const LoginPage();
+        }),
+    GoRoute(
+        parentNavigatorKey: _rootNavigationKey,
+        path: Routes.reportsPage,
+        builder: (context, state) => FutureProvider<UserList?>(
+              initialData: UserList.params([], null),
+              create: (context) => UserList.getUserList(),
+              child: const ReportsPage(),
+            )),
+    GoRoute(
+      parentNavigatorKey: _rootNavigationKey,
+      path: Routes.registrationPage,
+      builder: (context, state) => RegisterPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigationKey,
+      path: Routes.contactsPage,
+      builder: (context, state) => const ContactListPage(),
+    ),
+    GoRoute(
+        path: Routes.addFriendsPage,
+        builder: (context, state) => const AddFriendsPage()),
+  ],
+);

@@ -65,6 +65,6 @@ class RegisterPage extends StatelessWidget {
   }
 
   void navigateToLoginPage() async {
-    RouterService.router.go(Routes.loginPage);
+    globalRouter.push(Routes.loginPage);
   }
 }

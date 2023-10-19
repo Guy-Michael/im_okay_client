@@ -13,7 +13,8 @@ class AddFriendsPageState extends State<AddFriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+        body: Column(
       children: [
         Padding(
             padding: const EdgeInsets.all(16.0),
@@ -26,12 +27,12 @@ class AddFriendsPageState extends State<AddFriendsPage> {
           child: ListView.builder(
             itemCount: 100,
             itemBuilder: (context, index) {
-              return UserEntryWidget(userName: 'משתמש $index');
+              return UserEntryWidget(userName: 'משתמש ');
             },
           ),
         ),
       ],
-    );
+    ));
   }
 }
 

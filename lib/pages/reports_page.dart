@@ -47,23 +47,25 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserList>(
-        builder: (context, value, child) => Scaffold(
-            body: Column(children: [PersonList(value.users)]),
-            bottomSheet: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PurpleButton(
-                    callback: onLogoutButtonClicked,
-                    caption:
-                        Consts.logoutButtonCaption(value.activeUser!.gender)),
-                const SizedBox(width: 20),
-                PurpleButton(
-                    callback: onReportButtonClicked,
-                    caption: Consts.reportButtonCaption(
-                        value.activeUser!.nameHeb, value.activeUser!.gender))
-              ],
-            )));
+    return Scaffold(
+        body: Consumer<UserList>(
+            builder: (context, value, child) => Scaffold(
+                body: Column(children: [PersonList(value.users)]),
+                bottomSheet: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PurpleButton(
+                        callback: onLogoutButtonClicked,
+                        caption: Consts.logoutButtonCaption(
+                            value.activeUser!.gender)),
+                    const SizedBox(width: 20),
+                    PurpleButton(
+                        callback: onReportButtonClicked,
+                        caption: Consts.reportButtonCaption(
+                            value.activeUser!.nameHeb,
+                            value.activeUser!.gender))
+                  ],
+                ))));
   }
 
   void onReportButtonClicked() async {
@@ -75,10 +77,10 @@ class ReportsPage extends StatelessWidget {
 
   void onLogoutButtonClicked() async {
     await StorageUtils.removeCredentials();
-    RouterService.router.go(Routes.loginPage);
+    globalRouter.push(Routes.loginPage);
   }
 
   void onAddFriendsButtonClicked() async {
-    RouterService.router.go(Routes.addFriendsPage);
+    globalRouter.push(Routes.addFriendsPage);
   }
 }

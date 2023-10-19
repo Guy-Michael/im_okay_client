@@ -44,10 +44,10 @@ class HttpUtils {
       return false;
     }
 
-    User? user = User.fromJson(json.decode(response.body));
-    if (user != null) {
-      StorageUtils.storeUser(user);
-    }
+    User user = User.fromJson(json.decode(response.body));
+    StorageUtils.storeUser(user);
+
+    //UNCOMMENT TO ALLOW PERSISTENT LOGIN.
     // StorageUtils.storeAccessToken(accessToken);
     return true;
   }

@@ -19,7 +19,8 @@ class LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Scaffold(
+        body: Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -46,7 +47,7 @@ class LoginState extends State<LoginPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   void onButtonLoginClicked() async {
@@ -56,13 +57,12 @@ class LoginState extends State<LoginPage> {
         await HttpUtils.loginAndStoreCredentials(username, password);
     if (loggedIn) {
       debugPrint('logging in!');
-      RouterService.router.push(Routes.reportsPage);
+      globalRouter.push(Routes.reportsPage);
     }
   }
 
   void onButtonRegisterClicked(BuildContext context) {
-    context.push(Routes.registrationPage);
-    // RouterService.router.push(Routes.registrationPage);
+    globalRouter.push(Routes.registrationPage);
   }
 
   @override

@@ -22,10 +22,17 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              MyTextField(_firstNameController, Consts.firstName),
-              MyTextField(_lastNameController, Consts.lastName),
-              MyTextField(_passwordController, Consts.password),
-              MyTextField(_emailController, Consts.email),
+              MyTextField(
+                  inputController: _firstNameController,
+                  hintText: Consts.firstName),
+              MyTextField(
+                  inputController: _lastNameController,
+                  hintText: Consts.lastName),
+              MyTextField(
+                  inputController: _passwordController,
+                  hintText: Consts.password),
+              MyTextField(
+                  inputController: _emailController, hintText: Consts.email),
               const SizedBox(height: 50),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 PurpleButton(

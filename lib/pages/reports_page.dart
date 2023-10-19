@@ -77,4 +77,8 @@ class ReportsPage extends StatelessWidget {
     await StorageUtils.removeCredentials();
     RouterService.router.go(Routes.loginPage);
   }
+
+  void onAddFriendsButtonClicked() async {
+    RouterService.router.go(Routes.addFriendsPage);
+  }
 }

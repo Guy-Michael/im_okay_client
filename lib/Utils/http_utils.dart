@@ -48,7 +48,7 @@ class HttpUtils {
     if (user != null) {
       StorageUtils.storeUser(user);
     }
-    StorageUtils.storeAccessToken(accessToken);
+    // StorageUtils.storeAccessToken(accessToken);
     return true;
   }
 
@@ -65,6 +65,7 @@ class HttpUtils {
   }
 
   static Future<bool> validateLoginOnStartup() async {
+    debugPrint('validating!');
     String? accessToken = await StorageUtils.fetchAccessToken();
     if (accessToken == null) {
       return false;

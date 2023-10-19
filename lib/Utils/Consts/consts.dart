@@ -26,6 +26,8 @@ class Consts {
 
   static const String password = "סיסמה";
   static const String email = "אימייל";
+
+  static const String searchFriendsFieldHintText = "חפשו חברים";
 }
 
 class Gender {
@@ -38,4 +40,10 @@ class Routes {
   static const String reportsPage = "/report";
   static const String registrationPage = '/register';
   static const String contactsPage = '/contacts';
+  static const String addFriendsPage = '/addFriends';
+  static const String hub = '/main';
+
+  static String fromInt(int index) {
+    return [reportsPage, addFriendsPage][index];
+  }
 }

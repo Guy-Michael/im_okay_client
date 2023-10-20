@@ -11,7 +11,7 @@ import 'package:im_okay_client/Widgets/purple_button.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends ChangeNotifier {
-  User activeUser = User(username: "test", nameHeb: "מבחן");
+  User activeUser = User();
   List<User> users = [];
 
   UserList() {

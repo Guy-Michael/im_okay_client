@@ -24,23 +24,45 @@ class HubPageState extends State<HubPage> {
         ),
         body: list[selectedIndex].widget,
         bottomNavigationBar: NavigationBar(
+            selectedIndex: selectedIndex,
             onDestinationSelected: (value) {
               setState(
                 () {
+                  debugPrint("do");
                   selectedIndex = value;
                 },
               );
             },
             backgroundColor: Colors.amber,
             destinations: list
-                .map((e) =>
-                    NavigationDestination(label: e.label, icon: Icon(e.icon)))
+                .map((e) => NavigationDestination(
+                      label: e.label,
+                      icon: Icon(e.icon),
+                      selectedIcon: Icon(e.iconSelected),
+                    ))
                 .toList()));
   }
 }
 
-List<({Widget widget, String label, IconData icon})> list = [
-  const (widget: ReportsPage(), label: 'Home', icon: Icons.home),
-  const (widget: AddFriendsPage(), label: 'Add Friends', icon: Icons.plus_one),
-  const (widget: AddFriendsPage(), label: 'Settings', icon: Icons.settings),
+const List<
+        ({Widget widget, String label, IconData icon, IconData iconSelected})>
+    list = [
+  (
+    widget: ReportsPage(),
+    label: 'Home',
+    icon: Icons.home_outlined,
+    iconSelected: Icons.home
+  ),
+  (
+    widget: AddFriendsPage(),
+    label: 'Add Friends',
+    icon: Icons.plus_one_outlined,
+    iconSelected: Icons.plus_one
+  ),
+  (
+    widget: AddFriendsPage(),
+    label: 'Settings',
+    icon: Icons.settings_outlined,
+    iconSelected: Icons.settings
+  ),
 ];

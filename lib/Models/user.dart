@@ -8,8 +8,8 @@ class User {
   String gender;
 
   User(
-      {this.username = '',
-      this.nameHeb = '',
+      {this.username = 'test email',
+      this.nameHeb = 'test name',
       this.location = '',
       this.lastSeen = 0,
       this.gender = ''});

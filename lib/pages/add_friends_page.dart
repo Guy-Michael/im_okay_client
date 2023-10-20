@@ -27,7 +27,20 @@ class AddFriendsPageState extends State<AddFriendsPage> {
           child: ListView.builder(
             itemCount: 100,
             itemBuilder: (context, index) {
-              return Pair(name: 'שמובי מיכאל כעעעעע');
+              return Pair(
+                name: 'שמובי מיכאל כעעעעע',
+                appended: IconButton(
+                    // color: Color(0xffb4d3d7),
+                    style: ButtonStyle(
+                        fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)))),
+                    onPressed: () => debugPrint("pressed!"),
+                    alignment: Alignment.center,
+                    // decoration: BoxDecoration(
+                    //     color: const Color(0xffb4d3d7)),
+                    icon: const Icon(Icons.add)),
+              );
             },
           ),
         ),
@@ -64,44 +77,45 @@ class UserEntryWidget extends StatelessWidget {
 
 class Pair extends StatelessWidget {
   String name;
-
-  Pair({this.name = '', super.key});
+  Widget? appended;
+  Pair({this.name = '', this.appended, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(bottom: 5, right: 15),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          textDirection: TextDirection.rtl,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                width: 40,
-                height: 40,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: const Color(0xffb4d3d7)),
-                child: const Icon(Icons.add)),
-            const SizedBox(
-              width: 3,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 160,
-              height: 40,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: const Color(0xffb4d3d7)),
-              child: Text(name,
-                  textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  )),
-            ),
-          ],
+          children: _getChildren(),
         ));
+  }
+
+  List<Widget> _getChildren() {
+    List<Widget> list = [
+      Container(
+        alignment: Alignment.center,
+        width: 160,
+        height: 40,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color(0xffb4d3d7)),
+        child: Text(name,
+            textDirection: TextDirection.rtl,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            )),
+      )
+    ];
+
+    if (appended != null) {
+      list.add(const SizedBox(
+        width: 3,
+      ));
+      list.add(appended!);
+    }
+
+    return list;
   }
 }

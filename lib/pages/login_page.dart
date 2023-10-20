@@ -57,7 +57,7 @@ class LoginState extends State<LoginPage> {
         await HttpUtils.loginAndStoreCredentials(username, password);
     if (loggedIn) {
       debugPrint('logging in!');
-      globalRouter.push(Routes.reportsPage);
+      globalRouter.push(Routes.hub);
     }
   }
 

@@ -11,9 +11,8 @@ import 'package:im_okay_client/Widgets/purple_button.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends ChangeNotifier {
-  List<User> _users = [];
-  User? activeUser;
-  List<User> get users => _users;
+  User activeUser = User(username: "test", nameHeb: "מבחן");
+  List<User> users = [];
 
   UserList() {
     updateAll();
@@ -22,15 +21,14 @@ class UserList extends ChangeNotifier {
     });
   }
 
-  UserList.params(List<User> users, User? user) {
-    _users = users;
-    activeUser = user ?? User();
+  UserList.params({required this.users, User? activeUser}) {
+    activeUser = activeUser ?? User();
   }
 
   Future<void> updateAll() async {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
-    _users = updatedUsers;
-    activeUser = await StorageUtils.fetchUser();
+    users = updatedUsers;
+    activeUser = (await StorageUtils.fetchUser())!;
     notifyListeners();
   }
 
@@ -38,7 +36,7 @@ class UserList extends ChangeNotifier {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
     User? activeUser = await StorageUtils.fetchUser();
 
-    return UserList.params(updatedUsers, activeUser);
+    return UserList.params(users: updatedUsers, activeUser: activeUser);
   }
 }
 
@@ -47,25 +45,31 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Consumer<UserList>(
-            builder: (context, value, child) => Scaffold(
-                body: Column(children: [PersonList(value.users)]),
-                bottomSheet: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PurpleButton(
-                        callback: onLogoutButtonClicked,
-                        caption: Consts.logoutButtonCaption(
-                            value.activeUser!.gender)),
-                    const SizedBox(width: 20),
-                    PurpleButton(
-                        callback: onReportButtonClicked,
-                        caption: Consts.reportButtonCaption(
-                            value.activeUser!.nameHeb,
-                            value.activeUser!.gender))
-                  ],
-                ))));
+    return FutureProvider<UserList>(
+        initialData: UserList(),
+        create: (context) async {
+          List<User> users = await HttpUtils.getOtherUsers();
+          return UserList.params(users: users);
+        },
+        child: Scaffold(
+            body: Consumer<UserList>(
+                builder: (context, value, child) => Scaffold(
+                    body: ListView(children: [PersonList(value.users)]),
+                    bottomSheet: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PurpleButton(
+                            callback: onLogoutButtonClicked,
+                            caption: Consts.logoutButtonCaption(
+                                value.activeUser!.gender)),
+                        const SizedBox(width: 20),
+                        PurpleButton(
+                            callback: onReportButtonClicked,
+                            caption: Consts.reportButtonCaption(
+                                value.activeUser!.nameHeb,
+                                value.activeUser!.gender))
+                      ],
+                    )))));
   }
 
   void onReportButtonClicked() async {

@@ -45,10 +45,12 @@ class HttpUtils {
     }
 
     User user = User.fromJson(json.decode(response.body));
-    StorageUtils.storeUser(user);
+    StorageUtils.storeUser(User());
 
     //UNCOMMENT TO ALLOW PERSISTENT LOGIN.
-    // StorageUtils.storeAccessToken(accessToken);
+    // StorageUtils.storeAccessToken(
+    // User.generateAccessToken("guy.michael275@gmail.com", "275"));
+    StorageUtils.storeAccessToken(accessToken);
     return true;
   }
 

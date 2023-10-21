@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay_client/Models/user.dart';
@@ -6,39 +7,32 @@ import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Utils/storage_utils.dart';
-import 'package:im_okay_client/Widgets/person_list.dart';
+import 'package:im_okay_client/Widgets/Reports%20Page/friend.dart';
 import 'package:im_okay_client/Widgets/purple_button.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends ChangeNotifier {
-  List<User> _users = [];
-  User? activeUser;
-  List<User> get users => _users;
-
-  UserList() {
+  late User activeUser;
+  late List<User> users;
+  UserList({this.users = const [], this.activeUser = const User()}) {
     updateAll();
-    Timer.periodic(const Duration(seconds: 5), (timer) async {
-      await updateAll();
-    });
-  }
 
-  UserList.params(List<User> users, User? user) {
-    _users = users;
-    activeUser = user ?? User();
+    Timer.periodic(const Duration(seconds: 5), (timer) async {
+      // await updateAll();
+    });
   }
 
   Future<void> updateAll() async {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
-    _users = updatedUsers;
-    activeUser = await StorageUtils.fetchUser();
+    users = updatedUsers;
+    activeUser = (await StorageUtils.fetchUser());
     notifyListeners();
   }
 
   static Future<UserList> getUserList() async {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
-    User? activeUser = await StorageUtils.fetchUser();
-
-    return UserList.params(updatedUsers, activeUser);
+    User activeUser = (await StorageUtils.fetchUser());
+    return UserList(users: updatedUsers, activeUser: activeUser);
   }
 }
 
@@ -47,23 +41,39 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserList>(
-        builder: (context, value, child) => Scaffold(
-            body: Column(children: [PersonList(value.users)]),
-            bottomSheet: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PurpleButton(
-                    callback: onLogoutButtonClicked,
-                    caption:
-                        Consts.logoutButtonCaption(value.activeUser!.gender)),
-                const SizedBox(width: 20),
-                PurpleButton(
-                    callback: onReportButtonClicked,
-                    caption: Consts.reportButtonCaption(
-                        value.activeUser!.nameHeb, value.activeUser!.gender))
-              ],
-            )));
+    return FutureProvider<UserList>(
+        initialData: UserList(),
+        create: (context) async {
+          List<User> users = await HttpUtils.getOtherUsers();
+          User activeUser = (await StorageUtils.fetchUser());
+          return UserList(users: users, activeUser: activeUser);
+        },
+        catchError: (context, error) {
+          return UserList();
+        },
+        child: Scaffold(
+            body: Consumer<UserList>(
+                builder: (context, value, child) => Scaffold(
+                    body: ListView(
+                        children: value.users.map((User user) {
+                      return Friend(
+                          name: user.nameHeb, lastSeen: user.lastSeen);
+                    }).toList()),
+                    bottomSheet: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PurpleButton(
+                            callback: onLogoutButtonClicked,
+                            caption: Consts.logoutButtonCaption(
+                                value.activeUser.gender)),
+                        const SizedBox(width: 20),
+                        PurpleButton(
+                            callback: onReportButtonClicked,
+                            caption: Consts.reportButtonCaption(
+                                value.activeUser.nameHeb,
+                                value.activeUser.gender))
+                      ],
+                    )))));
   }
 
   void onReportButtonClicked() async {
@@ -74,7 +84,13 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onLogoutButtonClicked() async {
-    await StorageUtils.removeCredentials();
-    RouterService.router.go(Routes.loginPage);
+    await auth.FirebaseAuth.instance.signOut();
+
+    // await StorageUtils.removeCredentials();
+    globalRouter.push(Routes.authRedirectPage);
+  }
+
+  void onAddFriendsButtonClicked() async {
+    globalRouter.push(Routes.addFriendsPage);
   }
 }

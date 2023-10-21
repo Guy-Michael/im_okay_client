@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
@@ -22,10 +23,17 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              MyTextField(_firstNameController, Consts.firstName),
-              MyTextField(_lastNameController, Consts.lastName),
-              MyTextField(_passwordController, Consts.password),
-              MyTextField(_emailController, Consts.email),
+              MyTextField(
+                  inputController: _firstNameController,
+                  hintText: Consts.firstName),
+              MyTextField(
+                  inputController: _lastNameController,
+                  hintText: Consts.lastName),
+              MyTextField(
+                  inputController: _passwordController,
+                  hintText: Consts.password),
+              MyTextField(
+                  inputController: _emailController, hintText: Consts.email),
               const SizedBox(height: 50),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 PurpleButton(
@@ -54,10 +62,14 @@ class RegisterPage extends StatelessWidget {
     String email = _emailController.text;
     String fullName = '$firstName $lastName';
 
-    await HttpUtils.registerNewUser(fullName, email, password);
+    var a = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+
+    globalRouter.go(Routes.authRedirectPage);
+    // await HttpUtils.registerNewUser(fullName, email, password);
   }
 
   void navigateToLoginPage() async {
-    RouterService.router.go(Routes.loginPage);
+    globalRouter.push(Routes.authRedirectPage);
   }
 }

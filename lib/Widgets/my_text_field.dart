@@ -4,9 +4,14 @@ class MyTextField extends StatelessWidget {
   final TextEditingController inputController;
   final String hintText;
   final bool obscureText;
+  final IconData? icon;
 
-  const MyTextField(this.inputController, this.hintText,
-      {super.key, this.obscureText = false});
+  const MyTextField(
+      {required this.inputController,
+      required this.hintText,
+      super.key,
+      this.obscureText = false,
+      this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +20,14 @@ class MyTextField extends StatelessWidget {
         textDirection: TextDirection.rtl,
         textAlign: TextAlign.right,
         decoration: InputDecoration(
-          hintText: hintText,
-        ),
+            hintText: hintText,
+            suffixIcon: IconButton(
+              icon: Icon(icon),
+              onPressed: () {
+                // Handle the search functionality here
+                // You can filter userEntries based on the search query
+              },
+            )),
         obscureText: obscureText);
   }
 }

@@ -23,10 +23,7 @@ class HttpUtils {
 
   static Future<bool> reportOkay() async {
     Uri uriLogin = composeUri("report");
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return false;
-    }
+    String accessToken = await StorageUtils.fetchAccessToken();
 
     Map<String, String> headers = {'Authorization': accessToken};
     Response response = await http.get(uriLogin, headers: headers);
@@ -38,23 +35,22 @@ class HttpUtils {
       String username, String password) async {
     Uri uri = composeUri('');
     String accessToken = User.generateAccessToken(username, password);
-    var headers = _getAuthorizationHeader(accessToken);
+    var headers = await _getAuthorizationHeader(includeAuth: false);
     Response response = await http.get(uri, headers: headers);
     if (response.statusCode != HttpStatus.ok) {
       return false;
     }
 
-    User? user = User.fromJson(json.decode(response.body));
-    if (user != null) {
-      StorageUtils.storeUser(user);
-    }
+    User user = User.fromJson(json.decode(response.body));
+    StorageUtils.storeUser(user);
+
     StorageUtils.storeAccessToken(accessToken);
     return true;
   }
 
   static Future<bool> loginWithAccessToken(String accessToken) async {
     Uri uri = composeUri('');
-    var headers = _getAuthorizationHeader(accessToken);
+    var headers = await _getAuthorizationHeader();
     Response response = await http.get(uri, headers: headers);
 
     if (response.statusCode != 200) {
@@ -65,10 +61,8 @@ class HttpUtils {
   }
 
   static Future<bool> validateLoginOnStartup() async {
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return false;
-    }
+    debugPrint('validating!');
+    String accessToken = await StorageUtils.fetchAccessToken();
 
     bool loggedIn = await loginWithAccessToken(accessToken);
     return loggedIn;
@@ -76,12 +70,8 @@ class HttpUtils {
 
   static Future<List<User>> getOtherUsers() async {
     Uri uri = composeUri("statusAll");
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return List.empty();
-    }
 
-    var headers = _getAuthorizationHeader(accessToken);
+    var headers = await _getAuthorizationHeader();
     Response response = await http.get(uri, headers: headers);
     List temp = json.decode(response.body);
     List<User> users = temp.map((u) {
@@ -108,7 +98,33 @@ class HttpUtils {
     return;
   }
 
-  static Map<String, String> _getAuthorizationHeader(String accessToken) {
-    return {'Authorization': accessToken};
+  static Future<List<User>> queryFriends(String searchQuery) async {
+    Uri uri = composeUri('query');
+    var headers = await _getAuthorizationHeader();
+    String body = json.encode({'query': searchQuery});
+    Response response = await http.post(uri, headers: headers, body: body);
+
+    if (response.statusCode != HttpStatus.ok) {
+      throw Exception("could not execute query");
+    }
+
+    List<User> friends = json.decode(response.body);
+    return friends;
+  }
+
+  static Future<Map<String, String>> _getAuthorizationHeader(
+      {bool includeAuth = true}) async {
+    var headers = {HttpHeaders.contentTypeHeader: 'Application/json'};
+
+    if (includeAuth) {
+      try {
+        String accessToken = await StorageUtils.fetchAccessToken();
+        headers[HttpHeaders.authorizationHeader] = accessToken;
+      } catch (e) {
+        debugPrint("no access token found.");
+      }
+    }
+
+    return headers;
   }
 }

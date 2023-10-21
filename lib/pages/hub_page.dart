@@ -52,13 +52,13 @@ List<({Widget widget, String label, IconData icon, IconData iconSelected})>
     iconSelected: Icons.home
   ),
   (
-    widget: AddFriendsPage(),
+    widget: const AddFriendsPage(),
     label: 'Add Friends',
     icon: Icons.plus_one_outlined,
     iconSelected: Icons.plus_one
   ),
   (
-    widget: AddFriendsPage(),
+    widget: const AddFriendsPage(),
     label: 'Settings',
     icon: Icons.settings_outlined,
     iconSelected: Icons.settings

@@ -22,7 +22,7 @@ class StorageUtils {
     String? accessToken = prefs.getString(_accessTokenStorageKey);
 
     if (accessToken == null) {
-      throw new Exception("no access token found");
+      throw Exception("no access token found");
     }
     return accessToken;
   }

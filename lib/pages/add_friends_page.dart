@@ -4,7 +4,7 @@ import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Widgets/my_text_field.dart';
 
 class AddFriendsPage extends StatefulWidget {
-  AddFriendsPage({super.key});
+  const AddFriendsPage({super.key});
 
   @override
   AddFriendsPageState createState() => AddFriendsPageState();
@@ -32,7 +32,8 @@ class AddFriendsPageState extends State<AddFriendsPage> {
               hintText: 'חפשו חברים',
               icon: Icons.search,
             )),
-        ElevatedButton(child: Text("search"), onPressed: getSearchResults),
+        ElevatedButton(
+            onPressed: getSearchResults, child: const Text("search")),
         Wrap(
           children: [
             FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),

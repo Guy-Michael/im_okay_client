@@ -23,10 +23,7 @@ class HttpUtils {
 
   static Future<bool> reportOkay() async {
     Uri uriLogin = composeUri("report");
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return false;
-    }
+    String accessToken = await StorageUtils.fetchAccessToken();
 
     Map<String, String> headers = {'Authorization': accessToken};
     Response response = await http.get(uriLogin, headers: headers);
@@ -65,10 +62,7 @@ class HttpUtils {
 
   static Future<bool> validateLoginOnStartup() async {
     debugPrint('validating!');
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return false;
-    }
+    String accessToken = await StorageUtils.fetchAccessToken();
 
     bool loggedIn = await loginWithAccessToken(accessToken);
     return loggedIn;
@@ -76,10 +70,6 @@ class HttpUtils {
 
   static Future<List<User>> getOtherUsers() async {
     Uri uri = composeUri("statusAll");
-    String? accessToken = await StorageUtils.fetchAccessToken();
-    if (accessToken == null) {
-      return List.empty();
-    }
 
     var headers = await _getAuthorizationHeader();
     Response response = await http.get(uri, headers: headers);

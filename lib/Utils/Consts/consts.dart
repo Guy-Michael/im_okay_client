@@ -36,7 +36,7 @@ class Gender {
 }
 
 class Routes {
-  static const String loginPage = "/login";
+  static const String authRedirectPage = "/auth";
   static const String reportsPage = "report";
   static const String registrationPage = '/register';
   static const String contactsPage = '/contacts';

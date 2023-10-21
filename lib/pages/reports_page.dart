@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay_client/Models/user.dart';
@@ -83,8 +84,10 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onLogoutButtonClicked() async {
-    await StorageUtils.removeCredentials();
-    globalRouter.push(Routes.loginPage);
+    await auth.FirebaseAuth.instance.signOut();
+
+    // await StorageUtils.removeCredentials();
+    globalRouter.push(Routes.authRedirectPage);
   }
 
   void onAddFriendsButtonClicked() async {

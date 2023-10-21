@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
+import 'package:im_okay_client/pages/auth_redirect_page.dart';
 import 'package:im_okay_client/pages/hub_page.dart';
 import 'package:im_okay_client/pages/login_page.dart';
 import 'package:im_okay_client/pages/register_page.dart';
@@ -8,13 +9,13 @@ import 'package:im_okay_client/pages/register_page.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 
 final GoRouter globalRouter = GoRouter(
-  initialLocation: Routes.hub,
+  initialLocation: Routes.authRedirectPage,
   navigatorKey: _rootNavigationKey,
   routes: [
     GoRoute(
-        path: Routes.loginPage,
+        path: Routes.authRedirectPage,
         parentNavigatorKey: _rootNavigationKey,
-        builder: (context, state) => const LoginPage()),
+        builder: (context, state) => const AuthRedirectPage()),
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
       path: Routes.registrationPage,

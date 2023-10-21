@@ -27,20 +27,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
           child: ListView.builder(
             itemCount: 100,
             itemBuilder: (context, index) {
-              return Pair(
-                name: 'שמובי מיכאל כעעעעע',
-                appended: IconButton(
-                    // color: Color(0xffb4d3d7),
-                    style: ButtonStyle(
-                        fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)))),
-                    onPressed: () => debugPrint("pressed!"),
-                    alignment: Alignment.center,
-                    // decoration: BoxDecoration(
-                    //     color: const Color(0xffb4d3d7)),
-                    icon: const Icon(Icons.add)),
-              );
+              return FriendSearchResult(name: 'שמובי מיכאל כעעעעע');
             },
           ),
         ),
@@ -49,36 +36,10 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   }
 }
 
-class UserEntryWidget extends StatelessWidget {
-  final String userName;
-
-  const UserEntryWidget({super.key, required this.userName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(92, 155, 255, 255),
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Text(
-          userName,
-          textAlign: TextAlign.right,
-          textDirection: TextDirection.rtl,
-          textScaleFactor: 2,
-        ),
-      ),
-    );
-  }
-}
-
-class Pair extends StatelessWidget {
+class FriendSearchResult extends StatelessWidget {
   String name;
   Widget? appended;
-  Pair({this.name = '', this.appended, super.key});
+  FriendSearchResult({this.name = '', this.appended, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,35 +48,33 @@ class Pair extends StatelessWidget {
         child: Row(
           textDirection: TextDirection.rtl,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: _getChildren(),
+          children: _getList(name),
         ));
   }
 
-  List<Widget> _getChildren() {
-    List<Widget> list = [
-      Container(
-        alignment: Alignment.center,
-        width: 160,
-        height: 40,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: const Color(0xffb4d3d7)),
-        child: Text(name,
-            textDirection: TextDirection.rtl,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            )),
-      )
-    ];
-
-    if (appended != null) {
-      list.add(const SizedBox(
-        width: 3,
-      ));
-      list.add(appended!);
-    }
-
-    return list;
-  }
+  List<Widget> _getList(String name) => [
+        Container(
+          alignment: Alignment.center,
+          width: 160,
+          height: 40,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: const Color(0xffb4d3d7)),
+          child: Text(name,
+              textDirection: TextDirection.rtl,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              )),
+        ),
+        IconButton(
+            color: const Color(0xffb4d3d7),
+            style: ButtonStyle(
+                fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)))),
+            onPressed: () => debugPrint("pressed!"),
+            alignment: Alignment.center,
+            icon: const Icon(Icons.add))
+      ];
 }

@@ -36,6 +36,7 @@ class HttpUtils {
 
   static Future<bool> loginAndStoreCredentials(
       String username, String password) async {
+    //UNCOMMENT TO ALLOW PERSISTENT LOGIN.
     Uri uri = composeUri('');
     String accessToken = User.generateAccessToken(username, password);
     var headers = _getAuthorizationHeader(accessToken);
@@ -45,11 +46,8 @@ class HttpUtils {
     }
 
     User user = User.fromJson(json.decode(response.body));
-    StorageUtils.storeUser(User());
+    StorageUtils.storeUser(user);
 
-    //UNCOMMENT TO ALLOW PERSISTENT LOGIN.
-    // StorageUtils.storeAccessToken(
-    // User.generateAccessToken("guy.michael275@gmail.com", "275"));
     StorageUtils.storeAccessToken(accessToken);
     return true;
   }

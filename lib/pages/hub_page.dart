@@ -28,7 +28,6 @@ class HubPageState extends State<HubPage> {
             onDestinationSelected: (value) {
               setState(
                 () {
-                  debugPrint("do");
                   selectedIndex = value;
                 },
               );

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 class User {
-  String username;
-  String nameHeb;
-  String location;
-  int lastSeen;
-  String gender;
+  final String username;
+  final String nameHeb;
+  final String location;
+  final int lastSeen;
+  final String gender;
 
-  User(
-      {this.username = 'test email',
-      this.nameHeb = 'test name',
+  const User(
+      {this.username = '',
+      this.nameHeb = '',
       this.location = '',
       this.lastSeen = 0,
       this.gender = ''});

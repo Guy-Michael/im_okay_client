@@ -6,37 +6,32 @@ import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Utils/storage_utils.dart';
-import 'package:im_okay_client/Widgets/person_list.dart';
+import 'package:im_okay_client/Widgets/Reports%20Page/friend.dart';
 import 'package:im_okay_client/Widgets/purple_button.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends ChangeNotifier {
-  User activeUser = User();
-  List<User> users = [];
-
-  UserList() {
+  late User activeUser;
+  late List<User> users;
+  UserList({this.users = const [], this.activeUser = const User()}) {
     updateAll();
+
     Timer.periodic(const Duration(seconds: 5), (timer) async {
       await updateAll();
     });
   }
 
-  UserList.params({required this.users, User? activeUser}) {
-    activeUser = activeUser ?? User();
-  }
-
   Future<void> updateAll() async {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
     users = updatedUsers;
-    activeUser = (await StorageUtils.fetchUser())!;
+    activeUser = (await StorageUtils.fetchUser());
     notifyListeners();
   }
 
   static Future<UserList> getUserList() async {
     List<User> updatedUsers = await HttpUtils.getOtherUsers();
-    User? activeUser = await StorageUtils.fetchUser();
-
-    return UserList.params(users: updatedUsers, activeUser: activeUser);
+    User activeUser = (await StorageUtils.fetchUser());
+    return UserList(users: updatedUsers, activeUser: activeUser);
   }
 }
 
@@ -49,25 +44,33 @@ class ReportsPage extends StatelessWidget {
         initialData: UserList(),
         create: (context) async {
           List<User> users = await HttpUtils.getOtherUsers();
-          return UserList.params(users: users);
+          User activeUser = (await StorageUtils.fetchUser());
+          return UserList(users: users, activeUser: activeUser);
+        },
+        catchError: (context, error) {
+          return UserList();
         },
         child: Scaffold(
             body: Consumer<UserList>(
                 builder: (context, value, child) => Scaffold(
-                    body: ListView(children: [PersonList(value.users)]),
+                    body: ListView(
+                        children: value.users.map((User user) {
+                      return Friend(
+                          name: user.nameHeb, lastSeen: user.lastSeen);
+                    }).toList()),
                     bottomSheet: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         PurpleButton(
                             callback: onLogoutButtonClicked,
                             caption: Consts.logoutButtonCaption(
-                                value.activeUser!.gender)),
+                                value.activeUser.gender)),
                         const SizedBox(width: 20),
                         PurpleButton(
                             callback: onReportButtonClicked,
                             caption: Consts.reportButtonCaption(
-                                value.activeUser!.nameHeb,
-                                value.activeUser!.gender))
+                                value.activeUser.nameHeb,
+                                value.activeUser.gender))
                       ],
                     )))));
   }

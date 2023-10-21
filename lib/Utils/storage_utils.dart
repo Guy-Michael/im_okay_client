@@ -23,11 +23,11 @@ class StorageUtils {
     return accessToken;
   }
 
-  static Future<User?> fetchUser() async {
+  static Future<User> fetchUser() async {
     final prefs = await SharedPreferences.getInstance();
     String? userJson = prefs.getString(_userStorageKey);
     if (userJson == null) {
-      return null;
+      throw Exception("no stored user");
     }
     User user = User.fromJson(json.decode(userJson));
     return user;

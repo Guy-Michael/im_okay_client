@@ -17,9 +17,13 @@ class StorageUtils {
     await prefs.setString(_userStorageKey, jsonUser);
   }
 
-  static Future<String?> fetchAccessToken() async {
+  static Future<String> fetchAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString(_accessTokenStorageKey);
+
+    if (accessToken == null) {
+      throw new Exception("no access token found");
+    }
     return accessToken;
   }
 

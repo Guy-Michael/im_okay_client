@@ -17,7 +17,7 @@ class UserList extends ChangeNotifier {
     updateAll();
 
     Timer.periodic(const Duration(seconds: 5), (timer) async {
-      await updateAll();
+      // await updateAll();
     });
   }
 

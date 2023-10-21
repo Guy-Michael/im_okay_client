@@ -43,11 +43,10 @@ class HubPageState extends State<HubPage> {
   }
 }
 
-const List<
-        ({Widget widget, String label, IconData icon, IconData iconSelected})>
+List<({Widget widget, String label, IconData icon, IconData iconSelected})>
     list = [
   (
-    widget: ReportsPage(),
+    widget: const ReportsPage(),
     label: 'Home',
     icon: Icons.home_outlined,
     iconSelected: Icons.home

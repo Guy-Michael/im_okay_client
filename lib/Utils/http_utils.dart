@@ -36,10 +36,9 @@ class HttpUtils {
 
   static Future<bool> loginAndStoreCredentials(
       String username, String password) async {
-    //UNCOMMENT TO ALLOW PERSISTENT LOGIN.
     Uri uri = composeUri('');
     String accessToken = User.generateAccessToken(username, password);
-    var headers = _getAuthorizationHeader(accessToken);
+    var headers = await _getAuthorizationHeader(includeAuth: false);
     Response response = await http.get(uri, headers: headers);
     if (response.statusCode != HttpStatus.ok) {
       return false;
@@ -54,7 +53,7 @@ class HttpUtils {
 
   static Future<bool> loginWithAccessToken(String accessToken) async {
     Uri uri = composeUri('');
-    var headers = _getAuthorizationHeader(accessToken);
+    var headers = await _getAuthorizationHeader();
     Response response = await http.get(uri, headers: headers);
 
     if (response.statusCode != 200) {
@@ -82,7 +81,7 @@ class HttpUtils {
       return List.empty();
     }
 
-    var headers = _getAuthorizationHeader(accessToken);
+    var headers = await _getAuthorizationHeader();
     Response response = await http.get(uri, headers: headers);
     List temp = json.decode(response.body);
     List<User> users = temp.map((u) {
@@ -109,7 +108,33 @@ class HttpUtils {
     return;
   }
 
-  static Map<String, String> _getAuthorizationHeader(String accessToken) {
-    return {'Authorization': accessToken};
+  static Future<List<User>> queryFriends(String searchQuery) async {
+    Uri uri = composeUri('query');
+    var headers = await _getAuthorizationHeader();
+    String body = json.encode({'query': searchQuery});
+    Response response = await http.post(uri, headers: headers, body: body);
+
+    if (response.statusCode != HttpStatus.ok) {
+      throw Exception("could not execute query");
+    }
+
+    List<User> friends = json.decode(response.body);
+    return friends;
+  }
+
+  static Future<Map<String, String>> _getAuthorizationHeader(
+      {bool includeAuth = true}) async {
+    var headers = {HttpHeaders.contentTypeHeader: 'Application/json'};
+
+    if (includeAuth) {
+      try {
+        String accessToken = await StorageUtils.fetchAccessToken();
+        headers[HttpHeaders.authorizationHeader] = accessToken;
+      } catch (e) {
+        debugPrint("no access token found.");
+      }
+    }
+
+    return headers;
   }
 }

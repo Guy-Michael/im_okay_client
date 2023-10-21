@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay_client/Models/user.dart';
+import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Widgets/my_text_field.dart';
 
 class AddFriendsPage extends StatefulWidget {
-  const AddFriendsPage({super.key});
+  AddFriendsPage({super.key});
 
   @override
   AddFriendsPageState createState() => AddFriendsPageState();
@@ -10,6 +12,13 @@ class AddFriendsPage extends StatefulWidget {
 
 class AddFriendsPageState extends State<AddFriendsPage> {
   TextEditingController searchController = TextEditingController();
+
+  Future<List<User>> getSearchResults() async {
+    String searchQuery = searchController.text;
+    List<User> list = await HttpUtils.queryFriends(searchQuery);
+    debugPrint(list.toString());
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,24 +32,34 @@ class AddFriendsPageState extends State<AddFriendsPage> {
               hintText: 'חפשו חברים',
               icon: Icons.search,
             )),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 100,
-            itemBuilder: (context, index) {
-              return FriendSearchResult(name: 'שמובי מיכאל כעעעעע');
-            },
-          ),
+        ElevatedButton(child: Text("search"), onPressed: getSearchResults),
+        Wrap(
+          children: [
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            FriendSearchResult(name: 'שמובי מיכאל כעעעעע')
+          ],
         ),
       ],
     ));
   }
 }
 
-class FriendSearchResult extends StatelessWidget {
-  String name;
-  Widget? appended;
+class FriendSearchResult extends StatefulWidget {
+  final String name;
+  final Widget? appended;
+
   FriendSearchResult({this.name = '', this.appended, super.key});
 
+  @override
+  State<FriendSearchResult> createState() => FriendSearchResultState();
+}
+
+class FriendSearchResultState extends State<FriendSearchResult> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,33 +67,33 @@ class FriendSearchResult extends StatelessWidget {
         child: Row(
           textDirection: TextDirection.rtl,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: _getList(name),
+          children: _getList(widget.name),
         ));
   }
-
-  List<Widget> _getList(String name) => [
-        Container(
-          alignment: Alignment.center,
-          width: 160,
-          height: 40,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color(0xffb4d3d7)),
-          child: Text(name,
-              textDirection: TextDirection.rtl,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              )),
-        ),
-        IconButton(
-            color: const Color(0xffb4d3d7),
-            style: ButtonStyle(
-                fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
-                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)))),
-            onPressed: () => debugPrint("pressed!"),
-            alignment: Alignment.center,
-            icon: const Icon(Icons.add))
-      ];
 }
+
+List<Widget> _getList(String name) => [
+      Container(
+        alignment: Alignment.center,
+        width: 160,
+        height: 40,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color(0xffb4d3d7)),
+        child: Text(name,
+            textDirection: TextDirection.rtl,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            )),
+      ),
+      IconButton(
+          color: const Color(0xffb4d3d7),
+          style: ButtonStyle(
+              fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
+              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)))),
+          onPressed: () => debugPrint("pressed!"),
+          alignment: Alignment.center,
+          icon: const Icon(Icons.add))
+    ];

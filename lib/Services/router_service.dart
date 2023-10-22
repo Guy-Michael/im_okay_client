@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/pages/auth_redirect_page.dart';
 import 'package:im_okay_client/pages/hub_page.dart';
-import 'package:im_okay_client/pages/login_page.dart';
 import 'package:im_okay_client/pages/register_page.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();

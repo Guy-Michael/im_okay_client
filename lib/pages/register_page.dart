@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
-import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Widgets/my_text_field.dart';
 import 'package:im_okay_client/Widgets/purple_button.dart';
 
@@ -62,7 +61,7 @@ class RegisterPage extends StatelessWidget {
     String email = _emailController.text;
     String fullName = '$firstName $lastName';
 
-    var a = await FirebaseAuth.instance
+    await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
     globalRouter.go(Routes.authRedirectPage);

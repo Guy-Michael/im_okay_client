@@ -7,8 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:im_okay_client/main.dart';
 import 'package:im_okay_client/pages/hub_page.dart';
 
 void main() {

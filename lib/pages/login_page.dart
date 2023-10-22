@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
@@ -55,7 +54,7 @@ class LoginState extends State<LoginPage> {
     String password = passwordController.text.trim();
 
     //NEW SIGNIN USING FIREBASE
-    var auth = await FirebaseAuth.instance
+    await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: username, password: password);
 
     globalRouter.push(Routes.hub);

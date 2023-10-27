@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:im_okay_client/Models/user.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
 import 'package:im_okay_client/Utils/http_utils.dart';

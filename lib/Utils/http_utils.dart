@@ -20,7 +20,8 @@ enum UsersController {
   fullUserDataEndpoint('full-user-data'),
   findFriendsEndpoint('find-friends'),
   reportEndpoint('report'),
-  friendsStatusEndpoint('friends-status');
+  friendsStatusEndpoint('friends-status'),
+  addFriendsEndpoint('add-friend');
 
   final String value;
   const UsersController(this.value);
@@ -158,6 +159,19 @@ class HttpUtils {
     User user = User.fromJson(json.decode(response.body));
 
     return user;
+  }
+
+  static void sendFriendRequestToUser({required User friend}) {
+    Uri uri = composeUri(
+        route: UsersController.route.value,
+        endpoint: UsersController.addFriendsEndpoint.value);
+
+    var headers = _getHeaders();
+    String requestorUid = auth.FirebaseAuth.instance.currentUser!.uid;
+    String body = json
+        .encode({'requestorUid': requestorUid, 'friendEmail': friend.email});
+
+    http.post(uri, body: body, headers: headers);
   }
 
   static Map<String, String> _getHeaders() {

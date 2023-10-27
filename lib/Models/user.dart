@@ -1,31 +1,33 @@
 import 'dart:convert';
 
 class User {
-  final String username;
-  final String nameHeb;
-  final String location;
-  final int lastSeen;
+  final String email;
+  final String firstName;
+  final String lastName;
   final String gender;
+  final int lastSeen;
+
+  String get fullName => "$firstName $lastName";
 
   const User(
-      {this.username = '',
-      this.nameHeb = '',
-      this.location = '',
+      {this.email = '',
+      this.firstName = '',
+      this.lastName = '',
       this.lastSeen = 0,
       this.gender = ''});
 
   User.fromJson(Map<String, dynamic> json)
-      : username = getValueOrDefault(json, 'username'),
-        nameHeb = getValueOrDefault(json, 'nameHeb'),
-        location = getValueOrDefault(json, 'location'),
+      : email = getValueOrDefault(json, 'email'),
+        firstName = getValueOrDefault(json, 'firstName'),
+        lastName = getValueOrDefault(json, 'lastName'),
         lastSeen = getValueOrDefault(json, 'lastSeen'),
         gender = getValueOrDefault(json, 'gender');
 
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
-      'nameHeb': nameHeb,
-      'location': location,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
       'lastSeen': lastSeen,
       'gender': gender
     };

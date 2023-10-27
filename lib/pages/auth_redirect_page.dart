@@ -13,7 +13,6 @@ class AuthRedirectPage extends StatelessWidget {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                debugPrint(snapshot.data!.toString());
                 return const HubPage();
               }
 

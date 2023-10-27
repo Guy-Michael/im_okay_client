@@ -12,12 +12,18 @@ class AddFriendsPage extends StatefulWidget {
 
 class AddFriendsPageState extends State<AddFriendsPage> {
   TextEditingController searchController = TextEditingController();
+  List<FriendSearchResult> searchList = [];
 
-  Future<List<User>> getSearchResults() async {
+  void getSearchResults() async {
     String searchQuery = searchController.text;
-    List<User> list = await HttpUtils.queryFriends(searchQuery);
-    debugPrint(list.toString());
-    return list;
+    searchList = (await HttpUtils.queryFriends(searchQuery))
+        .map((e) => FriendSearchResult(user: e, onAddClicked: onAddClicked))
+        .toList();
+    setState(() {});
+  }
+
+  void onAddClicked(User user) {
+    HttpUtils.sendFriendRequestToUser(friend: user);
   }
 
   @override
@@ -34,27 +40,18 @@ class AddFriendsPageState extends State<AddFriendsPage> {
             )),
         ElevatedButton(
             onPressed: getSearchResults, child: const Text("search")),
-        Wrap(
-          children: [
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע')
-          ],
-        ),
+        Wrap(children: searchList),
       ],
     ));
   }
 }
 
 class FriendSearchResult extends StatefulWidget {
-  final String name;
-  final Widget? appended;
+  final User user;
+  final Function(User user) onAddClicked;
 
-  FriendSearchResult({this.name = '', this.appended, super.key});
+  const FriendSearchResult(
+      {required this.user, required this.onAddClicked, super.key});
 
   @override
   State<FriendSearchResult> createState() => FriendSearchResultState();
@@ -68,12 +65,15 @@ class FriendSearchResultState extends State<FriendSearchResult> {
         child: Row(
           textDirection: TextDirection.rtl,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: _getList(widget.name),
+          children:
+              _getList(user: widget.user, onAddClicked: widget.onAddClicked),
         ));
   }
 }
 
-List<Widget> _getList(String name) => [
+List<Widget> _getList(
+        {required User user, required Function(User) onAddClicked}) =>
+    [
       Container(
         alignment: Alignment.center,
         width: 160,
@@ -81,7 +81,7 @@ List<Widget> _getList(String name) => [
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: const Color(0xffb4d3d7)),
-        child: Text(name,
+        child: Text(user.fullName,
             textDirection: TextDirection.rtl,
             style: const TextStyle(
               fontSize: 16,
@@ -94,7 +94,7 @@ List<Widget> _getList(String name) => [
               fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)))),
-          onPressed: () => debugPrint("pressed!"),
+          onPressed: () => onAddClicked(user),
           alignment: Alignment.center,
           icon: const Icon(Icons.add))
     ];

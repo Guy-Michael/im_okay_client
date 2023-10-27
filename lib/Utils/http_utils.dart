@@ -18,7 +18,7 @@ enum UsersController {
   route('users'),
   registerEndpoint('register'),
   fullUserDataEndpoint('full-user-data'),
-  findFriendsEndpoint('find'),
+  findFriendsEndpoint('find-friends'),
   reportEndpoint('report'),
   friendsStatusEndpoint('friends-status');
 
@@ -130,7 +130,10 @@ class HttpUtils {
       throw Exception("could not execute query");
     }
 
-    List<User> friends = json.decode(response.body);
+    List<User> friends = List<dynamic>.from(json.decode(response.body))
+        .map((e) => User.fromJson(e))
+        .toList();
+    // List<User> friends = map.map((key, value) => null)
     return friends;
   }
 

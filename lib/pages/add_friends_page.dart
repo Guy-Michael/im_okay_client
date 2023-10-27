@@ -12,11 +12,14 @@ class AddFriendsPage extends StatefulWidget {
 
 class AddFriendsPageState extends State<AddFriendsPage> {
   TextEditingController searchController = TextEditingController();
+  List<FriendSearchResult> searchList = [];
 
-  Future<List<User>> getSearchResults() async {
+  void getSearchResults() async {
     String searchQuery = searchController.text;
-    List<User> list = await HttpUtils.queryFriends(searchQuery);
-    return list;
+    searchList = (await HttpUtils.queryFriends(searchQuery))
+        .map((e) => FriendSearchResult(name: "${e.firstName} ${e.lastName}"))
+        .toList();
+    setState(() {});
   }
 
   @override
@@ -33,17 +36,17 @@ class AddFriendsPageState extends State<AddFriendsPage> {
             )),
         ElevatedButton(
             onPressed: getSearchResults, child: const Text("search")),
-        Wrap(
-          children: [
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
-            FriendSearchResult(name: 'שמובי מיכאל כעעעעע')
-          ],
-        ),
+        Wrap(children: searchList
+            // [
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע'),
+            //   FriendSearchResult(name: 'שמובי מיכאל כעעעעע')
+            // ],
+            ),
       ],
     ));
   }

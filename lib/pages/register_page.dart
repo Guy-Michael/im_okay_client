@@ -1,7 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:im_okay_client/Models/user.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
+import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Widgets/my_text_field.dart';
 import 'package:im_okay_client/Widgets/purple_button.dart';
 
@@ -59,13 +62,22 @@ class RegisterPage extends StatelessWidget {
     String lastName = _lastNameController.text;
     String password = _passwordController.text;
     String email = _emailController.text;
-    String fullName = '$firstName $lastName';
+    String gender = Gender.female;
 
-    await FirebaseAuth.instance
+    var credential = await auth.FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
-    globalRouter.go(Routes.authRedirectPage);
-    // await HttpUtils.registerNewUser(fullName, email, password);
+    // (await credential.user.getIdTokenResult()).claims
+
+    String? token = await credential.user?.getIdToken();
+    User user = User(firstName: firstName, lastName: lastName, gender: gender);
+
+    await HttpUtils.registerNewUser(token: token!, user: user);
+
+    await Future.delayed(const Duration(seconds: 2),
+        () => globalRouter.go(Routes.authRedirectPage));
+
+    Fluttertoast.showToast(msg: "נרשמת בהצלחה!");
   }
 
   void navigateToLoginPage() async {

@@ -16,7 +16,6 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   Future<List<User>> getSearchResults() async {
     String searchQuery = searchController.text;
     List<User> list = await HttpUtils.queryFriends(searchQuery);
-    debugPrint(list.toString());
     return list;
   }
 

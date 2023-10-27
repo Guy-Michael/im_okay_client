@@ -1,10 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:im_okay_client/Models/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:im_okay_client/Utils/storage_utils.dart';
+
+enum LoginController {
+  route("login"),
+  validateEndpoint("validate");
+
+  final String value;
+  const LoginController(this.value);
+}
+
+enum UsersController {
+  route('users'),
+  registerEndpoint('register'),
+  fullUserDataEndpoint('full-user-data'),
+  findFriendsEndpoint('find'),
+  reportEndpoint('report'),
+  friendsStatusEndpoint('friends-status');
+
+  final String value;
+  const UsersController(this.value);
+}
 
 class HttpUtils {
   static const String _localDomain = "http://localhost";
@@ -13,45 +33,40 @@ class HttpUtils {
   static const String _serverPort = "80";
   static const bool _isProduction = kReleaseMode;
 
-  static Uri composeUri(String endpoint) {
+  static Uri composeUri({required String route, required String endpoint}) {
     String domain = _isProduction ? _serverDomain : _localDomain;
     String port = _isProduction ? _serverPort : _localPort;
-    String url = "$domain:$port/api/login/$endpoint";
+    String url = "$domain:$port/$route/$endpoint";
     Uri uri = Uri.parse(url);
     return uri;
   }
 
   static Future<bool> reportOkay() async {
-    Uri uriLogin = composeUri("report");
-    String accessToken = await StorageUtils.fetchAccessToken();
+    Uri uriLogin = composeUri(
+        route: UsersController.route.value,
+        endpoint: UsersController.reportEndpoint.value);
 
-    Map<String, String> headers = {'Authorization': accessToken};
-    Response response = await http.get(uriLogin, headers: headers);
+    var headers = _getHeaders();
+    String? uid = auth.FirebaseAuth.instance.currentUser?.uid;
+    String body = json.encode({'uid': uid});
+    Response response = await http.post(uriLogin, body: body, headers: headers);
 
     return response.statusCode == HttpStatus.ok;
   }
 
-  static Future<bool> loginAndStoreCredentials(
-      String username, String password) async {
-    Uri uri = composeUri('');
-    String accessToken = User.generateAccessToken(username, password);
-    var headers = await _getAuthorizationHeader(includeAuth: false);
-    Response response = await http.get(uri, headers: headers);
-    if (response.statusCode != HttpStatus.ok) {
-      return false;
-    }
+  static Future<bool> validateLogin(
+      {required String username, required String password}) async {
+    auth.UserCredential credentials = await auth.FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: username, password: password);
 
-    User user = User.fromJson(json.decode(response.body));
-    StorageUtils.storeUser(user);
+    Uri uri = composeUri(
+        route: LoginController.route.value,
+        endpoint: LoginController.validateEndpoint.value);
+    var token = await credentials.user?.getIdToken();
 
-    StorageUtils.storeAccessToken(accessToken);
-    return true;
-  }
-
-  static Future<bool> loginWithAccessToken(String accessToken) async {
-    Uri uri = composeUri('');
-    var headers = await _getAuthorizationHeader();
-    Response response = await http.get(uri, headers: headers);
+    var headers = _getHeaders();
+    String body = json.encode({'token': token});
+    Response response = await http.post(uri, body: body, headers: headers);
 
     if (response.statusCode != 200) {
       return false;
@@ -60,19 +75,20 @@ class HttpUtils {
     return true;
   }
 
-  static Future<bool> validateLoginOnStartup() async {
-    debugPrint('validating!');
-    String accessToken = await StorageUtils.fetchAccessToken();
+  static Future<List<User>> getAllFriends() async {
+    Uri uri = composeUri(
+        route: UsersController.route.value,
+        endpoint: UsersController.friendsStatusEndpoint.value);
 
-    bool loggedIn = await loginWithAccessToken(accessToken);
-    return loggedIn;
-  }
+    auth.User? user = auth.FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception();
+    }
 
-  static Future<List<User>> getOtherUsers() async {
-    Uri uri = composeUri("statusAll");
+    String body = json.encode({'uid': user.uid});
+    var headers = _getHeaders();
 
-    var headers = await _getAuthorizationHeader();
-    Response response = await http.get(uri, headers: headers);
+    Response response = await http.post(uri, body: body, headers: headers);
     List temp = json.decode(response.body);
     List<User> users = temp.map((u) {
       return User.fromJson(u);
@@ -81,26 +97,32 @@ class HttpUtils {
     return users;
   }
 
-  static Future<void> registerNewUser(
-      String name, String email, String password) async {
-    Uri uri = composeUri('register');
-    String body =
-        json.encode({'username': email, 'nameHeb': name, 'password': password});
-    Response response = await http.post(uri,
-        body: body,
-        headers: {HttpHeaders.contentTypeHeader: "application/json"});
+  static Future<void> registerNewUser({
+    required String token,
+    required User user,
+  }) async {
+    Uri uri = composeUri(
+        route: UsersController.route.value,
+        endpoint: UsersController.registerEndpoint.value);
+
+    var headers = _getHeaders();
+    String body = json.encode({'token': "this is a token value", 'user': user});
+
+    Response response = await http.post(uri, body: body, headers: headers);
 
     if (response.statusCode == HttpStatus.ok) {
       debugPrint('registration successful! OMG!');
     } else {
       debugPrint('registration failed :(');
     }
-    return;
   }
 
   static Future<List<User>> queryFriends(String searchQuery) async {
-    Uri uri = composeUri('query');
-    var headers = await _getAuthorizationHeader();
+    Uri uri = composeUri(
+        route: UsersController.route.value,
+        endpoint: UsersController.findFriendsEndpoint.value);
+
+    var headers = _getHeaders();
     String body = json.encode({'query': searchQuery});
     Response response = await http.post(uri, headers: headers, body: body);
 
@@ -112,18 +134,31 @@ class HttpUtils {
     return friends;
   }
 
-  static Future<Map<String, String>> _getAuthorizationHeader(
-      {bool includeAuth = true}) async {
-    var headers = {HttpHeaders.contentTypeHeader: 'Application/json'};
-
-    if (includeAuth) {
-      try {
-        String accessToken = await StorageUtils.fetchAccessToken();
-        headers[HttpHeaders.authorizationHeader] = accessToken;
-      } catch (e) {
-        debugPrint("no access token found.");
-      }
+  static Future<User> getFullLoggedInUserDate() async {
+    String? uid = auth.FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      throw Exception();
     }
+
+    Uri uri = composeUri(
+        route: UsersController.route.value,
+        endpoint: UsersController.fullUserDataEndpoint.value);
+    var headers = _getHeaders();
+    String body = json.encode({'uid': uid});
+
+    Response response = await http.post(uri, body: body, headers: headers);
+
+    if (response.statusCode != HttpStatus.ok) {
+      throw Exception();
+    }
+
+    User user = User.fromJson(json.decode(response.body));
+
+    return user;
+  }
+
+  static Map<String, String> _getHeaders() {
+    var headers = {HttpHeaders.contentTypeHeader: 'Application/json'};
 
     return headers;
   }

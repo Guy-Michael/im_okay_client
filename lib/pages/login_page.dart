@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:im_okay_client/Models/user.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
+import 'package:im_okay_client/Utils/http_utils.dart';
 import 'package:im_okay_client/Widgets/purple_button.dart';
 import 'package:im_okay_client/Widgets/my_text_field.dart';
 
@@ -54,16 +56,21 @@ class LoginState extends State<LoginPage> {
     String password = passwordController.text.trim();
 
     //NEW SIGNIN USING FIREBASE
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: username, password: password);
+    bool succeeded =
+        await HttpUtils.validateLogin(username: username, password: password);
 
+    if (succeeded) {
+      // User user = await HttpUtils.getFullLoggedInUserDate();
+
+      var claims =
+          (await auth.FirebaseAuth.instance.currentUser?.getIdTokenResult())
+              ?.claims;
+
+      debugPrint(claims?['firstName']);
+      debugPrint(claims?['lastName']);
+      debugPrint(claims?['gender']);
+    }
     globalRouter.push(Routes.hub);
-    // OLD SIGNIN IMPLEMENTATION.
-    // bool loggedIn =
-    //     await HttpUtils.loginAndStoreCredentials(username, password);
-    // if (loggedIn) {
-    //   debugPrint('logging in!');
-    // }
   }
 
   void onButtonRegisterClicked(BuildContext context) {

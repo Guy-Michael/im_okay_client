@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.example.im_okay_client"
+    namespace "com.example.imokay"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

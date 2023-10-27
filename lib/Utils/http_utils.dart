@@ -106,7 +106,7 @@ class HttpUtils {
         endpoint: UsersController.registerEndpoint.value);
 
     var headers = _getHeaders();
-    String body = json.encode({'token': "this is a token value", 'user': user});
+    String body = json.encode({'token': token, 'user': user});
 
     Response response = await http.post(uri, body: body, headers: headers);
 

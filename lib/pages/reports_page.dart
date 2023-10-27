@@ -38,28 +38,25 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureProvider<(Map<String, dynamic>?, List<User>)>(
-        initialData: (null, const []),
+    return FutureProvider<(User, List<User>)>(
+        initialData: (const User(), const []),
         create: (context) async {
           List<User> users = await HttpUtils.getAllFriends();
-          var idTokenResult =
-              await auth.FirebaseAuth.instance.currentUser?.getIdTokenResult();
 
-          return (idTokenResult?.claims, users);
+          User activeUser = await HttpUtils.getFullLoggedInUserDate();
+          return (activeUser, users);
         },
         catchError: (context, error) {
-          return (null, const []);
+          return (const User(), const []);
         },
-        child: Scaffold(body: Consumer<(Map<String, dynamic>?, List<User>)>(
-            builder: (context, value, child) {
-          String firstName = value.$1?['firstName'];
-          String lastName = value.$1?['lastName'];
-          String gender = value.$1?['gender'];
-          String fullName = "$firstName $lastName";
+        child: Scaffold(body:
+            Consumer<(User, List<User>)>(builder: (context, value, child) {
+          User activeUser = value.$1;
+          List<User> users = value.$2;
 
           return Scaffold(
               body: ListView(
-                  children: value.$2.map((User user) {
+                  children: users.map((User user) {
                 return Friend(name: user.firstName, lastSeen: user.lastSeen);
               }).toList()),
               bottomSheet: Row(
@@ -67,11 +64,12 @@ class ReportsPage extends StatelessWidget {
                 children: [
                   PurpleButton(
                       callback: onLogoutButtonClicked,
-                      caption: Consts.logoutButtonCaption(gender)),
+                      caption: Consts.logoutButtonCaption(activeUser.gender)),
                   const SizedBox(width: 20),
                   PurpleButton(
                       callback: onReportButtonClicked,
-                      caption: Consts.reportButtonCaption(fullName, gender))
+                      caption: Consts.reportButtonCaption(
+                          activeUser.firstName, activeUser.gender))
                 ],
               ));
         })));

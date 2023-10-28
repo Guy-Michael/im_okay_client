@@ -69,6 +69,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '788980587447',
     projectId: 'soi-im-okay',
     storageBucket: 'soi-im-okay.appspot.com',
-    iosBundleId: 'com.example.imOkayClient',
+    iosBundleId: 'com.example.im_okay_clientClient',
   );
 }

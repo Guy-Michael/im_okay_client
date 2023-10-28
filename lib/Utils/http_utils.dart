@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
 import 'package:im_okay_client/Models/user.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,7 +49,8 @@ class HttpUtils {
     var headers = _getHeaders();
     String? uid = auth.FirebaseAuth.instance.currentUser?.uid;
     String body = json.encode({'uid': uid});
-    Response response = await http.post(uriLogin, body: body, headers: headers);
+    http.Response response =
+        await http.post(uriLogin, body: body, headers: headers);
 
     return response.statusCode == HttpStatus.ok;
   }
@@ -67,7 +67,7 @@ class HttpUtils {
 
     var headers = _getHeaders();
     String body = json.encode({'token': token});
-    Response response = await http.post(uri, body: body, headers: headers);
+    http.Response response = await http.post(uri, body: body, headers: headers);
 
     if (response.statusCode != 200) {
       return false;
@@ -89,7 +89,7 @@ class HttpUtils {
     String body = json.encode({'uid': user.uid});
     var headers = _getHeaders();
 
-    Response response = await http.post(uri, body: body, headers: headers);
+    http.Response response = await http.post(uri, body: body, headers: headers);
     List temp = json.decode(response.body);
     List<User> users = temp.map((u) {
       return User.fromJson(u);
@@ -109,7 +109,7 @@ class HttpUtils {
     var headers = _getHeaders();
     String body = json.encode({'token': token, 'user': user});
 
-    Response response = await http.post(uri, body: body, headers: headers);
+    http.Response response = await http.post(uri, body: body, headers: headers);
 
     if (response.statusCode == HttpStatus.ok) {
       debugPrint('registration successful! OMG!');
@@ -125,7 +125,7 @@ class HttpUtils {
 
     var headers = _getHeaders();
     String body = json.encode({'query': searchQuery});
-    Response response = await http.post(uri, headers: headers, body: body);
+    http.Response response = await http.post(uri, headers: headers, body: body);
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception("could not execute query");
@@ -150,7 +150,7 @@ class HttpUtils {
     var headers = _getHeaders();
     String body = json.encode({'uid': uid});
 
-    Response response = await http.post(uri, body: body, headers: headers);
+    http.Response response = await http.post(uri, body: body, headers: headers);
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception();

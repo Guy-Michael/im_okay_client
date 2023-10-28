@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay_client/Models/user.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
@@ -78,7 +78,7 @@ class ReportsPage extends StatelessWidget {
   void onReportButtonClicked() async {
     bool reportedSuccessfully = await HttpUtils.reportOkay();
     if (reportedSuccessfully) {
-      Fluttertoast.showToast(msg: Consts.reportedSuccessfully);
+      // Fluttertoast.showToast(msg: Consts.reportedSuccessfully);
     }
   }
 

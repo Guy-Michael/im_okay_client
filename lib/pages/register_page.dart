@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay_client/Models/user.dart';
 import 'package:im_okay_client/Services/router_service.dart';
 import 'package:im_okay_client/Utils/Consts/consts.dart';
@@ -77,7 +77,7 @@ class RegisterPage extends StatelessWidget {
     await Future.delayed(const Duration(seconds: 2),
         () => globalRouter.go(Routes.authRedirectPage));
 
-    Fluttertoast.showToast(msg: "נרשמת בהצלחה!");
+    // Fluttertoast.showToast(msg: "נרשמת בהצלחה!");
   }
 
   void navigateToLoginPage() async {

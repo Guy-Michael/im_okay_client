@@ -1,6 +1,6 @@
 {
-    "name": "im_okay_client",
-    "short_name": "im_okay_client",
+    "name": "im_okay",
+    "short_name": "im_okay",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

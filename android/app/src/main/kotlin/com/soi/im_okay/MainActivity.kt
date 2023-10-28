@@ -1,4 +1,4 @@
-package com.soi.im_okay_client
+package com.soi.im_okay
 
 import io.flutter.embedding.android.FlutterActivity
 

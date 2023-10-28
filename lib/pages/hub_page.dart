@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay_client/pages/add_friends_page.dart';
-import 'package:im_okay_client/pages/reports_page.dart';
+import 'package:im_okay/pages/add_friends_page.dart';
+import 'package:im_okay/pages/reports_page.dart';
 
 class HubPage extends StatefulWidget {
   const HubPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
-import 'package:im_okay_client/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
 
 class Friend extends StatefulWidget {
   final String name;

@@ -1,4 +1,4 @@
-# im_okay_client
+# im_okay
 
 A new Flutter project.
 

@@ -8,7 +8,7 @@
 PRODUCT_NAME = im_okay_client
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.imOkayClient
+PRODUCT_BUNDLE_IDENTIFIER = com.soi.imOkayClient
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.soi. All rights reserved.

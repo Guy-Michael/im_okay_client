@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:im_okay_client/Services/router_service.dart';
-import 'package:im_okay_client/Utils/Consts/consts.dart';
-import 'package:im_okay_client/Utils/http_utils.dart';
-import 'package:im_okay_client/Widgets/purple_button.dart';
-import 'package:im_okay_client/Widgets/my_text_field.dart';
+import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/http_utils.dart';
+import 'package:im_okay/Widgets/purple_button.dart';
+import 'package:im_okay/Widgets/my_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

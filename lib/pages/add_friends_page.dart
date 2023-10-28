@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay_client/Models/user.dart';
-import 'package:im_okay_client/Utils/http_utils.dart';
-import 'package:im_okay_client/Widgets/my_text_field.dart';
+import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Utils/http_utils.dart';
+import 'package:im_okay/Widgets/my_text_field.dart';
 
 class AddFriendsPage extends StatefulWidget {
   const AddFriendsPage({super.key});

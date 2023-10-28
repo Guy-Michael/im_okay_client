@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
-import 'package:im_okay_client/Models/user.dart';
+import 'package:im_okay/Models/user.dart';
 import 'package:http/http.dart' as http;
 
 enum LoginController {

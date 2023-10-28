@@ -9,30 +9,6 @@ import 'package:im_okay/Widgets/Reports%20Page/friend.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 import 'package:provider/provider.dart';
 
-// class UserList extends ChangeNotifier {
-//   late List<User> users;
-//   UserList({this.users = const []}) {
-//     updateAll();
-
-//     Timer.periodic(const Duration(seconds: 5), (timer) async {
-//       // await updateAll();
-//     });
-//   }
-
-//   Future<void> updateAll() async {
-//     List<User> updatedUsers = await HttpUtils.getAllFriends();
-//     users = updatedUsers;
-//     activeUser = (await StorageUtils.fetchUser());
-//     notifyListeners();
-//   }
-
-//   static Future<UserList> getUserList() async {
-//     List<User> updatedUsers = await HttpUtils.getAllFriends();
-//     User activeUser = (await StorageUtils.fetchUser());
-//     return UserList(users: updatedUsers, activeUser: activeUser);
-//   }
-// }
-
 class ReportsPage extends StatelessWidget {
   const ReportsPage({super.key});
 

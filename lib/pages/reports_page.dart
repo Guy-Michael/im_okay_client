@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay/Models/user.dart';
@@ -59,10 +60,12 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onLogoutButtonClicked() async {
-    await auth.FirebaseAuth.instance.signOut();
+    var token = await FirebaseMessaging.instance.getToken();
+    debugPrint(token);
+    // await auth.FirebaseAuth.instance.signOut();
 
-    // await StorageUtils.removeCredentials();
-    globalRouter.push(Routes.authRedirectPage);
+    // // await StorageUtils.removeCredentials();
+    // globalRouter.push(Routes.authRedirectPage);
   }
 
   void onAddFriendsButtonClicked() async {

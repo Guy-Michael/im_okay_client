@@ -6,6 +6,13 @@
         android:label="I'm Okay"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <service
+        android:name="io.flutter.plugins.firebase.messaging.FirebaseMessagingService"
+        android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>  
         <activity
             android:name=".MainActivity"
             android:exported="true"

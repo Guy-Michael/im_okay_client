@@ -10,7 +10,11 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-
+  FirebaseMessaging.onMessage.listen(
+    (event) {
+      debugPrint(event.data.toString());
+    },
+  );
   FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
       debugPrint('User is currently signed out!');

@@ -1,18 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
-    <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" />
-    <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
     <application
         android:label="I'm Okay"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
-        <service
-        android:name="io.flutter.plugins.firebase.messaging.FirebaseMessagingService"
-        android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>  
         <activity
             android:name=".MainActivity"
             android:exported="true"

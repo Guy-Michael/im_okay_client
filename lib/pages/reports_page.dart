@@ -60,8 +60,8 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onLogoutButtonClicked() async {
-    var token = await FirebaseMessaging.instance.getToken();
-    debugPrint(token);
+    // var token = await FirebaseMessaging.instance.getToken();
+    // debugPrint(token);
     // await auth.FirebaseAuth.instance.signOut();
 
     // // await StorageUtils.removeCredentials();

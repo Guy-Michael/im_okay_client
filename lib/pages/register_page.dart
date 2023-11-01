@@ -55,9 +55,6 @@ class RegisterPage extends StatelessWidget {
   }
 
   void completeRegistration() async {
-    debugPrint(
-        'name: ${_firstNameController.text}, password: ${_passwordController.text}, email: ${_emailController.text}');
-
     String firstName = _firstNameController.text;
     String lastName = _lastNameController.text;
     String password = _passwordController.text;
@@ -67,12 +64,10 @@ class RegisterPage extends StatelessWidget {
     var credential = await auth.FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
-    // (await credential.user.getIdTokenResult()).claims
-
     String? token = await credential.user?.getIdToken();
     User user = User(firstName: firstName, lastName: lastName, gender: gender);
 
-    await HttpUtils.registerNewUser(token: token!, user: user);
+    await HttpUtils.registerNewUser(deviceToken: token!, user: user);
 
     await Future.delayed(const Duration(seconds: 2),
         () => globalRouter.go(Routes.authRedirectPage));

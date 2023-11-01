@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
@@ -59,17 +58,8 @@ class LoginState extends State<LoginPage> {
         await HttpUtils.validateLogin(username: username, password: password);
 
     if (succeeded) {
-      // User user = await HttpUtils.getFullLoggedInUserDate();
-
-      var claims =
-          (await auth.FirebaseAuth.instance.currentUser?.getIdTokenResult())
-              ?.claims;
-
-      debugPrint(claims?['firstName']);
-      debugPrint(claims?['lastName']);
-      debugPrint(claims?['gender']);
+      globalRouter.push(Routes.hub);
     }
-    globalRouter.push(Routes.hub);
   }
 
   void onButtonRegisterClicked(BuildContext context) {

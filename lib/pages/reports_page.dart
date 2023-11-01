@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
@@ -19,15 +17,16 @@ class ReportsPage extends StatelessWidget {
         initialData: (const User(), const []),
         create: (context) async {
           List<User> users = await HttpUtils.getAllFriends();
-
-          User activeUser = await HttpUtils.getFullLoggedInUserDate();
+          User activeUser = await HttpUtils.getFullLoggedInUserData();
           return (activeUser, users);
         },
         catchError: (context, error) {
+          debugPrint("Unable to load anything.");
           return (const User(), const []);
         },
         child: Scaffold(body:
             Consumer<(User, List<User>)>(builder: (context, value, child) {
+          debugPrint("yes");
           User activeUser = value.$1;
           List<User> users = value.$2;
 
@@ -53,22 +52,20 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onReportButtonClicked() async {
-    bool reportedSuccessfully = await HttpUtils.reportOkay();
-    if (reportedSuccessfully) {
-      // Fluttertoast.showToast(msg: Consts.reportedSuccessfully);
-    }
+    var user = auth.FirebaseAuth.instance.currentUser;
+    String? uid = user?.uid;
+    String? authToken = await user?.getIdToken();
+
+    // String? fcmToken = await FirebaseMessaging.instance.getToken() ?? "Rweq";
+    debugPrint("uid: $uid \n device token: fcmToken \n authToken: $authToken");
+    // bool reportedSuccessfully = await HttpUtils.reportOkay();
+    // if (reportedSuccessfully) {
+    //   // Fluttertoast.showToast(msg: Consts.reportedSuccessfully);
+    // }
   }
 
   void onLogoutButtonClicked() async {
-    // var token = await FirebaseMessaging.instance.getToken();
-    // debugPrint(token);
-    // await auth.FirebaseAuth.instance.signOut();
-
-    // // await StorageUtils.removeCredentials();
-    // globalRouter.push(Routes.authRedirectPage);
-  }
-
-  void onAddFriendsButtonClicked() async {
-    globalRouter.push(Routes.addFriendsPage);
+    await auth.FirebaseAuth.instance.signOut();
+    globalRouter.push(Routes.authRedirectPage);
   }
 }

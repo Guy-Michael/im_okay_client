@@ -5,17 +5,18 @@ import 'package:flutter/foundation.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:http/http.dart' as http;
 
-enum LoginController {
-  route("login"),
-  validateEndpoint("validate");
+enum AuthController {
+  route('auth'),
+  registerEndpoint('register'),
+  validateEndpoint('validate'),
+  registerFcmToken('store-token');
 
   final String value;
-  const LoginController(this.value);
+  const AuthController(this.value);
 }
 
 enum UsersController {
   route('users'),
-  registerEndpoint('register'),
   fullUserDataEndpoint('full-user-data'),
   findFriendsEndpoint('find-friends'),
   reportEndpoint('report'),
@@ -27,7 +28,8 @@ enum UsersController {
 }
 
 class HttpUtils {
-  static const String _localDomain = "http://localhost";
+  // static const String _localDomain = "http://localhost";
+  static const String _localDomain = "http://192.168.174.138";
   static const String _localPort = "5129";
   static const String _serverDomain = "http://20.217.26.29";
   static const String _serverPort = "80";
@@ -61,8 +63,8 @@ class HttpUtils {
         .signInWithEmailAndPassword(email: username, password: password);
 
     Uri uri = composeUri(
-        route: LoginController.route.value,
-        endpoint: LoginController.validateEndpoint.value);
+        route: AuthController.route.value,
+        endpoint: AuthController.validateEndpoint.value);
     var token = await credentials.user?.getIdToken();
 
     var headers = _getHeaders();
@@ -88,8 +90,10 @@ class HttpUtils {
 
     String body = json.encode({'uid': user.uid});
     var headers = _getHeaders();
+    debugPrint("sending to: ${uri.toString()}");
 
     http.Response response = await http.post(uri, body: body, headers: headers);
+    debugPrint("Succeeded!");
     List temp = json.decode(response.body);
     List<User> users = temp.map((u) {
       return User.fromJson(u);
@@ -99,15 +103,15 @@ class HttpUtils {
   }
 
   static Future<void> registerNewUser({
-    required String token,
+    required String deviceToken,
     required User user,
   }) async {
     Uri uri = composeUri(
-        route: UsersController.route.value,
-        endpoint: UsersController.registerEndpoint.value);
+        route: AuthController.route.value,
+        endpoint: AuthController.registerEndpoint.value);
 
     var headers = _getHeaders();
-    String body = json.encode({'token': token, 'user': user});
+    String body = json.encode({'deviceToken': deviceToken, 'user': user});
 
     http.Response response = await http.post(uri, body: body, headers: headers);
 
@@ -134,11 +138,10 @@ class HttpUtils {
     List<User> friends = List<dynamic>.from(json.decode(response.body))
         .map((e) => User.fromJson(e))
         .toList();
-    // List<User> friends = map.map((key, value) => null)
     return friends;
   }
 
-  static Future<User> getFullLoggedInUserDate() async {
+  static Future<User> getFullLoggedInUserData() async {
     String? uid = auth.FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) {
       throw Exception();
@@ -157,7 +160,8 @@ class HttpUtils {
     }
 
     User user = User.fromJson(json.decode(response.body));
-
+    debugPrint(user.toString());
+    debugPrint("reloading pleaseeee");
     return user;
   }
 
@@ -178,5 +182,23 @@ class HttpUtils {
     var headers = {HttpHeaders.contentTypeHeader: 'Application/json'};
 
     return headers;
+  }
+
+  static Future<void> storeFcmToken(String deviceToken) async {
+    Uri uri = composeUri(
+        route: AuthController.route.value,
+        endpoint: AuthController.registerFcmToken.value);
+
+    String? uid = auth.FirebaseAuth.instance.currentUser?.uid;
+    debugPrint(uid);
+    String body = json.encode({'uid': uid, 'deviceToken': deviceToken});
+    http.Response response =
+        await http.post(uri, body: body, headers: _getHeaders());
+
+    if (response.statusCode != HttpStatus.ok) {
+      //do something bad
+    }
+
+    //Be happy.
   }
 }

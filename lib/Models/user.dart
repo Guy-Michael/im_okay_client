@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class User {
   final String email;
   final String firstName;
@@ -35,10 +33,5 @@ class User {
 
   static dynamic getValueOrDefault(Map<String, dynamic> json, key) {
     return json.containsKey(key) && json[key] != null ? json[key] : '';
-  }
-
-  static String generateAccessToken(String username, String password) {
-    String accessToken = base64.encode(utf8.encode("$username:$password"));
-    return accessToken;
   }
 }

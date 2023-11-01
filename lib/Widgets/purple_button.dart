@@ -12,7 +12,7 @@ class PurpleButton extends StatelessWidget {
     return ElevatedButton(
         onPressed: callback,
         style: ElevatedButton.styleFrom(
-            minimumSize: const Size(200, 70),
+            minimumSize: const Size(100, 70),
             maximumSize: const Size(400, 200),
             backgroundColor: Colors.deepPurpleAccent),
         child: Text(

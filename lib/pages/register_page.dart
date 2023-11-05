@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Services/API%20Services/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
@@ -67,7 +68,8 @@ class RegisterPage extends StatelessWidget {
     String? token = await credential.user?.getIdToken();
     User user = User(firstName: firstName, lastName: lastName, gender: gender);
 
-    await HttpUtils.registerNewUser(deviceToken: token!, user: user);
+    await UserAuthenticationApiService.registerNewUser(
+        authToken: token!, user: user);
 
     await Future.delayed(const Duration(seconds: 2),
         () => globalRouter.go(Routes.authRedirectPage));

@@ -39,11 +39,8 @@ class Routes {
   static const String authRedirectPage = "/auth";
   static const String reportsPage = "report";
   static const String registrationPage = '/register';
-  static const String contactsPage = '/contacts';
-  static const String addFriendsPage = 'addFriends';
+  static const String settings = '/settings';
+  static const String friendRequests = "/requests";
+  static const String addFriendsPage = 'add-friends';
   static const String hub = '/hub';
-
-  static String fromInt(int index) {
-    return [reportsPage, addFriendsPage][index];
-  }
 }

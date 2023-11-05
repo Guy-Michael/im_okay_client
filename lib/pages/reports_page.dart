@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Services/API%20Services/friend_request_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Widgets/Reports%20Page/friend.dart';
@@ -16,7 +16,7 @@ class ReportsPage extends StatelessWidget {
     return FutureProvider<(User, List<User>)>(
         initialData: (const User(), const []),
         create: (context) async {
-          List<User> users = await HttpUtils.getAllFriends();
+          List<User> users = await FriendInteractionsApiService.getAllFriends();
           User activeUser = await HttpUtils.getFullLoggedInUserData();
           return (activeUser, users);
         },
@@ -26,21 +26,20 @@ class ReportsPage extends StatelessWidget {
         },
         child: Scaffold(body:
             Consumer<(User, List<User>)>(builder: (context, value, child) {
-          debugPrint("yes");
+          debugPrint(value.$1.toJson().toString());
+
           User activeUser = value.$1;
           List<User> users = value.$2;
 
           return Scaffold(
               body: ListView(
                   children: users.map((User user) {
-                return Friend(name: user.firstName, lastSeen: user.lastSeen);
+                return FriendReport(
+                    name: user.firstName, lastSeen: user.lastSeen);
               }).toList()),
               bottomSheet: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  PurpleButton(
-                      callback: onLogoutButtonClicked,
-                      caption: Consts.logoutButtonCaption(activeUser.gender)),
                   const SizedBox(width: 20),
                   PurpleButton(
                       callback: onReportButtonClicked,
@@ -52,20 +51,6 @@ class ReportsPage extends StatelessWidget {
   }
 
   void onReportButtonClicked() async {
-    var user = auth.FirebaseAuth.instance.currentUser;
-    String? uid = user?.uid;
-    String? authToken = await user?.getIdToken();
-
-    // String? fcmToken = await FirebaseMessaging.instance.getToken() ?? "Rweq";
-    debugPrint("uid: $uid \n device token: fcmToken \n authToken: $authToken");
-    // bool reportedSuccessfully = await HttpUtils.reportOkay();
-    // if (reportedSuccessfully) {
-    //   // Fluttertoast.showToast(msg: Consts.reportedSuccessfully);
-    // }
-  }
-
-  void onLogoutButtonClicked() async {
-    await auth.FirebaseAuth.instance.signOut();
-    globalRouter.push(Routes.authRedirectPage);
+    await FriendInteractionsApiService.reportOkay();
   }
 }

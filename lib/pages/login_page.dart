@@ -53,7 +53,6 @@ class LoginState extends State<LoginPage> {
     String username = usernameController.text.trim();
     String password = passwordController.text.trim();
 
-    //NEW SIGNIN USING FIREBASE
     bool succeeded =
         await HttpUtils.validateLogin(username: username, password: password);
 

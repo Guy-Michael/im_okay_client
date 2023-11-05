@@ -23,6 +23,7 @@ void main() async {
       debugPrint('Storing device token..');
 
       String? deviceToken = await FirebaseMessaging.instance.getToken();
+      debugPrint(deviceToken);
       if (deviceToken != null) {
         await HttpUtils.storeFcmToken(deviceToken);
       }

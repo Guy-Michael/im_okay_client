@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class PurpleButton extends StatelessWidget {
+class PurpleButton extends StatefulWidget {
   final Function() callback;
   final String caption;
-  double minimumHeight;
-  double maximumHeight;
-  double minimumWidth;
-  double maximumWidth;
-  double scaleFactor;
-  PurpleButton(
+  final double minimumHeight;
+  final double maximumHeight;
+  final double minimumWidth;
+  final double maximumWidth;
+  final double scaleFactor;
+
+  const PurpleButton(
       {required this.callback,
       required this.caption,
       this.minimumHeight = 100,
@@ -19,20 +20,22 @@ class PurpleButton extends StatelessWidget {
       super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Size minimumSize =
-        Size(minimumHeight * scaleFactor, minimumWidth * scaleFactor);
-    Size maximumSize =
-        Size(maximumHeight * scaleFactor, maximumWidth * scaleFactor);
+  State<StatefulWidget> createState() => PurpleButtonState();
+}
 
+class PurpleButtonState extends State<PurpleButton> {
+  @override
+  Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: callback,
+        onPressed: widget.callback,
         style: ElevatedButton.styleFrom(
-            minimumSize: minimumSize,
-            maximumSize: maximumSize,
+            minimumSize: Size(widget.minimumHeight * widget.scaleFactor,
+                widget.minimumWidth * widget.scaleFactor),
+            maximumSize: Size(widget.maximumHeight * widget.scaleFactor,
+                widget.maximumWidth * widget.scaleFactor),
             backgroundColor: Colors.deepPurpleAccent),
         child: Text(
-          caption,
+          widget.caption,
           textScaleFactor: 1.5,
         ));
   }

@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 

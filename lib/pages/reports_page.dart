@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/friend_request_api_service.dart';

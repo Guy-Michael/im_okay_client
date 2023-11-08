@@ -49,12 +49,15 @@ String parseLastSeen(int lastSeen, String gender) {
   int delta = DateTime.now().millisecondsSinceEpoch - lastSeen;
   Duration duration = Duration(milliseconds: delta);
   debugPrint(duration.toString());
-  if (duration.inHours > 1) {
+  if (duration.inHours < 1) {
     result = Consts.xMinutesAgo(duration.inMinutes);
+
+    // result = DateTime.fromMillisecondsSinceEpoch(lastSeen).toString();
     // result = '${DateTime(lastSeen).hour}:${DateTime(lastSeen).minute}';
     // result = intl.DateFormat.().format(DateTime(lastSeen),);
   } else {
-    result = DateTime(lastSeen).toIso8601String();
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(lastSeen);
+    result = " ${time.day}.${time.month}, ${time.hour}:${time.minute}";
   }
 
   return result;

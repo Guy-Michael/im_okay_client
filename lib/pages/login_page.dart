@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Services/API%20Services/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 
@@ -53,10 +53,10 @@ class LoginState extends State<LoginPage> {
     String username = usernameController.text.trim();
     String password = passwordController.text.trim();
 
-    bool succeeded =
-        await HttpUtils.validateLogin(username: username, password: password);
-
-    if (succeeded) {
+    bool authenticationSuccessfull =
+        await UserAuthenticationApiService.validateLoginAndGetUserData(
+            username: username, password: password);
+    if (authenticationSuccessfull) {
       globalRouter.push(Routes.hub);
     }
   }

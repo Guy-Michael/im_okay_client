@@ -26,6 +26,9 @@ class AuthRedirectPage extends StatelessWidget {
 
         return authenticated;
       }(), builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        }
         return (snapshot.hasData && snapshot.data!)
             ? const HubPage()
             : const LoginPage();

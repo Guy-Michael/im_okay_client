@@ -11,7 +11,7 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  await FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.instance.requestPermission();
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   FirebaseAuth.instance.authStateChanges().listen((User? user) async {
@@ -20,10 +20,9 @@ void main() async {
       debugPrint('User is currently signed out!');
     } else {
       debugPrint('User is signed in!');
-      debugPrint('Storing device token..');
 
       String? deviceToken = await FirebaseMessaging.instance.getToken();
-      debugPrint(deviceToken);
+
       if (deviceToken != null) {
         await HttpUtils.storeFcmToken(deviceToken);
       }
@@ -32,7 +31,6 @@ void main() async {
 
   FirebaseMessaging.instance.onTokenRefresh.listen(
     (token) async {
-      debugPrint("new token acquired!");
       if (FirebaseAuth.instance.currentUser != null) {
         await HttpUtils.storeFcmToken(token);
       }

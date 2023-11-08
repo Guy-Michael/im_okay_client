@@ -13,7 +13,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
+  final TextEditingController _genderController = TextEditingController();
   RegisterPage({super.key});
 
   @override
@@ -24,6 +24,7 @@ class RegisterPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               MyTextField(
                   inputController: _firstNameController,
@@ -37,6 +38,15 @@ class RegisterPage extends StatelessWidget {
               MyTextField(
                   inputController: _emailController, hintText: Consts.email),
               const SizedBox(height: 50),
+              DropdownMenu(
+                label: const Text("מגדר"),
+                controller: _genderController,
+                menuStyle: const MenuStyle(alignment: Alignment.topRight),
+                dropdownMenuEntries: const [
+                  DropdownMenuEntry(value: Gender.female, label: "נקבה"),
+                  DropdownMenuEntry(value: Gender.male, label: "זכר")
+                ],
+              ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 PurpleButton(
                     callback: navigateToLoginPage, caption: Consts.cancel),
@@ -59,13 +69,14 @@ class RegisterPage extends StatelessWidget {
     String lastName = _lastNameController.text;
     String password = _passwordController.text;
     String email = _emailController.text;
-    String gender = Gender.female;
+    String gender = Gender.fromHebrew(_genderController.text);
 
     var credential = await auth.FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
+    User user = User(
+        firstName: firstName, lastName: lastName, email: email, gender: gender);
 
     String? token = await credential.user?.getIdToken();
-    User user = User(firstName: firstName, lastName: lastName, gender: gender);
 
     await UserAuthenticationApiService.registerNewUser(
         authToken: token!, user: user);

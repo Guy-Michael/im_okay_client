@@ -29,7 +29,7 @@ enum UsersController {
 
   final String value;
   const UsersController(this.value);
-  String get endpoint => '$route/$value';
+  String get endpoint => '${route.value}/$value';
 }
 
 class HttpUtils {
@@ -108,10 +108,7 @@ class HttpUtils {
     http.Response response = await http.post(uri, body: body, headers: headers);
 
     if (response.statusCode == HttpStatus.ok) {
-      debugPrint('registration successful! OMG!');
-    } else {
-      debugPrint('registration failed :(');
-    }
+    } else {}
   }
 
   static Future<List<User>> queryFriends(String searchQuery) async {
@@ -152,8 +149,6 @@ class HttpUtils {
     }
 
     User user = User.fromJson(json.decode(response.body));
-    debugPrint(user.toString());
-    debugPrint("reloading pleaseeee");
     return user;
   }
 

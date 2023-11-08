@@ -1,20 +1,8 @@
 import 'dart:convert';
+import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Utils/http_utils.dart';
-
-enum AuthController {
-  route('auth'),
-  registerEndpoint('register'),
-  validateEndpoint('validate'),
-  registerFcmToken('store-token');
-
-  final String value;
-  const AuthController(this.value);
-  String get endpoint {
-    return '${route.value}/$value';
-  }
-}
 
 class UserAuthenticationApiService {
   static auth.User? get firebaseUser {
@@ -22,7 +10,7 @@ class UserAuthenticationApiService {
   }
 
   static Future<User?> get appUser async {
-    String endpoint = UsersController.fullUserDataEndpoint.endpoint;
+    String endpoint = AuthController.signedInUserData.endpoint;
 
     String? authToken = await firebaseUser?.getIdToken();
 
@@ -38,11 +26,14 @@ class UserAuthenticationApiService {
     return user;
   }
 
-  static Future<bool> registerNewUser({
-    required String authToken,
-    required User user,
-  }) async {
+  static Future<bool> registerNewUser(
+      {required String password, required User user}) async {
     String endpoint = AuthController.registerEndpoint.endpoint;
+
+    var credential = await auth.FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: user.email, password: password);
+
+    String authToken = (await credential.user?.getIdToken())!;
 
     var body = {'authToken': authToken, 'user': user};
 
@@ -76,5 +67,22 @@ class UserAuthenticationApiService {
     }
 
     return true;
+  }
+
+  static Future<void> storeFcmToken(String deviceToken) async {
+    String endpoint = AuthController.registerFcmToken.endpoint;
+    String? uid = auth.FirebaseAuth.instance.currentUser!.uid;
+
+    var body = {'uid': uid, 'deviceToken': deviceToken};
+
+    await HttpUtils.post(endpoint: endpoint, body: body);
+  }
+
+  static Future<void> deleteUser({required User user}) async {
+    String endpoint = AuthController.deleteUser.endpoint;
+
+    var body = {'email': user.email};
+
+    await HttpUtils.post(endpoint: endpoint, body: body);
   }
 }

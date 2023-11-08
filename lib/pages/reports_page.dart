@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/friend_request_api_service.dart';
+import 'package:im_okay/Services/API%20Services/friend_interactions_api_service.dart';
 import 'package:im_okay/Services/API%20Services/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/Reports%20Page/friend.dart';
@@ -19,11 +21,9 @@ class ReportsPageState extends State<ReportsPage> {
     var builder = FutureBuilder<(User activeUser, List<User> friends)>(
       initialData: (const User(), List<User>.empty()),
       future: () async {
-        // Timer.periodic(const Duration(seconds: 5), (timer) {
-        //   setState(
-        //     () {},
-        //   );
-        // });
+        Timer.periodic(const Duration(seconds: 5), (_) {
+          setState(() {});
+        });
         List<User> users = await FriendInteractionsApiService.getAllFriends();
         User activeUser = (await UserAuthenticationApiService.appUser)!;
         return (activeUser, users);
@@ -57,41 +57,6 @@ class ReportsPageState extends State<ReportsPage> {
       },
     );
     return builder;
-    // return FutureProvider<(User, List<User>)>(
-    //     updateShouldNotify: (previous, next) => previous != next,
-    //     initialData: (const User(), const []),
-    //     create: (context) async {
-    //       List<User> users = await FriendInteractionsApiService.getAllFriends();
-    //       User activeUser = (await UserAuthenticationApiService.appUser)!;
-    //       return (activeUser, users);
-    //     },
-    //     catchError: (context, error) {
-    //       return (const User(), const []);
-    //     },
-    //     child: Scaffold(body:
-    //         Consumer<(User, List<User>)>(builder: (context, value, child) {
-    //       User activeUser = value.$1;
-    //       List<User> users = value.$2;
-    //       if (activeUser.firstName == '' || users.isEmpty) {
-    //         return const Center(child: CircularProgressIndicator.adaptive());
-    //       }
-    //       return Scaffold(
-    //           body: ListView(
-    //               children: users.map((User user) {
-    //             return FriendReport(
-    //                 name: user.firstName, lastSeen: user.lastSeen);
-    //           }).toList()),
-    //           bottomSheet: Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               const SizedBox(width: 20),
-    //               PurpleButton(
-    //                   callback: onReportButtonClicked,
-    //                   caption: Consts.reportButtonCaption(
-    //                       activeUser.firstName, activeUser.gender))
-    //             ],
-    //           ));
-    //     })));
   }
 
   void onReportButtonClicked() async {

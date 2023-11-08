@@ -1,4 +1,6 @@
-class User {
+import 'package:equatable/equatable.dart';
+
+class User extends Equatable {
   final String email;
   final String firstName;
   final String lastName;
@@ -34,4 +36,7 @@ class User {
   static dynamic getValueOrDefault(Map<String, dynamic> json, key) {
     return json.containsKey(key) && json[key] != null ? json[key] : '';
   }
+
+  @override
+  List<Object?> get props => [firstName, lastName, email, gender, lastSeen];
 }

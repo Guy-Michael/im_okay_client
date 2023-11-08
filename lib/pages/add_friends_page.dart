@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Utils/http_utils.dart';
+import 'package:im_okay/Services/API%20Services/friend_interactions_api_service.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 
 class AddFriendsPage extends StatefulWidget {
@@ -16,14 +16,18 @@ class AddFriendsPageState extends State<AddFriendsPage> {
 
   void getSearchResults() async {
     String searchQuery = searchController.text;
-    searchList = (await HttpUtils.queryFriends(searchQuery))
+    List<User> searchResults =
+        await FriendInteractionsApiService.queryFriends(searchQuery);
+
+    searchList = searchResults
         .map((e) => FriendSearchResult(user: e, onAddClicked: onAddClicked))
         .toList();
+
     setState(() {});
   }
 
   void onAddClicked(User user) {
-    HttpUtils.sendFriendRequestToUser(friend: user);
+    FriendInteractionsApiService.sendFriendRequest(friend: user);
   }
 
   @override

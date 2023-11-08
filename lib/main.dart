@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:im_okay/Services/API%20Services/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
-import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/firebase_options.dart';
 
 void main() async {
@@ -24,7 +24,7 @@ void main() async {
       String? deviceToken = await FirebaseMessaging.instance.getToken();
 
       if (deviceToken != null) {
-        await HttpUtils.storeFcmToken(deviceToken);
+        await UserAuthenticationApiService.storeFcmToken(deviceToken);
       }
     }
   });
@@ -32,7 +32,7 @@ void main() async {
   FirebaseMessaging.instance.onTokenRefresh.listen(
     (token) async {
       if (FirebaseAuth.instance.currentUser != null) {
-        await HttpUtils.storeFcmToken(token);
+        await UserAuthenticationApiService.storeFcmToken(token);
       }
     },
   );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/friend_request_api_service.dart';
-import 'package:im_okay/Utils/http_utils.dart';
+import 'package:im_okay/Services/API%20Services/friend_interactions_api_service.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
 class FriendRequestsPage extends StatefulWidget {
@@ -19,7 +18,7 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
     return Scaffold(
         body: FutureBuilder<List<User>>(
       initialData: const [],
-      future: HttpUtils.getFriendRequests(),
+      future: FriendInteractionsApiService.getIncomingPendingRequests(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Column(

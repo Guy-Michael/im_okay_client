@@ -7,6 +7,9 @@ class Consts {
   static const String reportedSuccessfully = "שיתפת בהצלחה";
   static String logoutButtonCaption(String gender) =>
       gender == Gender.female ? "התנתקי" : "התנתק";
+
+  static String deleteUserButtonCaption(String gender) =>
+      gender == Gender.female ? "מחקי את חשבונך" : "מחק את חשבונך";
   static String reportButtonCaption(String nameHeb, String gender) {
     String result = "$nameHeb, ";
     return "❤️ $result${gender == Gender.female ? "שתפי שאת בטוחה" : "שתף שאתה בטוח"}";
@@ -33,17 +36,17 @@ class Consts {
 class Gender {
   static const String male = "male";
   static const String female = "female";
+  static String fromHebrew(String genderInHebrew) {
+    return genderInHebrew == "נקבה" ? female : male;
+  }
 }
 
 class Routes {
   static const String authRedirectPage = "/auth";
   static const String reportsPage = "report";
   static const String registrationPage = '/register';
-  static const String contactsPage = '/contacts';
-  static const String addFriendsPage = 'addFriends';
+  static const String settings = '/settings';
+  static const String friendRequests = "/requests";
+  static const String addFriendsPage = 'add-friends';
   static const String hub = '/hub';
-
-  static String fromInt(int index) {
-    return [reportsPage, addFriendsPage][index];
-  }
 }

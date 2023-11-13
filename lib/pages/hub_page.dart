@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/add_friends_page.dart';
+import 'package:im_okay/pages/friend_requests_page.dart';
 import 'package:im_okay/pages/reports_page.dart';
+import 'package:im_okay/pages/settings.dart';
 
 class HubPage extends StatefulWidget {
   const HubPage({super.key});
@@ -58,9 +60,15 @@ List<({Widget widget, String label, IconData icon, IconData iconSelected})>
     iconSelected: Icons.plus_one
   ),
   (
-    widget: const AddFriendsPage(),
+    widget: const FriendRequestsPage(),
+    label: "Requests",
+    icon: Icons.waves_outlined,
+    iconSelected: Icons.waves
+  ),
+  (
+    widget: const SettingsPage(),
     label: 'Settings',
     icon: Icons.settings_outlined,
     iconSelected: Icons.settings
-  ),
+  )
 ];

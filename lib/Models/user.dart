@@ -1,6 +1,6 @@
-import 'dart:convert';
+import 'package:equatable/equatable.dart';
 
-class User {
+class User extends Equatable {
   final String email;
   final String firstName;
   final String lastName;
@@ -37,8 +37,6 @@ class User {
     return json.containsKey(key) && json[key] != null ? json[key] : '';
   }
 
-  static String generateAccessToken(String username, String password) {
-    String accessToken = base64.encode(utf8.encode("$username:$password"));
-    return accessToken;
-  }
+  @override
+  List<Object?> get props => [firstName, lastName, email, gender, lastSeen];
 }

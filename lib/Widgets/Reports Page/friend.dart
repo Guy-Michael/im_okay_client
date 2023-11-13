@@ -1,23 +1,22 @@
-import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 
-class Friend extends StatefulWidget {
+class FriendReport extends StatefulWidget {
   final String name;
   final int lastSeen;
   final String gender;
 
-  const Friend(
+  const FriendReport(
       {super.key,
       this.name = '',
       this.lastSeen = 0,
       this.gender = Gender.female});
 
   @override
-  State<Friend> createState() => _FriendState();
+  State<FriendReport> createState() => _FriendReportState();
 }
 
-class _FriendState extends State<Friend> {
+class _FriendReportState extends State<FriendReport> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -50,10 +49,11 @@ String parseLastSeen(int lastSeen, String gender) {
   int delta = DateTime.now().millisecondsSinceEpoch - lastSeen;
   Duration duration = Duration(milliseconds: delta);
 
-  if (duration.inHours > 1) {
-    result = intl.DateFormat.Hm().format(DateTime.now());
-  } else {
+  if (duration.inHours < 1) {
     result = Consts.xMinutesAgo(duration.inMinutes);
+  } else {
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(lastSeen);
+    result = " ${time.day}.${time.month}, ${time.hour}:${time.minute}";
   }
 
   return result;

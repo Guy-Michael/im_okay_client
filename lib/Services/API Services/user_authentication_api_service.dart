@@ -78,10 +78,11 @@ class UserAuthenticationApiService {
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
 
-  static Future<void> deleteUser({required User user}) async {
+  static Future<void> deleteSignedInUser() async {
     String endpoint = AuthController.deleteUser.endpoint;
 
-    var body = {'email': user.email};
+    User signedInUser = (await appUser)!;
+    var body = {'email': signedInUser.email};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }

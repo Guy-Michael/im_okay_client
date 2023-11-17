@@ -29,10 +29,10 @@ class PurpleButtonState extends State<PurpleButton> {
     return ElevatedButton(
         onPressed: widget.callback,
         style: ElevatedButton.styleFrom(
-            minimumSize: Size(widget.minimumHeight * widget.scaleFactor,
+            minimumSize: Size(widget.minimumWidth * widget.scaleFactor,
                 widget.minimumWidth * widget.scaleFactor),
-            maximumSize: Size(widget.maximumHeight * widget.scaleFactor,
-                widget.maximumWidth * widget.scaleFactor),
+            maximumSize: Size(widget.maximumWidth * widget.scaleFactor,
+                widget.maximumHeight * widget.scaleFactor),
             backgroundColor: Colors.deepPurpleAccent),
         child: Text(
           widget.caption,

@@ -38,15 +38,26 @@ class ReportsPageState extends State<ReportsPage> {
           return const Center(child: CircularProgressIndicator.adaptive());
         }
         return Scaffold(
-            body: ListView(children: () {
-              if (users.isEmpty) {
-                return [const Center(child: Text("עוד לא הוספת חברים :)"))];
-              }
-              return users.map((User user) {
-                return FriendReport(
-                    name: user.firstName, lastSeen: user.lastSeen);
-              }).toList();
-            }()),
+            body: Wrap(
+                runSpacing: 3,
+                children: () {
+                  if (users.isEmpty) {
+                    return [const Center(child: Text("עוד לא הוספת חברים :)"))];
+                  }
+                  FriendReport mine = FriendReport(
+                    name: "השיתוף האחרון שלי",
+                    gender: activeUser.gender,
+                    lastSeen: activeUser.lastSeen,
+                  );
+                  List<FriendReport> allUsers = [mine];
+                  List<FriendReport> otherUsers = users.map((User user) {
+                    return FriendReport(
+                        name: user.firstName, lastSeen: user.lastSeen);
+                  }).toList();
+
+                  allUsers.addAll(otherUsers);
+                  return allUsers;
+                }()),
             bottomSheet: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

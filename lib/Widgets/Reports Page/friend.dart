@@ -19,24 +19,65 @@ class FriendReport extends StatefulWidget {
 class _FriendReportState extends State<FriendReport> {
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-        spacing: 1,
+    return Row(
         textDirection: TextDirection.rtl,
-        alignment: WrapAlignment.start,
-        children: [
-          Container(
-              constraints: nameBoxConstraints,
-              alignment: Alignment.center,
-              decoration: boxDecoration,
-              child: Text(widget.name, style: textStyle)),
-          Container(
-              constraints: lastSeenBoxConstraints,
-              alignment: Alignment.center,
-              decoration: boxDecoration,
-              child: Text(parseLastSeen(widget.lastSeen, widget.gender),
-                  style: textStyle))
-        ]);
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisSize: MainAxisSize.max,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        // spacing: 0,
+        // direction: Axis.horizontal,
+        // textDirection: TextDirection.rtl,
+        // runAlignment: WrapAlignment.center,
+        // alignment: WrapAlignment.start,
+        children: getList(widget.name, widget.lastSeen, widget.gender));
+    // children: getList2());
   }
+}
+
+List<Widget> getList2() {
+  return [
+    Expanded(
+        child: Container(
+      color: Colors.blue,
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+        child: Text(
+          'Container 1',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    )),
+    Expanded(
+        child: Container(
+      color: Colors.green,
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+        child: Text(
+          'Container 2',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    )),
+  ];
+}
+
+List<Widget> getList(String name, int lastSeen, String gender) {
+  return [
+    // return Row(textDirection: TextDirection.rtl, children: [
+    Expanded(
+        child: Container(
+            constraints: nameBoxConstraints,
+            alignment: Alignment.center,
+            decoration: boxDecoration,
+            child: Text(name, style: textStyle))),
+    SizedBox(width: 1),
+    Expanded(
+        child: Container(
+            constraints: lastSeenBoxConstraints,
+            alignment: Alignment.center,
+            decoration: boxDecoration,
+            child: Text(parseLastSeen(lastSeen, gender), style: textStyle)))
+  ];
 }
 
 String parseLastSeen(int lastSeen, String gender) {
@@ -59,14 +100,14 @@ String parseLastSeen(int lastSeen, String gender) {
   return result;
 }
 
-const BoxConstraints nameBoxConstraints =
-    BoxConstraints(maxWidth: 120, maxHeight: 40, minWidth: 60, minHeight: 20);
+const BoxConstraints nameBoxConstraints = BoxConstraints.expand(height: 40);
+// BoxConstraints(maxWidth: 120, maxHeight: 40, minWidth: 60, minHeight: 20);
 
-const BoxConstraints lastSeenBoxConstraints =
-    BoxConstraints(maxWidth: 120, maxHeight: 40, minWidth: 60, minHeight: 20);
+const BoxConstraints lastSeenBoxConstraints = BoxConstraints.expand(height: 40);
+// BoxConstraints(maxWidth: 120, maxHeight: 40, minWidth: 60, minHeight: 20);
 
 const TextStyle textStyle =
-    TextStyle(fontSize: 15, fontWeight: FontWeight.w700);
+    TextStyle(fontSize: 20, fontWeight: FontWeight.w700);
 
 BoxDecoration boxDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(5), color: const Color(0xffb4d3d7));

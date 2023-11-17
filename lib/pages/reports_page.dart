@@ -2,14 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_service.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/Reports%20Page/friend.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
 class ReportsPage extends StatefulWidget {
-  const ReportsPage({super.key});
+  final IFriendInteractionsProvider friendInteractionProvider;
+
+  const ReportsPage({required this.friendInteractionProvider, super.key});
 
   @override
   State<StatefulWidget> createState() => ReportsPageState();
@@ -24,7 +26,8 @@ class ReportsPageState extends State<ReportsPage> {
         Timer.periodic(const Duration(seconds: 5), (_) {
           setState(() {});
         });
-        List<User> users = await FriendInteractionsApiService.getAllFriends();
+        List<User> users =
+            await widget.friendInteractionProvider.getAllFriends();
         User activeUser = (await UserAuthenticationApiService.appUser)!;
         return (activeUser, users);
       }(),
@@ -60,6 +63,6 @@ class ReportsPageState extends State<ReportsPage> {
   }
 
   void onReportButtonClicked() async {
-    await FriendInteractionsApiService.reportOkay();
+    await widget.friendInteractionProvider.reportOkay();
   }
 }

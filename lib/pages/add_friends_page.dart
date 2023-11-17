@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_service.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 
 class AddFriendsPage extends StatefulWidget {
-  const AddFriendsPage({super.key});
+  final IFriendInteractionsProvider friendInteractionProvider;
+
+  const AddFriendsPage({required this.friendInteractionProvider, super.key});
 
   @override
   AddFriendsPageState createState() => AddFriendsPageState();
@@ -17,7 +19,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   void getSearchResults() async {
     String searchQuery = searchController.text;
     List<User> searchResults =
-        await FriendInteractionsApiService.queryFriends(searchQuery);
+        await widget.friendInteractionProvider.queryFriends(searchQuery);
 
     searchList = searchResults
         .map((e) => FriendSearchResult(user: e, onAddClicked: onAddClicked))
@@ -27,7 +29,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   }
 
   void onAddClicked(User user) {
-    FriendInteractionsApiService.sendFriendRequest(friend: user);
+    widget.friendInteractionProvider.sendFriendRequest(friend: user);
   }
 
   @override

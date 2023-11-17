@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/user.dart';
 import 'dart:convert';
 
-class FriendInteractionsApiService {
-  static Future<void> respondToFriendRequest(
+class FriendInteractionsApiService implements IFriendInteractionsProvider {
+  @override
+  Future<void> respondToFriendRequest(
       User userToRespond, bool approveRequest) async {
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
 
@@ -19,7 +21,8 @@ class FriendInteractionsApiService {
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
 
-  static Future<List<User>> getIncomingPendingRequests() async {
+  @override
+  Future<List<User>> getIncomingPendingRequests() async {
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
     var body = {'uid': uid};
 
@@ -33,7 +36,8 @@ class FriendInteractionsApiService {
     return requestors;
   }
 
-  static Future<List<User>> queryFriends(String searchQuery) async {
+  @override
+  Future<List<User>> queryFriends(String searchQuery) async {
     String endpoint = UsersController.findFriends.endpoint;
     var body = {'query': searchQuery};
 
@@ -44,7 +48,8 @@ class FriendInteractionsApiService {
     return friends;
   }
 
-  static Future<User> getFullUserDataByEmail({required String email}) async {
+  @override
+  Future<User> getFullUserDataByEmail({required String email}) async {
     String endpoint = UsersController.getUserData.endpoint;
 
     var body = {'email': email};
@@ -56,7 +61,8 @@ class FriendInteractionsApiService {
     return user;
   }
 
-  static Future<List<User>> getAllFriends() async {
+  @override
+  Future<List<User>> getAllFriends() async {
     String endpoint = UsersController.getFriendList.endpoint;
 
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
@@ -72,7 +78,8 @@ class FriendInteractionsApiService {
     return users;
   }
 
-  static void sendFriendRequest({required User friend}) {
+  @override
+  void sendFriendRequest({required User friend}) {
     String endpoint = UsersController.sendFriendRequest.endpoint;
 
     String requestorUid = auth.FirebaseAuth.instance.currentUser!.uid;
@@ -81,7 +88,8 @@ class FriendInteractionsApiService {
     HttpUtils.post(endpoint: endpoint, body: body);
   }
 
-  static Future<void> reportOkay() async {
+  @override
+  Future<void> reportOkay() async {
     String endpoint = UsersController.reportOkay.endpoint;
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
     var body = {'uid': uid};
@@ -89,5 +97,5 @@ class FriendInteractionsApiService {
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
 
-  // static Future<List<User>> getOutgoingPendingRequests() async {}
+  // Future<List<User>> getOutgoingPendingRequests() async {}
 }

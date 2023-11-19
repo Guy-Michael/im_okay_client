@@ -23,18 +23,41 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
       initialData: const [],
       future: widget.friendInteractionProvider.getIncomingPendingRequests(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Column(
-              children: snapshot.data!
-                  .map((User user) => PendingFriendRequest(
-                        friendInteractionProvider:
-                            widget.friendInteractionProvider,
-                        user: user,
-                      ))
-                  .toList());
-        }
+        // if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+        //   return Column(
+        //       children: snapshot.data!
+        //           .map((User user) => PendingFriendRequest(
+        //                 friendInteractionProvider:
+        //                     widget.friendInteractionProvider,
+        //                 user: user,
+        //               ))
+        //           .toList());
+        // }
 
-        return const Text("No pending requests :)");
+        List<PendingFriendRequest> requests = [
+          PendingFriendRequest(
+            friendInteractionProvider: widget.friendInteractionProvider,
+            user: const User(firstName: "TEST", lastName: "TESTING"),
+          ),
+          PendingFriendRequest(
+            friendInteractionProvider: widget.friendInteractionProvider,
+            user: const User(firstName: "TEST", lastName: "TESTING"),
+          ),
+          PendingFriendRequest(
+            friendInteractionProvider: widget.friendInteractionProvider,
+            user: const User(firstName: "TEST", lastName: "TESTING"),
+          ),
+          PendingFriendRequest(
+            friendInteractionProvider: widget.friendInteractionProvider,
+            user: const User(firstName: "TEST", lastName: "TESTING"),
+          )
+        ];
+
+        return Column(
+          children: requests,
+        );
+
+        return const Center(child: Text("No pending requests :)"));
       },
     ));
   }
@@ -55,30 +78,38 @@ class PendingFriendRequest extends StatefulWidget {
 class PendingFriendRequestState extends State<PendingFriendRequest> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.only(bottom: 5, right: 15),
-        child: Row(
-          textDirection: TextDirection.rtl,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: _getList(user: widget.user),
-        ));
+    // return Container(
+    // margin: const EdgeInsets.only(bottom: 5, right: 15),
+    // child:
+    return Row(
+      // runSpacing: 100,
+      // spacing: 10,
+      textDirection: TextDirection.rtl,
+      // crossAxisAlignment: CrossAxisAlignment.center,
+      children: _getList(user: widget.user),
+      // )
+    );
   }
 
   List<Widget> _getList({required User user}) => [
-        Container(
-          alignment: Alignment.center,
-          constraints: const BoxConstraints(
-              maxHeight: 70, maxWidth: 100, minHeight: 70, minWidth: 100),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color(0xffb4d3d7)),
-          child: Text(user.fullName,
-              textDirection: TextDirection.rtl,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              )),
-        ),
+        Expanded(
+            flex: 7,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
+              alignment: Alignment.center,
+              // constraints: BoxConstraints.expand(height: 70),
+              // constraints: const BoxConstraints(
+              //     maxHeight: 200, maxWidth: 400, minHeight: 100, minWidth: 70),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: const Color(0xffb4d3d7)),
+              child: Text(user.fullName,
+                  textDirection: TextDirection.rtl,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  )),
+            )),
         PurpleButton(
           caption: "אשר",
           callback: () => widget.friendInteractionProvider
@@ -86,6 +117,7 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
         ),
         PurpleButton(
           caption: "דחה",
+          color: Colors.redAccent,
           callback: () => widget.friendInteractionProvider
               .respondToFriendRequest(user, false),
         )

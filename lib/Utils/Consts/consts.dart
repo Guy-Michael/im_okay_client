@@ -20,8 +20,19 @@ class Consts {
     return gender == Gender.female ? "לא שיתפה עדיין" : "לא שיתף עדיין";
   }
 
-  static String xMinutesAgo(int minutes) {
-    return 'לפני $minutes דקות';
+  static String xTimeAgo(Duration deltaSince) {
+    String result = 'לפני ';
+    if (deltaSince.inDays > 1) {
+      result += "${deltaSince.inDays} ימים";
+    } else if (deltaSince.inHours > 1) {
+      result += "${deltaSince.inHours} שעות";
+    } else if (deltaSince.inMinutes > 1) {
+      result += "${deltaSince.inMinutes} דקות";
+    } else {
+      result += "רגע";
+    }
+
+    return result;
   }
 
   static const String firstName = "שם פרטי";

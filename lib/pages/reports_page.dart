@@ -6,7 +6,15 @@ import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/f
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/Reports%20Page/friend.dart';
+import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
+
+Future<(User activeUser, List<User> friends)> future(
+    IFriendInteractionsProvider provider) async {
+  List<User> users = await provider.getAllFriends();
+  User activeUser = (await UserAuthenticationApiService.appUser)!;
+  return (activeUser, users);
+}
 
 class ReportsPage extends StatefulWidget {
   final IFriendInteractionsProvider friendInteractionProvider;
@@ -22,50 +30,51 @@ class ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     var builder = FutureBuilder<(User activeUser, List<User> friends)>(
       initialData: (const User(), List<User>.empty()),
-      future: () async {
-        Timer.periodic(const Duration(seconds: 5), (_) {
-          setState(() {});
-        });
-        List<User> users =
-            await widget.friendInteractionProvider.getAllFriends();
-        User activeUser = (await UserAuthenticationApiService.appUser)!;
-        return (activeUser, users);
-      }(),
+      future: future(widget.friendInteractionProvider),
       builder: (context, snapshot) {
         User activeUser = snapshot.data!.$1;
         List<User> users = snapshot.data!.$2;
         if (activeUser.firstName == '' && users.isEmpty) {
           return const Center(child: CircularProgressIndicator.adaptive());
         }
+
         return Scaffold(
             body: Wrap(
-                runSpacing: 3,
+                textDirection: TextDirection.rtl,
                 children: () {
                   if (users.isEmpty) {
                     return [const Center(child: Text("עוד לא הוספת חברים :)"))];
                   }
-                  FriendReport mine = FriendReport(
-                    name: "השיתוף האחרון שלי",
-                    gender: activeUser.gender,
-                    lastSeen: activeUser.lastSeen,
-                  );
-                  List<FriendReport> allUsers = [mine];
-                  List<FriendReport> otherUsers = users.map((User user) {
-                    return FriendReport(
-                        name: user.firstName, lastSeen: user.lastSeen);
-                  }).toList();
-
-                  allUsers.addAll(otherUsers);
-                  return allUsers;
+                  List<User> allUsers = [activeUser];
+                  allUsers.addAll(users);
+                  return allUsers
+                      .map((e) => GFListTileDirectional(
+                            title: Text(e.fullName),
+                            direction: TextDirection.rtl,
+                            margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                            onLongPress: () {},
+                            color: const Color.fromARGB(150, 170, 170, 170),
+                            icon: Text(parseLastSeen(e.lastSeen, e.gender)),
+                            avatar: const Icon(Icons.person_rounded),
+                            shadow: const BoxShadow(
+                                blurStyle: BlurStyle.solid,
+                                color: Colors.transparent),
+                          ))
+                      .toList();
                 }()),
             bottomSheet: Row(
+              textDirection: TextDirection.rtl,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(width: 20),
                 PurpleButton(
                     callback: onReportButtonClicked,
                     caption: Consts.reportButtonCaption(
-                        activeUser.firstName, activeUser.gender))
+                        activeUser.firstName, activeUser.gender)),
+                const SizedBox(width: 20),
+                PurpleButton(
+                    callback: () => setState(() {}),
+                    caption:
+                        activeUser.gender == Gender.female ? "רענני" : "רענן")
               ],
             ));
       },
@@ -75,5 +84,25 @@ class ReportsPageState extends State<ReportsPage> {
 
   void onReportButtonClicked() async {
     await widget.friendInteractionProvider.reportOkay();
+    setState(() {});
   }
+}
+
+String parseLastSeen(int lastSeen, String gender) {
+  String result = '';
+
+  if (lastSeen == 0) {
+    return Consts.notReportedYet(gender);
+  }
+
+  int delta = DateTime.now().millisecondsSinceEpoch - lastSeen;
+  Duration duration = Duration(milliseconds: delta);
+
+  result = Consts.xTimeAgo(duration);
+  // } else {
+  //   DateTime time = DateTime.fromMillisecondsSinceEpoch(lastSeen);
+  //   result = " ${time.day}.${time.month}, ${time.hour}:${time.minute}";
+  // }
+
+  return result;
 }

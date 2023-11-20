@@ -39,8 +39,8 @@ List<Widget> getList2() {
     Expanded(
         child: Container(
       color: Colors.blue,
-      padding: EdgeInsets.all(16.0),
-      child: Center(
+      padding: const EdgeInsets.all(16.0),
+      child: const Center(
         child: Text(
           'Container 1',
           style: TextStyle(color: Colors.white),
@@ -50,8 +50,8 @@ List<Widget> getList2() {
     Expanded(
         child: Container(
       color: Colors.green,
-      padding: EdgeInsets.all(16.0),
-      child: Center(
+      padding: const EdgeInsets.all(16.0),
+      child: const Center(
         child: Text(
           'Container 2',
           style: TextStyle(color: Colors.white),
@@ -70,7 +70,7 @@ List<Widget> getList(String name, int lastSeen, String gender) {
             alignment: Alignment.center,
             decoration: boxDecoration,
             child: Text(name, style: textStyle))),
-    SizedBox(width: 1),
+    const SizedBox(width: 1),
     Expanded(
         child: Container(
             constraints: lastSeenBoxConstraints,

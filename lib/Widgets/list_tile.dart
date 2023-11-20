@@ -4,7 +4,7 @@ import 'package:getwidget/getwidget.dart';
 class GFListTileDirectional extends StatelessWidget {
   /// Creates ListTile with leading, title, trailing, image widget for almost every type of ListTile design.
   const GFListTileDirectional({
-    Key? key,
+    super.key,
     this.direction,
     this.titleText,
     this.subTitleText,
@@ -33,7 +33,7 @@ class GFListTileDirectional extends StatelessWidget {
     this.secondButtonTextStyle,
     this.radius,
     this.shadow,
-  }) : super(key: key);
+  });
 
   /// type of [String] used to pass text, alternative to title property and gets higher priority than title
   final TextDirection? direction;

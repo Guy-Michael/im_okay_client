@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
 class FriendRequestsPage extends StatefulWidget {
@@ -33,6 +36,79 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
         //               ))
         //           .toList());
         // }
+
+        List<Widget> tiles = [
+          Row(
+            textDirection: TextDirection.rtl,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                  child: GFListTileDirectional(
+                title: Text("שם מלא משתמש"),
+                direction: TextDirection.rtl,
+                margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                onLongPress: () {},
+                color: const Color.fromARGB(150, 170, 170, 170),
+                avatar: const Icon(Icons.person_rounded),
+                shadow: const BoxShadow(
+                    blurStyle: BlurStyle.solid, color: Colors.transparent),
+              )),
+              GFButton(
+                onPressed: () {},
+                text: "אשר",
+              ),
+              SizedBox(width: 2),
+              GFButton(
+                onPressed: () {},
+                text: "דחה",
+              )
+            ],
+          ),
+          Row(
+            children: [
+              GFListTileDirectional(
+                title: Text("שם מלא משתמש"),
+                direction: TextDirection.rtl,
+                margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                onLongPress: () {},
+                color: const Color.fromARGB(150, 170, 170, 170),
+                avatar: const Icon(Icons.person_rounded),
+                shadow: const BoxShadow(
+                    blurStyle: BlurStyle.solid, color: Colors.transparent),
+              ),
+              PurpleButton(
+                callback: () {},
+                caption: "אשר",
+              ),
+              PurpleButton(
+                callback: () {},
+                caption: "אשר",
+              )
+            ],
+          ),
+          Row(
+            children: [
+              GFListTileDirectional(
+                title: Text("שם מלא משתמש"),
+                direction: TextDirection.rtl,
+                margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                onLongPress: () {},
+                color: const Color.fromARGB(150, 170, 170, 170),
+                avatar: const Icon(Icons.person_rounded),
+                shadow: const BoxShadow(
+                    blurStyle: BlurStyle.solid, color: Colors.transparent),
+              ),
+              PurpleButton(
+                callback: () {},
+                caption: "אשר",
+              ),
+              PurpleButton(
+                callback: () {},
+                caption: "אשר",
+              )
+            ],
+          ),
+        ];
 
         List<PendingFriendRequest> requests = [
           PendingFriendRequest(
@@ -93,33 +169,31 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
 
   List<Widget> _getList({required User user}) => [
         Expanded(
-            flex: 7,
-            child: Container(
-              padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
-              alignment: Alignment.center,
-              // constraints: BoxConstraints.expand(height: 70),
-              // constraints: const BoxConstraints(
-              //     maxHeight: 200, maxWidth: 400, minHeight: 100, minWidth: 70),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: const Color(0xffb4d3d7)),
-              child: Text(user.fullName,
-                  textDirection: TextDirection.rtl,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  )),
-            )),
-        PurpleButton(
-          caption: "אשר",
-          callback: () => widget.friendInteractionProvider
-              .respondToFriendRequest(user, true),
+            child: GFListTileDirectional(
+          title: Text(user.fullName),
+          direction: TextDirection.rtl,
+          margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+          onLongPress: () {},
+          color: const Color.fromARGB(150, 170, 170, 170),
+          avatar: const Icon(Icons.person_rounded),
+          shadow: const BoxShadow(
+              blurStyle: BlurStyle.solid, color: Colors.transparent),
+        )),
+        GFButton(
+          onPressed: () async {
+            await widget.friendInteractionProvider
+                .respondToFriendRequest(user, true);
+          },
+          text: "אשר",
         ),
-        PurpleButton(
-          caption: "דחה",
+        const SizedBox(width: 2),
+        GFButton(
           color: Colors.redAccent,
-          callback: () => widget.friendInteractionProvider
-              .respondToFriendRequest(user, false),
+          onPressed: () async {
+            await widget.friendInteractionProvider
+                .respondToFriendRequest(user, false);
+          },
+          text: "דחה",
         )
       ];
 }

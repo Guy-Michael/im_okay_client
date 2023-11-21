@@ -7,7 +7,6 @@ import 'package:im_okay/pages/settings.dart';
 
 class HubPage extends StatefulWidget {
   final IFriendInteractionsProvider friendInteractionProvider;
-
   const HubPage({required this.friendInteractionProvider, super.key});
 
   @override
@@ -16,9 +15,21 @@ class HubPage extends StatefulWidget {
 
 class HubPageState extends State<HubPage> {
   int selectedIndex = 0;
+  late ReportsPage reportsPage;
+  late SettingsPage settingsPage;
+  late AddFriendsPage addFriendsPage;
+  late FriendRequestsPage friendRequestsPage;
+
   @override
   void initState() {
     super.initState();
+    reportsPage = ReportsPage(
+        friendInteractionProvider: widget.friendInteractionProvider);
+    settingsPage = SettingsPage();
+    addFriendsPage = AddFriendsPage(
+        friendInteractionProvider: widget.friendInteractionProvider);
+    friendRequestsPage = FriendRequestsPage(
+        friendInteractionProvider: widget.friendInteractionProvider);
   }
 
   @override
@@ -50,29 +61,25 @@ class HubPageState extends State<HubPage> {
   List<({Widget page, String label, IconData icon, IconData iconSelected})>
       _getBottomNavigationWidgets() => [
             (
-              page: ReportsPage(
-                  friendInteractionProvider: widget.friendInteractionProvider),
+              page: reportsPage,
               label: 'Home',
               icon: Icons.home_outlined,
               iconSelected: Icons.home
             ),
             (
-              page: AddFriendsPage(
-                  friendInteractionProvider: widget.friendInteractionProvider),
+              page: addFriendsPage,
               label: 'Add Friends',
               icon: Icons.plus_one_outlined,
               iconSelected: Icons.plus_one
             ),
             (
-              page: FriendRequestsPage(
-                friendInteractionProvider: widget.friendInteractionProvider,
-              ),
+              page: friendRequestsPage,
               label: "Requests",
               icon: Icons.waves_outlined,
               iconSelected: Icons.waves
             ),
             (
-              page: const SettingsPage(),
+              page: settingsPage,
               label: 'Settings',
               icon: Icons.settings_outlined,
               iconSelected: Icons.settings

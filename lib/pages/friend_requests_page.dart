@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/friend_interactions_api_service.dart';
-import 'package:im_okay/Widgets/purple_button.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Widgets/list_tile.dart';
 
 class FriendRequestsPage extends StatefulWidget {
-  const FriendRequestsPage({super.key});
+  final IFriendInteractionsProvider friendInteractionProvider;
+
+  const FriendRequestsPage(
+      {required this.friendInteractionProvider, super.key});
 
   @override
   FriendRequestsPageState createState() => FriendRequestsPageState();
@@ -18,28 +22,31 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
     return Scaffold(
         body: FutureBuilder<List<User>>(
       initialData: const [],
-      future: FriendInteractionsApiService.getIncomingPendingRequests(),
+      future: widget.friendInteractionProvider.getIncomingPendingRequests(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return Column(
               children: snapshot.data!
                   .map((User user) => PendingFriendRequest(
+                        friendInteractionProvider:
+                            widget.friendInteractionProvider,
                         user: user,
                       ))
                   .toList());
         }
 
-        return const Text("No pending requests :)");
+        return const Center(child: Text("No pending requests :)"));
       },
     ));
   }
 }
 
 class PendingFriendRequest extends StatefulWidget {
+  final IFriendInteractionsProvider friendInteractionProvider;
   final User user;
-  // final Function(User user) onAddClicked;
 
-  const PendingFriendRequest({required this.user, super.key});
+  const PendingFriendRequest(
+      {required this.friendInteractionProvider, required this.user, super.key});
 
   @override
   State<PendingFriendRequest> createState() => PendingFriendRequestState();
@@ -48,39 +55,39 @@ class PendingFriendRequest extends StatefulWidget {
 class PendingFriendRequestState extends State<PendingFriendRequest> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.only(bottom: 5, right: 15),
-        child: Row(
-          textDirection: TextDirection.rtl,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: _getList(user: widget.user),
-        ));
+    return Row(
+      textDirection: TextDirection.rtl,
+      children: _getList(user: widget.user),
+    );
   }
-}
 
-List<Widget> _getList({required User user}) => [
-      Container(
-        alignment: Alignment.center,
-        constraints: const BoxConstraints(
-            maxHeight: 70, maxWidth: 100, minHeight: 70, minWidth: 100),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: const Color(0xffb4d3d7)),
-        child: Text(user.fullName,
-            textDirection: TextDirection.rtl,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            )),
-      ),
-      PurpleButton(
-        caption: "אשר",
-        callback: () =>
-            FriendInteractionsApiService.respondToFriendRequest(user, true),
-      ),
-      PurpleButton(
-        caption: "דחה",
-        callback: () =>
-            FriendInteractionsApiService.respondToFriendRequest(user, false),
-      )
-    ];
+  List<Widget> _getList({required User user}) => [
+        Expanded(
+            child: GFListTileDirectional(
+          title: Text(user.fullName),
+          direction: TextDirection.rtl,
+          margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+          onLongPress: () {},
+          color: const Color.fromARGB(150, 170, 170, 170),
+          avatar: const Icon(Icons.person_rounded),
+          shadow: const BoxShadow(
+              blurStyle: BlurStyle.solid, color: Colors.transparent),
+        )),
+        GFButton(
+          onPressed: () async {
+            await widget.friendInteractionProvider
+                .respondToFriendRequest(user, true);
+          },
+          text: "אשר",
+        ),
+        const SizedBox(width: 2),
+        GFButton(
+          color: Colors.redAccent,
+          onPressed: () async {
+            await widget.friendInteractionProvider
+                .respondToFriendRequest(user, false);
+          },
+          text: "דחה",
+        )
+      ];
+}

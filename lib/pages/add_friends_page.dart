@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/friend_interactions_api_service.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
+import 'package:im_okay/Widgets/purple_button.dart';
 
 class AddFriendsPage extends StatefulWidget {
-  const AddFriendsPage({super.key});
+  final IFriendInteractionsProvider friendInteractionProvider;
+
+  const AddFriendsPage({required this.friendInteractionProvider, super.key});
 
   @override
   AddFriendsPageState createState() => AddFriendsPageState();
@@ -17,7 +23,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   void getSearchResults() async {
     String searchQuery = searchController.text;
     List<User> searchResults =
-        await FriendInteractionsApiService.queryFriends(searchQuery);
+        await widget.friendInteractionProvider.queryFriends(searchQuery);
 
     searchList = searchResults
         .map((e) => FriendSearchResult(user: e, onAddClicked: onAddClicked))
@@ -27,26 +33,28 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   }
 
   void onAddClicked(User user) {
-    FriendInteractionsApiService.sendFriendRequest(friend: user);
+    widget.friendInteractionProvider.sendFriendRequest(friend: user);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: MyTextField(
-              inputController: searchController,
-              hintText: 'חפשו חברים',
-              icon: Icons.search,
-            )),
-        ElevatedButton(
-            onPressed: getSearchResults, child: const Text("search")),
-        Wrap(children: searchList),
-      ],
-    ));
+      body: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: MyTextField(
+                inputController: searchController,
+                hintText: 'חפשו חברים',
+                icon: Icons.search,
+              )),
+          Wrap(children: searchList),
+        ],
+      ),
+      bottomSheet: Center(
+          heightFactor: 1,
+          child: PurpleButton(callback: getSearchResults, caption: "search")),
+    );
   }
 }
 
@@ -67,38 +75,51 @@ class FriendSearchResultState extends State<FriendSearchResult> {
     return Container(
         margin: const EdgeInsets.only(bottom: 5, right: 15),
         child: Row(
-          textDirection: TextDirection.rtl,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children:
-              _getList(user: widget.user, onAddClicked: widget.onAddClicked),
-        ));
+            textDirection: TextDirection.rtl,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: GFListTileDirectional(
+                title: Text(widget.user.fullName),
+                direction: TextDirection.rtl,
+                margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                onLongPress: () {},
+                color: const Color.fromARGB(150, 170, 170, 170),
+                avatar: const Icon(Icons.person_rounded),
+                shadow: const BoxShadow(
+                    blurStyle: BlurStyle.solid, color: Colors.transparent),
+              )),
+              GFButton(
+                onPressed: () => widget.onAddClicked(widget.user),
+                color: Colors.green,
+                child:
+                    Text("+", textScaleFactor: 2, textAlign: TextAlign.center),
+                // const Icon(Icons.add),
+              )
+
+              // Container(
+              //   alignment: Alignment.center,
+              //   width: 160,
+              //   height: 40,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(5),
+              //       color: const Color(0xffb4d3d7)),
+              //   child: Text(widget.user.fullName,
+              //       textDirection: TextDirection.rtl,
+              //       style: const TextStyle(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.w700,
+              //       )),
+              // ),
+              // IconButton(
+              //     color: const Color(0xffb4d3d7),
+              //     style: ButtonStyle(
+              //         fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
+              //         shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(5)))),
+              //     onPressed: () => widget.onAddClicked(widget.user),
+              //     alignment: Alignment.center,
+              //     icon: const Icon(Icons.add))
+            ]));
   }
 }
-
-List<Widget> _getList(
-        {required User user, required Function(User) onAddClicked}) =>
-    [
-      Container(
-        alignment: Alignment.center,
-        width: 160,
-        height: 40,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: const Color(0xffb4d3d7)),
-        child: Text(user.fullName,
-            textDirection: TextDirection.rtl,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            )),
-      ),
-      IconButton(
-          color: const Color(0xffb4d3d7),
-          style: ButtonStyle(
-              fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
-              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)))),
-          onPressed: () => onAddClicked(user),
-          alignment: Alignment.center,
-          icon: const Icon(Icons.add))
-    ];

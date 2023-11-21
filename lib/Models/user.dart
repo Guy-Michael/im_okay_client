@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
 
 class User extends Equatable {
   final String email;
@@ -8,6 +9,7 @@ class User extends Equatable {
   final int lastSeen;
 
   String get fullName => "$firstName $lastName";
+  bool get isFemale => gender == Gender.female;
 
   const User(
       {this.email = '',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class PurpleButton extends StatefulWidget {
   final Function() callback;
   final String caption;
+  final Color color;
   final double minimumHeight;
   final double maximumHeight;
   final double minimumWidth;
@@ -12,6 +13,7 @@ class PurpleButton extends StatefulWidget {
   const PurpleButton(
       {required this.callback,
       required this.caption,
+      this.color = Colors.deepPurpleAccent,
       this.minimumHeight = 100,
       this.minimumWidth = 70,
       this.maximumHeight = 200,
@@ -29,11 +31,11 @@ class PurpleButtonState extends State<PurpleButton> {
     return ElevatedButton(
         onPressed: widget.callback,
         style: ElevatedButton.styleFrom(
-            minimumSize: Size(widget.minimumHeight * widget.scaleFactor,
+            minimumSize: Size(widget.minimumWidth * widget.scaleFactor,
                 widget.minimumWidth * widget.scaleFactor),
-            maximumSize: Size(widget.maximumHeight * widget.scaleFactor,
-                widget.maximumWidth * widget.scaleFactor),
-            backgroundColor: Colors.deepPurpleAccent),
+            maximumSize: Size(widget.maximumWidth * widget.scaleFactor,
+                widget.maximumHeight * widget.scaleFactor),
+            backgroundColor: widget.color),
         child: Text(
           widget.caption,
           textScaleFactor: 1.5,

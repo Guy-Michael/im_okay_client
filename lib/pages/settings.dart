@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
-import 'package:im_okay/Services/API%20Services/user_authentication_api_service.dart';
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
@@ -24,11 +24,10 @@ class SettingsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     PurpleButton(
-                        callback: onLogoutButtonClicked,
-                        caption: Consts.logoutButtonCaption(Gender.female)),
+                        callback: onLogoutButtonClicked, caption: "התנתקות"),
                     PurpleButton(
                         callback: onDeleteUserButtonClicked,
-                        caption: Consts.deleteUserButtonCaption(Gender.female)),
+                        caption: "מחיקת חשבון"),
                   ])));
     });
   }

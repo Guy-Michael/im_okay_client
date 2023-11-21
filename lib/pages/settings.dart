@@ -24,11 +24,10 @@ class SettingsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     PurpleButton(
-                        callback: onLogoutButtonClicked,
-                        caption: Consts.logoutButtonCaption(Gender.female)),
+                        callback: onLogoutButtonClicked, caption: "התנתקות"),
                     PurpleButton(
                         callback: onDeleteUserButtonClicked,
-                        caption: Consts.deleteUserButtonCaption(Gender.female)),
+                        caption: "מחיקת חשבון"),
                   ])));
     });
   }

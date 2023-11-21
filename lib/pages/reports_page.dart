@@ -44,9 +44,20 @@ class ReportsPageState extends State<ReportsPage> {
                   if (users.isEmpty) {
                     return [const Center(child: Text("עוד לא הוספת חברים :)"))];
                   }
-                  List<User> allUsers = [activeUser];
-                  allUsers.addAll(users);
-                  return allUsers
+                  GFListTileDirectional activeUserTile = GFListTileDirectional(
+                    title: Text("השיתוף האחרון שלי"),
+                    direction: TextDirection.rtl,
+                    margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                    onLongPress: () {},
+                    color: const Color.fromARGB(150, 170, 170, 170),
+                    icon: Text(
+                        parseLastSeen(activeUser.lastSeen, activeUser.gender)),
+                    avatar: const Icon(Icons.person_rounded),
+                    shadow: const BoxShadow(
+                        blurStyle: BlurStyle.solid, color: Colors.transparent),
+                  );
+
+                  List<GFListTileDirectional> allUserTiles = users
                       .map((e) => GFListTileDirectional(
                             title: Text(e.fullName),
                             direction: TextDirection.rtl,
@@ -60,6 +71,8 @@ class ReportsPageState extends State<ReportsPage> {
                                 color: Colors.transparent),
                           ))
                       .toList();
+                  allUserTiles.insert(0, activeUserTile);
+                  return allUserTiles;
                 }()),
             bottomSheet: Row(
               textDirection: TextDirection.rtl,

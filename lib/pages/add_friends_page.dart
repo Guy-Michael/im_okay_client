@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -75,34 +78,48 @@ class FriendSearchResultState extends State<FriendSearchResult> {
             textDirection: TextDirection.rtl,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                alignment: Alignment.center,
-                width: 160,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: const Color(0xffb4d3d7)),
-                child: Text(widget.user.fullName,
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    )),
-              ),
-              IconButton(
-                  color: const Color(0xffb4d3d7),
-                  style: ButtonStyle(
-                      fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
-                      shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)))),
-                  onPressed: () => widget.onAddClicked(widget.user),
-                  alignment: Alignment.center,
-                  icon: const Icon(Icons.add))
-            ]
-            // _getList(user: widget.user, onAddClicked: widget.onAddClicked),
-            ));
+              Expanded(
+                  child: GFListTileDirectional(
+                title: Text(widget.user.fullName),
+                direction: TextDirection.rtl,
+                margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+                onLongPress: () {},
+                color: const Color.fromARGB(150, 170, 170, 170),
+                avatar: const Icon(Icons.person_rounded),
+                shadow: const BoxShadow(
+                    blurStyle: BlurStyle.solid, color: Colors.transparent),
+              )),
+              GFButton(
+                onPressed: () => widget.onAddClicked(widget.user),
+                color: Colors.green,
+                child:
+                    Text("+", textScaleFactor: 2, textAlign: TextAlign.center),
+                // const Icon(Icons.add),
+              )
+
+              // Container(
+              //   alignment: Alignment.center,
+              //   width: 160,
+              //   height: 40,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(5),
+              //       color: const Color(0xffb4d3d7)),
+              //   child: Text(widget.user.fullName,
+              //       textDirection: TextDirection.rtl,
+              //       style: const TextStyle(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.w700,
+              //       )),
+              // ),
+              // IconButton(
+              //     color: const Color(0xffb4d3d7),
+              //     style: ButtonStyle(
+              //         fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
+              //         shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(5)))),
+              //     onPressed: () => widget.onAddClicked(widget.user),
+              //     alignment: Alignment.center,
+              //     icon: const Icon(Icons.add))
+            ]));
   }
 }
-
-// List<Widget> _getList(
-//         {required User user, required Function(User) onAddClicked}) =>

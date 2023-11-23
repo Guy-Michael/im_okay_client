@@ -42,7 +42,10 @@ class ReportsPageState extends State<ReportsPage> {
                 textDirection: TextDirection.rtl,
                 children: () {
                   if (users.isEmpty) {
-                    return [const Center(child: Text("עוד לא הוספת חברים :)"))];
+                    return [
+                      const Center(
+                          heightFactor: 5, child: Text("עוד לא הוספת חברים :)"))
+                    ];
                   }
                   GFListTileDirectional activeUserTile = GFListTileDirectional(
                     title: Text("השיתוף האחרון שלי"),

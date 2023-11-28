@@ -26,19 +26,33 @@ class PurpleButton extends StatefulWidget {
 }
 
 class PurpleButtonState extends State<PurpleButton> {
+  bool isWaitingForCallback = false;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: widget.callback,
+        onPressed: () async {
+          setState(() {
+            isWaitingForCallback = true;
+          });
+          await widget.callback();
+
+          setState(() {
+            isWaitingForCallback = false;
+          });
+          // isWaitingForCallback = false;
+        },
         style: ElevatedButton.styleFrom(
             minimumSize: Size(widget.minimumWidth * widget.scaleFactor,
                 widget.minimumWidth * widget.scaleFactor),
             maximumSize: Size(widget.maximumWidth * widget.scaleFactor,
                 widget.maximumHeight * widget.scaleFactor),
             backgroundColor: widget.color),
-        child: Text(
-          widget.caption,
-          textScaleFactor: 1.5,
-        ));
+        child: isWaitingForCallback
+            ? const CircularProgressIndicator()
+            : Text(
+                widget.caption,
+                textScaleFactor: 1.5,
+              ));
   }
 }

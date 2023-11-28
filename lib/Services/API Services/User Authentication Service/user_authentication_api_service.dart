@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
@@ -21,6 +22,7 @@ class UserAuthenticationApiService {
     var body = {'authToken': authToken};
 
     String response = await HttpUtils.post(endpoint: endpoint, body: body);
+    debugPrint(response);
     User user = User.fromJson((json.decode(response)));
 
     return user;

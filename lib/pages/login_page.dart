@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Widgets/async_button.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 
@@ -41,7 +43,14 @@ class LoginState extends State<LoginPage> {
                   caption: Consts.registerCaption),
               const SizedBox(width: 20),
               PurpleButton(
-                  callback: onButtonLoginClicked, caption: Consts.loginCaption)
+                  callback: onButtonLoginClicked, caption: Consts.loginCaption),
+              AsyncButton(
+                onPressed: () {
+                  onButtonLoginClicked();
+                },
+                text: Consts.loginCaption,
+                icon: Icon(Icons.login),
+              )
             ])
           ],
         ),

@@ -1,0 +1,296 @@
+@startuml
+set namespaceSeparator ::
+
+class "im_okay::firebase_options.dart::DefaultFirebaseOptions" {
+  {static} +FirebaseOptions web
+  {static} +FirebaseOptions android
+  {static} +FirebaseOptions ios
+  {static} +FirebaseOptions currentPlatform
+}
+
+"im_okay::firebase_options.dart::DefaultFirebaseOptions" o-- "firebase_core_platform_interface::firebase_core_platform_interface.dart::FirebaseOptions"
+
+class "im_okay::Models::user.dart::User" {
+  +String email
+  +String firstName
+  +String lastName
+  +String gender
+  +int lastSeen
+  +String fullName
+  +Map<String, dynamic> toJson()
+  {static} +dynamic getValueOrDefault()
+}
+
+class "im_okay::pages::add_friends_page.dart::AddFriendsPage" {
+  +AddFriendsPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::pages::add_friends_page.dart::AddFriendsPage"
+
+class "im_okay::pages::add_friends_page.dart::AddFriendsPageState" {
+  +TextEditingController searchController
+  +List<FriendSearchResult> searchList
+  +void getSearchResults()
+  +void onAddClicked()
+  +Widget build()
+}
+
+"im_okay::pages::add_friends_page.dart::AddFriendsPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::pages::add_friends_page.dart::AddFriendsPageState"
+
+class "im_okay::pages::add_friends_page.dart::FriendSearchResult" {
+  +User user
+  +dynamic Function(User) onAddClicked
+  +State<FriendSearchResult> createState()
+}
+
+"im_okay::pages::add_friends_page.dart::FriendSearchResult" o-- "im_okay::Models::user.dart::User"
+"im_okay::pages::add_friends_page.dart::FriendSearchResult" o-- "null::dynamic Function(User)"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::pages::add_friends_page.dart::FriendSearchResult"
+
+class "im_okay::pages::add_friends_page.dart::FriendSearchResultState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::pages::add_friends_page.dart::FriendSearchResultState"
+
+class "im_okay::pages::auth_redirect_page.dart::AuthRedirectPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "im_okay::pages::auth_redirect_page.dart::AuthRedirectPage"
+
+class "im_okay::pages::friend_requests_page.dart::FriendRequestsPage" {
+  +FriendRequestsPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::pages::friend_requests_page.dart::FriendRequestsPage"
+
+class "im_okay::pages::friend_requests_page.dart::FriendRequestsPageState" {
+  +List<PendingFriendRequest> friendRequestsList
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::pages::friend_requests_page.dart::FriendRequestsPageState"
+
+class "im_okay::pages::friend_requests_page.dart::PendingFriendRequest" {
+  +User user
+  +State<PendingFriendRequest> createState()
+}
+
+"im_okay::pages::friend_requests_page.dart::PendingFriendRequest" o-- "im_okay::Models::user.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::pages::friend_requests_page.dart::PendingFriendRequest"
+
+class "im_okay::pages::friend_requests_page.dart::PendingFriendRequestState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::pages::friend_requests_page.dart::PendingFriendRequestState"
+
+class "im_okay::pages::hub_page.dart::HubPage" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::pages::hub_page.dart::HubPage"
+
+class "im_okay::pages::hub_page.dart::HubPageState" {
+  +int selectedIndex
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::pages::hub_page.dart::HubPageState"
+
+class "im_okay::pages::login_page.dart::LoginPage" {
+  +State<LoginPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::pages::login_page.dart::LoginPage"
+
+class "im_okay::pages::login_page.dart::LoginState" {
+  +TextEditingController usernameController
+  +TextEditingController passwordController
+  +Widget build()
+  +void onButtonLoginClicked()
+  +void onButtonRegisterClicked()
+  +void dispose()
+}
+
+"im_okay::pages::login_page.dart::LoginState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::pages::login_page.dart::LoginState"
+
+class "im_okay::pages::register_page.dart::RegisterPage" {
+  -TextEditingController _firstNameController
+  -TextEditingController _lastNameController
+  -TextEditingController _passwordController
+  -TextEditingController _emailController
+  +Widget build()
+  +void completeRegistration()
+  +void navigateToLoginPage()
+}
+
+"im_okay::pages::register_page.dart::RegisterPage" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "im_okay::pages::register_page.dart::RegisterPage"
+
+class "im_okay::pages::reports_page.dart::ReportsPage" {
+  +Widget build()
+  +void onReportButtonClicked()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "im_okay::pages::reports_page.dart::ReportsPage"
+
+class "im_okay::pages::settings.dart::SettingsPage" {
+  +Widget build()
+  +void onLogoutButtonClicked()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "im_okay::pages::settings.dart::SettingsPage"
+
+class "im_okay::Services::API%20Services::friend_request_api_service.dart::FriendInteractionsApiService" {
+  {static} +dynamic respondToFriendRequest()
+  {static} +dynamic getIncomingPendingRequests()
+  {static} +dynamic getAllFriends()
+  {static} +dynamic reportOkay()
+}
+
+class "im_okay::Services::API%20Services::friend_request_api_service.dart::FriendsController" {
+  +int index
+  {static} +List<FriendsController> values
+  {static} +FriendsController route
+}
+
+"im_okay::Services::API%20Services::friend_request_api_service.dart::FriendsController" o-- "im_okay::Services::API%20Services::friend_request_api_service.dart::FriendsController"
+"dart::core::Enum" <|-- "im_okay::Services::API%20Services::friend_request_api_service.dart::FriendsController"
+
+class "im_okay::Services::API%20Services::user_authentication_api_service.dart::UserAuthenticationApiService" {
+  {static} +User? firebaseUser
+  {static} +dynamic appUser
+  {static} +dynamic registerNewUser()
+}
+
+"im_okay::Services::API%20Services::user_authentication_api_service.dart::UserAuthenticationApiService" o-- "firebase_auth::firebase_auth.dart::User"
+
+class "im_okay::Services::API%20Services::user_authentication_api_service.dart::AuthController" {
+  +int index
+  {static} +List<AuthController> values
+  {static} +AuthController route
+}
+
+"im_okay::Services::API%20Services::user_authentication_api_service.dart::AuthController" o-- "im_okay::Services::API%20Services::user_authentication_api_service.dart::AuthController"
+"dart::core::Enum" <|-- "im_okay::Services::API%20Services::user_authentication_api_service.dart::AuthController"
+
+class "im_okay::Utils::Consts::consts.dart::Consts" {
+  {static} +String loginCaption
+  {static} +String registerCaption
+  {static} +String cancel
+  {static} +String username
+  {static} +String reportedSuccessfully
+  {static} +String justNow
+  {static} +String firstName
+  {static} +String lastName
+  {static} +String password
+  {static} +String email
+  {static} +String searchFriendsFieldHintText
+  {static} +String logoutButtonCaption()
+  {static} +String reportButtonCaption()
+  {static} +String notReportedYet()
+  {static} +String xMinutesAgo()
+}
+
+class "im_okay::Utils::Consts::consts.dart::Gender" {
+  {static} +String male
+  {static} +String female
+}
+
+class "im_okay::Utils::Consts::consts.dart::Routes" {
+  {static} +String authRedirectPage
+  {static} +String reportsPage
+  {static} +String registrationPage
+  {static} +String settings
+  {static} +String friendRequests
+  {static} +String addFriendsPage
+  {static} +String hub
+}
+
+class "im_okay::Utils::http_utils.dart::HttpUtils" {
+  {static} -String _localDomain
+  {static} -String _localPort
+  {static} -String _serverDomain
+  {static} -String _serverPort
+  {static} -bool _isProduction
+  {static} +Uri composeUri()
+  {static} +Uri composeUri2()
+  {static} +dynamic validateLogin()
+  {static} +dynamic validateLoginByUid()
+  {static} +dynamic registerNewUser()
+  {static} +dynamic queryFriends()
+  {static} +dynamic getFullLoggedInUserData()
+  {static} +void sendFriendRequestToUser()
+  {static} -Map<String, String> _getHeaders()
+  {static} +dynamic storeFcmToken()
+  {static} +dynamic getFriendRequests()
+  {static} +String formatJsonBody()
+  {static} +dynamic post()
+}
+
+class "im_okay::Utils::http_utils.dart::AuthController" {
+  +int index
+  {static} +List<AuthController> values
+  {static} +AuthController route
+}
+
+"im_okay::Utils::http_utils.dart::AuthController" o-- "im_okay::Utils::http_utils.dart::AuthController"
+"dart::core::Enum" <|-- "im_okay::Utils::http_utils.dart::AuthController"
+
+class "im_okay::Utils::http_utils.dart::UsersController" {
+  +int index
+  {static} +List<UsersController> values
+  {static} +UsersController route
+}
+
+"im_okay::Utils::http_utils.dart::UsersController" o-- "im_okay::Utils::http_utils.dart::UsersController"
+"dart::core::Enum" <|-- "im_okay::Utils::http_utils.dart::UsersController"
+
+class "im_okay::Widgets::my_text_field.dart::MyTextField" {
+  +TextEditingController inputController
+  +String hintText
+  +bool obscureText
+  +IconData? icon
+  +Widget build()
+}
+
+"im_okay::Widgets::my_text_field.dart::MyTextField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"im_okay::Widgets::my_text_field.dart::MyTextField" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "im_okay::Widgets::my_text_field.dart::MyTextField"
+
+class "im_okay::Widgets::purple_button.dart::PurpleButton" {
+  +dynamic Function() callback
+  +String caption
+  +double minimumHeight
+  +double maximumHeight
+  +double minimumWidth
+  +double maximumWidth
+  +double scaleFactor
+  +Widget build()
+}
+
+"im_okay::Widgets::purple_button.dart::PurpleButton" o-- "null::dynamic Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "im_okay::Widgets::purple_button.dart::PurpleButton"
+
+class "im_okay::Widgets::Reports%20Page::friend.dart::FriendReport" {
+  +String name
+  +int lastSeen
+  +String gender
+  +State<FriendReport> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "im_okay::Widgets::Reports%20Page::friend.dart::FriendReport"
+
+class "im_okay::Widgets::Reports%20Page::friend.dart::_FriendReportState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "im_okay::Widgets::Reports%20Page::friend.dart::_FriendReportState"
+
+
+@enduml

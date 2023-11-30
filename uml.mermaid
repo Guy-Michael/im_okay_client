@@ -1,0 +1,244 @@
+classDiagram
+class DefaultFirebaseOptions
+DefaultFirebaseOptions : +web$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +android$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +ios$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+DefaultFirebaseOptions : +currentPlatform$ FirebaseOptions
+DefaultFirebaseOptions o-- FirebaseOptions
+
+class User
+User : +email String
+User : +firstName String
+User : +lastName String
+User : +gender String
+User : +lastSeen int
+User : +fullName String
+User : +toJson() Map<String, dynamic>
+User : +getValueOrDefault()$ dynamic
+
+class AddFriendsPage
+AddFriendsPage : +createState() AddFriendsPageState
+StatefulWidget <|-- AddFriendsPage
+
+class AddFriendsPageState
+AddFriendsPageState : +searchController TextEditingController
+AddFriendsPageState o-- TextEditingController
+AddFriendsPageState : +searchList List~FriendSearchResult~
+AddFriendsPageState : +getSearchResults() void
+AddFriendsPageState : +onAddClicked() void
+AddFriendsPageState : +build() Widget
+State <|-- AddFriendsPageState
+
+class FriendSearchResult
+FriendSearchResult : +user User
+FriendSearchResult o-- User
+FriendSearchResult : +onAddClicked dynamic FunctionUser
+FriendSearchResult o-- dynamic FunctionUser
+FriendSearchResult : +createState() State<FriendSearchResult>
+StatefulWidget <|-- FriendSearchResult
+
+class FriendSearchResultState
+FriendSearchResultState : +build() Widget
+State <|-- FriendSearchResultState
+
+class AuthRedirectPage
+AuthRedirectPage : +build() Widget
+StatelessWidget <|-- AuthRedirectPage
+
+class FriendRequestsPage
+FriendRequestsPage : +createState() FriendRequestsPageState
+StatefulWidget <|-- FriendRequestsPage
+
+class FriendRequestsPageState
+FriendRequestsPageState : +friendRequestsList List~PendingFriendRequest~
+FriendRequestsPageState : +build() Widget
+State <|-- FriendRequestsPageState
+
+class PendingFriendRequest
+PendingFriendRequest : +user User
+PendingFriendRequest o-- User
+PendingFriendRequest : +createState() State<PendingFriendRequest>
+StatefulWidget <|-- PendingFriendRequest
+
+class PendingFriendRequestState
+PendingFriendRequestState : +build() Widget
+State <|-- PendingFriendRequestState
+
+class HubPage
+HubPage : +createState() State<StatefulWidget>
+StatefulWidget <|-- HubPage
+
+class HubPageState
+HubPageState : +selectedIndex int
+HubPageState : +initState() void
+HubPageState : +build() Widget
+State <|-- HubPageState
+
+class LoginPage
+LoginPage : +createState() State<LoginPage>
+StatefulWidget <|-- LoginPage
+
+class LoginState
+LoginState : +usernameController TextEditingController
+LoginState o-- TextEditingController
+LoginState : +passwordController TextEditingController
+LoginState o-- TextEditingController
+LoginState : +build() Widget
+LoginState : +onButtonLoginClicked() void
+LoginState : +onButtonRegisterClicked() void
+LoginState : +dispose() void
+State <|-- LoginState
+
+class RegisterPage
+RegisterPage : -_firstNameController TextEditingController
+RegisterPage o-- TextEditingController
+RegisterPage : -_lastNameController TextEditingController
+RegisterPage o-- TextEditingController
+RegisterPage : -_passwordController TextEditingController
+RegisterPage o-- TextEditingController
+RegisterPage : -_emailController TextEditingController
+RegisterPage o-- TextEditingController
+RegisterPage : +build() Widget
+RegisterPage : +completeRegistration() void
+RegisterPage : +navigateToLoginPage() void
+StatelessWidget <|-- RegisterPage
+
+class ReportsPage
+ReportsPage : +build() Widget
+ReportsPage : +onReportButtonClicked() void
+StatelessWidget <|-- ReportsPage
+
+class SettingsPage
+SettingsPage : +build() Widget
+SettingsPage : +onLogoutButtonClicked() void
+StatelessWidget <|-- SettingsPage
+
+class FriendInteractionsApiService
+FriendInteractionsApiService : +respondToFriendRequest()$ dynamic
+FriendInteractionsApiService : +getIncomingPendingRequests()$ dynamic
+FriendInteractionsApiService : +getAllFriends()$ dynamic
+FriendInteractionsApiService : +reportOkay()$ dynamic
+
+class FriendsController
+<<enumeration>> FriendsController
+FriendsController : +index int
+FriendsController : +values$ List~FriendsController~
+FriendsController : +route$ FriendsController
+FriendsController o-- FriendsController
+Enum <|.. FriendsController
+
+class UserAuthenticationApiService
+UserAuthenticationApiService : +firebaseUser$ User?
+UserAuthenticationApiService o-- User
+UserAuthenticationApiService : +appUser$ dynamic
+UserAuthenticationApiService : +registerNewUser()$ dynamic
+
+class AuthController
+<<enumeration>> AuthController
+AuthController : +index int
+AuthController : +values$ List~AuthController~
+AuthController : +route$ AuthController
+AuthController o-- AuthController
+Enum <|.. AuthController
+
+class Consts
+Consts : +loginCaption$ String
+Consts : +registerCaption$ String
+Consts : +cancel$ String
+Consts : +username$ String
+Consts : +reportedSuccessfully$ String
+Consts : +justNow$ String
+Consts : +firstName$ String
+Consts : +lastName$ String
+Consts : +password$ String
+Consts : +email$ String
+Consts : +searchFriendsFieldHintText$ String
+Consts : +logoutButtonCaption()$ String
+Consts : +reportButtonCaption()$ String
+Consts : +notReportedYet()$ String
+Consts : +xMinutesAgo()$ String
+
+class Gender
+Gender : +male$ String
+Gender : +female$ String
+
+class Routes
+Routes : +authRedirectPage$ String
+Routes : +reportsPage$ String
+Routes : +registrationPage$ String
+Routes : +settings$ String
+Routes : +friendRequests$ String
+Routes : +addFriendsPage$ String
+Routes : +hub$ String
+
+class HttpUtils
+HttpUtils : -_localDomain$ String
+HttpUtils : -_localPort$ String
+HttpUtils : -_serverDomain$ String
+HttpUtils : -_serverPort$ String
+HttpUtils : -_isProduction$ bool
+HttpUtils : +composeUri()$ Uri
+HttpUtils : +composeUri2()$ Uri
+HttpUtils : +validateLogin()$ dynamic
+HttpUtils : +validateLoginByUid()$ dynamic
+HttpUtils : +registerNewUser()$ dynamic
+HttpUtils : +queryFriends()$ dynamic
+HttpUtils : +getFullLoggedInUserData()$ dynamic
+HttpUtils : +sendFriendRequestToUser()$ void
+HttpUtils : -_getHeaders()$ Map<String, String>
+HttpUtils : +storeFcmToken()$ dynamic
+HttpUtils : +getFriendRequests()$ dynamic
+HttpUtils : +formatJsonBody()$ String
+HttpUtils : +post()$ dynamic
+
+class AuthController
+<<enumeration>> AuthController
+AuthController : +index int
+AuthController : +values$ List~AuthController~
+AuthController : +route$ AuthController
+AuthController o-- AuthController
+Enum <|.. AuthController
+
+class UsersController
+<<enumeration>> UsersController
+UsersController : +index int
+UsersController : +values$ List~UsersController~
+UsersController : +route$ UsersController
+UsersController o-- UsersController
+Enum <|.. UsersController
+
+class MyTextField
+MyTextField : +inputController TextEditingController
+MyTextField o-- TextEditingController
+MyTextField : +hintText String
+MyTextField : +obscureText bool
+MyTextField : +icon IconData?
+MyTextField o-- IconData
+MyTextField : +build() Widget
+StatelessWidget <|-- MyTextField
+
+class PurpleButton
+PurpleButton : +callback dynamic Function
+PurpleButton o-- dynamic Function
+PurpleButton : +caption String
+PurpleButton : +minimumHeight double
+PurpleButton : +maximumHeight double
+PurpleButton : +minimumWidth double
+PurpleButton : +maximumWidth double
+PurpleButton : +scaleFactor double
+PurpleButton : +build() Widget
+StatelessWidget <|-- PurpleButton
+
+class FriendReport
+FriendReport : +name String
+FriendReport : +lastSeen int
+FriendReport : +gender String
+FriendReport : +createState() State<FriendReport>
+StatefulWidget <|-- FriendReport
+
+class _FriendReportState
+_FriendReportState : +build() Widget
+State <|-- _FriendReportState

@@ -9,7 +9,7 @@ import 'package:im_okay/pages/register_page.dart';
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 final _friendInteractionProvider = FriendInteractionsApiService();
 final GoRouter globalRouter = GoRouter(
-  initialLocation: Routes.authRedirectPage,
+  initialLocation: Routes.registrationPage,
   navigatorKey: _rootNavigationKey,
   routes: [
     GoRoute(

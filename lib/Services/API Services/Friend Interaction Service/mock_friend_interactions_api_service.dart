@@ -4,19 +4,19 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 
 class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   final List<User> _userList = [
-    const User(
+    User(
         firstName: 'Test 1',
         lastName: 'User 1',
         email: 'fake@imokay.com',
         gender: Gender.male,
         lastSeen: 0),
-    const User(
+    User(
         firstName: 'Test 2',
         lastName: 'User 2',
         email: 'fake@imokay.com',
         gender: Gender.male,
         lastSeen: 0),
-    const User(
+    User(
         firstName: 'Test 3',
         lastName: 'User 3',
         email: 'fake@imokay.com',
@@ -24,7 +24,7 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
         lastSeen: 0),
   ];
 
-  final User _singleUser = const User(
+  final User _singleUser = User(
       firstName: 'Kamila',
       lastName: 'Flowers',
       email: 'kamila@imokay.com',
@@ -68,8 +68,7 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<void> respondToFriendRequest(
-      User userToRespond, bool approveRequest) async {
+  Future<void> respondToFriendRequest(User userToRespond, bool approveRequest) async {
     return;
   }
 

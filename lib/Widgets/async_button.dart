@@ -1,6 +1,4 @@
-import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 
@@ -9,7 +7,7 @@ class AsyncButton extends StatefulWidget {
   final String? text;
   final Widget? icon;
 
-  AsyncButton({required this.onPressed, this.text, this.icon});
+  const AsyncButton({super.key, required this.onPressed, this.text, this.icon});
 
   @override
   AsyncButtonState createState() => AsyncButtonState();

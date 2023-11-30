@@ -47,6 +47,8 @@ class Consts {
 class Gender {
   static const String male = "male";
   static const String female = "female";
+  static const String maleHeb = 'זכר';
+  static const String femaleHeb = 'נקבה';
   static String fromHebrew(String genderInHebrew) {
     return genderInHebrew == "נקבה" ? female : male;
   }

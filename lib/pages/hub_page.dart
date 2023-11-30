@@ -25,7 +25,7 @@ class HubPageState extends State<HubPage> {
     super.initState();
     reportsPage = ReportsPage(
         friendInteractionProvider: widget.friendInteractionProvider);
-    settingsPage = SettingsPage();
+    settingsPage = const SettingsPage();
     addFriendsPage = AddFriendsPage(
         friendInteractionProvider: widget.friendInteractionProvider);
     friendRequestsPage = FriendRequestsPage(
@@ -36,7 +36,7 @@ class HubPageState extends State<HubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 157, 100, 255),
+          backgroundColor: const Color.fromARGB(255, 157, 100, 255),
         ),
         body: _getBottomNavigationWidgets()[selectedIndex].page,
         bottomNavigationBar: NavigationBar(
@@ -48,7 +48,7 @@ class HubPageState extends State<HubPage> {
                 },
               );
             },
-            backgroundColor: Color.fromARGB(255, 157, 100, 255),
+            backgroundColor: const Color.fromARGB(255, 157, 100, 255),
             destinations: _getBottomNavigationWidgets()
                 .map((e) => NavigationDestination(
                       label: e.label,

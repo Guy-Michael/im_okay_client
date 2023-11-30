@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/Registration%20Page/registration_form.dart';
@@ -76,7 +77,7 @@ class RegisterPage extends StatelessWidget {
     debugPrint("Got my data!");
     // debugPrint(user.toString());
     // debugPrint(password);
-    // await UserAuthenticationApiService.registerNewUser(password: password, user: user);
+    await UserAuthenticationApiService.registerNewUser(password: password, user: user);
 
     // await Future.delayed(
     //     const Duration(seconds: 2), () => globalRouter.go(Routes.authRedirectPage));

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Utils/http_utils.dart';
+import 'package:im_okay/firebase_options.dart';
 
 class UserAuthenticationApiService {
   static auth.User? get firebaseUser {
@@ -28,12 +30,15 @@ class UserAuthenticationApiService {
     return user;
   }
 
-  static Future<bool> registerNewUser(
-      {required String password, required User user}) async {
+  static Future<bool> registerNewUser({required String password, required User user}) async {
     String endpoint = AuthController.registerEndpoint.endpoint;
 
-    var credential = await auth.FirebaseAuth.instance
+    auth.UserCredential credential;
+
+    credential = await auth.FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: user.email, password: password);
+
+    auth.FirebaseAuth.instance.signOut();
 
     String authToken = (await credential.user?.getIdToken())!;
 

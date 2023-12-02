@@ -7,11 +7,6 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/Registration%20Page/registration_form.dart';
 
 class RegisterPage extends StatelessWidget {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
   RegisterPage({super.key});
 
   @override
@@ -66,21 +61,10 @@ class RegisterPage extends StatelessWidget {
   }
 
   void completeRegistration(User user, String password) async {
-    // String firstName = _firstNameController.text;
-    // String lastName = _lastNameController.text;
-    // String password = _passwordController.text;
-    // String email = _emailController.text;
-    // String gender = Gender.fromHebrew(_genderController.text);
-
-    // User user = User(firstName: firstName, lastName: lastName, email: email, gender: gender);
-
-    debugPrint("Got my data!");
-    // debugPrint(user.toString());
-    // debugPrint(password);
     await UserAuthenticationApiService.registerNewUser(password: password, user: user);
 
-    // await Future.delayed(
-    //     const Duration(seconds: 2), () => globalRouter.go(Routes.authRedirectPage));
+    await Future.delayed(
+        const Duration(seconds: 2), () => globalRouter.go(Routes.authRedirectPage));
 
     // Fluttertoast.showToast(msg: "נרשמת בהצלחה!");
   }

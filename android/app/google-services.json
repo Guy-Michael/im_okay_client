@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788980587447",
+    "project_id": "soi-im-okay",
+    "storage_bucket": "soi-im-okay.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788980587447:android:2e3a77775b334f8a3d6632",
+        "android_client_info": {
+          "package_name": "com.soi.im_okay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLyfp1bdXaI89rbUGzsHefVPgerXID0XI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

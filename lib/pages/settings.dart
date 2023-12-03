@@ -23,21 +23,18 @@ class SettingsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    PurpleButton(
-                        callback: onLogoutButtonClicked, caption: "התנתקות"),
-                    PurpleButton(
-                        callback: onDeleteUserButtonClicked,
-                        caption: "מחיקת חשבון"),
+                    PurpleButton(onClick: onLogoutButtonClicked, caption: "התנתקות"),
+                    PurpleButton(onClick: onDeleteUserButtonClicked, caption: "מחיקת חשבון"),
                   ])));
     });
   }
 
-  void onLogoutButtonClicked() async {
+  Future<void> onLogoutButtonClicked() async {
     await auth.FirebaseAuth.instance.signOut();
     globalRouter.push(Routes.authRedirectPage);
   }
 
-  void onDeleteUserButtonClicked() async {
+  Future<void> onDeleteUserButtonClicked() async {
     await UserAuthenticationApiService.deleteSignedInUser();
 
     globalRouter.go(Routes.authRedirectPage);

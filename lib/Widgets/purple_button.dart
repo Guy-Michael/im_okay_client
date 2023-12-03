@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 
 class PurpleButton extends StatefulWidget {
-  final Function() callback;
+  final Future<void> Function() onClick;
+  final bool showProgressIndicatorAfterClick;
   final String caption;
   final Color color;
-  final double minimumHeight;
-  final double maximumHeight;
-  final double minimumWidth;
-  final double maximumWidth;
-  final double scaleFactor;
 
   const PurpleButton(
-      {required this.callback,
+      {required this.onClick,
       required this.caption,
+      this.showProgressIndicatorAfterClick = false,
       this.color = Colors.deepPurpleAccent,
-      this.minimumHeight = 100,
-      this.minimumWidth = 70,
-      this.maximumHeight = 200,
-      this.maximumWidth = 400,
-      this.scaleFactor = 1,
       super.key});
 
   @override
@@ -30,29 +22,30 @@ class PurpleButtonState extends State<PurpleButton> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
+    Size minimumSize = Size(deviceWidth * 0.2, deviceHeight * 0.05);
+    Size maximumSize = Size(minimumSize.width * 3, minimumSize.height * 3);
     return ElevatedButton(
         onPressed: () async {
-          setState(() {
-            isWaitingForCallback = true;
-          });
-          await widget.callback();
-
-          setState(() {
-            isWaitingForCallback = false;
-          });
-          // isWaitingForCallback = false;
+          if (widget.showProgressIndicatorAfterClick) {
+            setState(() {
+              isWaitingForCallback = true;
+            });
+          }
+          widget.onClick().then((value) => setState(() {
+                isWaitingForCallback = false;
+              }));
         },
         style: ElevatedButton.styleFrom(
-            minimumSize: Size(widget.minimumWidth * widget.scaleFactor,
-                widget.minimumWidth * widget.scaleFactor),
-            maximumSize: Size(widget.maximumWidth * widget.scaleFactor,
-                widget.maximumHeight * widget.scaleFactor),
-            backgroundColor: widget.color),
-        child: isWaitingForCallback
-            ? const CircularProgressIndicator()
-            : Text(
-                widget.caption,
-                textScaleFactor: 1.5,
-              ));
+            minimumSize: minimumSize, maximumSize: maximumSize, backgroundColor: widget.color),
+        child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: isWaitingForCallback
+                ? const CircularProgressIndicator()
+                : Text(
+                    widget.caption,
+                    textScaleFactor: 1.5,
+                  )));
   }
 }

@@ -7,7 +7,7 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/Registration%20Page/registration_form.dart';
 
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {

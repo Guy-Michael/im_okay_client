@@ -75,11 +75,13 @@ class ReportsPageState extends State<ReportsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PurpleButton(
-                    callback: onReportButtonClicked,
+                    showProgressIndicatorAfterClick: true,
+                    onClick: onReportButtonClicked,
                     caption: Consts.reportButtonCaption(activeUser.firstName, activeUser.gender)),
                 const SizedBox(width: 20),
                 PurpleButton(
-                    callback: () => setState(() {}),
+                    showProgressIndicatorAfterClick: true,
+                    onClick: () async => setState(() {}),
                     caption: activeUser.gender == Gender.female ? "רענני" : "רענן")
               ],
             ));
@@ -88,7 +90,7 @@ class ReportsPageState extends State<ReportsPage> {
     return builder;
   }
 
-  void onReportButtonClicked() async {
+  Future<void> onReportButtonClicked() async {
     await widget.friendInteractionProvider.reportOkay();
     setState(() {});
   }

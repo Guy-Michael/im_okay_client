@@ -21,7 +21,7 @@ final GoRouter globalRouter = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
       path: Routes.registrationPage,
-      builder: (context, state) => RegisterPage(),
+      builder: (context, state) => const RegisterPage(),
     ),
     GoRoute(
         parentNavigatorKey: _rootNavigationKey,

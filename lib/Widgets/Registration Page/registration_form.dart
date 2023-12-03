@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Widgets/purple_button.dart';
 
 final _formKey = GlobalKey<FormState>();
 
 class RegistrationForm extends StatefulWidget {
   Function(User user, String password) onSubmit;
-  final Map<String, Object> _formData = {};
-  User _user = User();
+  final User _user = User();
   String _password = '';
 
   RegistrationForm({super.key, required this.onSubmit});
@@ -81,16 +80,18 @@ class RegistrationFormState extends State<RegistrationForm> {
                       onChanged: (a) {}),
                   Padding(
                       padding: const EdgeInsets.all(20),
-                      child: GFButton(
-                          onPressed: () async {
+                      child: PurpleButton(
+                          showProgressIndicatorAfterClick: true,
+                          onClick: () async {
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
+
                             _formKey.currentState!.save();
                             debugPrint(widget._user.toString());
                             await widget.onSubmit(widget._user, widget._password);
                           },
-                          child: const Text(RegistrationConstants.submitButtonText)))
+                          caption: RegistrationConstants.submitButtonText))
                 ],
               ))),
     );

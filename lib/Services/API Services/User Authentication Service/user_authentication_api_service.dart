@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Utils/http_utils.dart';
-import 'package:im_okay/firebase_options.dart';
 
 class UserAuthenticationApiService {
   static auth.User? get firebaseUser {

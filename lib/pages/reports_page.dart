@@ -70,21 +70,24 @@ class ReportsPageState extends State<ReportsPage> {
                   allUserTiles.insert(0, activeUserTile);
                   return allUserTiles;
                 }()),
-            bottomSheet: Row(
-              textDirection: TextDirection.rtl,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PurpleButton(
-                    showProgressIndicatorAfterClick: true,
-                    onClick: onReportButtonClicked,
-                    caption: Consts.reportButtonCaption(activeUser.firstName, activeUser.gender)),
-                const SizedBox(width: 20),
-                PurpleButton(
-                    showProgressIndicatorAfterClick: true,
-                    onClick: () async => setState(() {}),
-                    caption: activeUser.gender == Gender.female ? "רענני" : "רענן")
-              ],
-            ));
+            bottomSheet: Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PurpleButton(
+                        showProgressIndicatorAfterClick: true,
+                        onClick: onReportButtonClicked,
+                        caption:
+                            Consts.reportButtonCaption(activeUser.firstName, activeUser.gender)),
+                    const SizedBox(width: 20),
+                    PurpleButton(
+                        showProgressIndicatorAfterClick: true,
+                        onClick: () async => setState(() {}),
+                        caption: activeUser.gender == Gender.female ? "רענני" : "רענן")
+                  ],
+                )));
       },
     );
     return builder;

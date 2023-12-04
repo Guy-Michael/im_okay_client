@@ -22,6 +22,9 @@ class AddFriendsPageState extends State<AddFriendsPage> {
 
   Future<void> getSearchResults() async {
     String searchQuery = searchController.text;
+    if (searchQuery.isEmpty) {
+      return;
+    }
     List<User> searchResults = await widget.friendInteractionProvider.queryFriends(searchQuery);
 
     setState(() {
@@ -52,8 +55,10 @@ class AddFriendsPageState extends State<AddFriendsPage> {
       ),
       bottomSheet: Center(
           heightFactor: 1,
-          child: PurpleButton(
-              onClick: getSearchResults, caption: AddFriendsPageConsts.searchButtonCaption)),
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: PurpleButton(
+                  onClick: getSearchResults, caption: AddFriendsPageConsts.searchButtonCaption))),
     );
   }
 }

@@ -1,12 +1,12 @@
 class Consts {
+  static const String appName = "I'm Okay";
   static const String loginCaption = r'התחברות';
   static const String registerCaption = r'הרשמה';
   static const String cancel = "ביטול";
   static const String username = "שם משתמש";
 
   static const String reportedSuccessfully = "שיתפת בהצלחה";
-  static String logoutButtonCaption(String gender) =>
-      gender == Gender.female ? "התנתקי" : "התנתק";
+  static String logoutButtonCaption(String gender) => gender == Gender.female ? "התנתקי" : "התנתק";
 
   static String deleteUserButtonCaption(String gender) =>
       gender == Gender.female ? "מחקי את חשבונך" : "מחק את חשבונך";

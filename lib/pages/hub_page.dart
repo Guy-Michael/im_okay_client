@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Services/API Services/Friend Interaction Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/add_friends_page.dart';
 import 'package:im_okay/pages/friend_requests_page.dart';
 import 'package:im_okay/pages/reports_page.dart';
@@ -35,7 +36,7 @@ class HubPageState extends State<HubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Im Okay"),
+          title: const Text(Consts.appName),
           backgroundColor: const Color.fromARGB(255, 157, 100, 255),
         ),
         body: _getBottomNavigationWidgets()[selectedIndex].page,

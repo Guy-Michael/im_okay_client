@@ -14,50 +14,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         body: RegistrationForm(
       onSubmit: completeRegistration,
-    )
-        // Center(
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(16.0),
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       crossAxisAlignment: CrossAxisAlignment.end,
-        //       children: <Widget>[
-        //         MyTextField(
-        //             inputController: _firstNameController,
-        //             hintText: Consts.firstName),
-        //         MyTextField(
-        //             inputController: _lastNameController,
-        //             hintText: Consts.lastName),
-        //         MyTextField(
-        //             inputController: _passwordController,
-        //             hintText: Consts.password),
-        //         MyTextField(
-        //             inputController: _emailController, hintText: Consts.email),
-        //         const SizedBox(height: 50),
-        //         DropdownMenu(
-        //           label: const Text("מגדר"),
-        //           controller: _genderController,
-        //           menuStyle: const MenuStyle(alignment: Alignment.topRight),
-        //           dropdownMenuEntries: const [
-        //             DropdownMenuEntry(value: Gender.female, label: "נקבה"),
-        //             DropdownMenuEntry(value: Gender.male, label: "זכר")
-        //           ],
-        //         ),
-        //         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        //           PurpleButton(
-        //               callback: navigateToLoginPage, caption: Consts.cancel),
-        //           const SizedBox(
-        //             width: 50,
-        //           ),
-        //           PurpleButton(
-        //               callback: completeRegistration,
-        //               caption: Consts.registerCaption),
-        //         ])
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        );
+    ));
   }
 
   void completeRegistration(User user, String password) async {

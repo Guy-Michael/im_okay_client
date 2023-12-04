@@ -19,13 +19,19 @@ class SettingsPage extends StatelessWidget {
           body: const Center(child: Text("בבנייה, יגיע בקרוב!")),
           bottomSheet: Center(
               heightFactor: 1,
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PurpleButton(onClick: onLogoutButtonClicked, caption: "התנתקות"),
-                    PurpleButton(onClick: onDeleteUserButtonClicked, caption: "מחיקת חשבון"),
-                  ])));
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        PurpleButton(
+                          onClick: onLogoutButtonClicked,
+                          caption: "התנתקות",
+                          color: Colors.grey,
+                        ),
+                        PurpleButton(onClick: onDeleteUserButtonClicked, caption: "מחיקת חשבון"),
+                      ]))));
     });
   }
 

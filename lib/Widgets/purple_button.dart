@@ -5,12 +5,14 @@ class PurpleButton extends StatefulWidget {
   final bool showProgressIndicatorAfterClick;
   final String caption;
   final Color color;
+  final EdgeInsets? padding;
 
   const PurpleButton(
       {required this.onClick,
       required this.caption,
       this.showProgressIndicatorAfterClick = false,
       this.color = Colors.deepPurpleAccent,
+      this.padding,
       super.key});
 
   @override
@@ -38,14 +40,15 @@ class PurpleButtonState extends State<PurpleButton> {
               }));
         },
         style: ElevatedButton.styleFrom(
-            minimumSize: minimumSize, maximumSize: maximumSize, backgroundColor: widget.color),
-        child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: isWaitingForCallback
-                ? const CircularProgressIndicator()
-                : Text(
-                    widget.caption,
-                    textScaleFactor: 1.5,
-                  )));
+            minimumSize: minimumSize,
+            maximumSize: maximumSize,
+            backgroundColor: widget.color,
+            padding: widget.padding),
+        child: isWaitingForCallback
+            ? const CircularProgressIndicator()
+            : Text(
+                widget.caption,
+                textScaleFactor: 1.5,
+              ));
   }
 }

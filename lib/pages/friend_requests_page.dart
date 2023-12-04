@@ -3,12 +3,12 @@ import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
+import 'package:im_okay/Widgets/purple_button.dart';
 
 class FriendRequestsPage extends StatefulWidget {
   final IFriendInteractionsProvider friendInteractionProvider;
 
-  const FriendRequestsPage(
-      {required this.friendInteractionProvider, super.key});
+  const FriendRequestsPage({required this.friendInteractionProvider, super.key});
 
   @override
   FriendRequestsPageState createState() => FriendRequestsPageState();
@@ -28,14 +28,13 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
           return Column(
               children: snapshot.data!
                   .map((User user) => PendingFriendRequest(
-                        friendInteractionProvider:
-                            widget.friendInteractionProvider,
+                        friendInteractionProvider: widget.friendInteractionProvider,
                         user: user,
                       ))
                   .toList());
         }
 
-        return const Center(child: Text("No pending requests :)"));
+        return const Center(child: Text(FriendRequestConsts.noPendingRequestsCaption));
       },
     ));
   }
@@ -56,7 +55,7 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      textDirection: TextDirection.rtl,
+      // textDirection: TextDirection.rtl,
       children: _getList(user: widget.user),
     );
   }
@@ -70,24 +69,29 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
           onLongPress: () {},
           color: const Color.fromARGB(150, 170, 170, 170),
           avatar: const Icon(Icons.person_rounded),
-          shadow: const BoxShadow(
-              blurStyle: BlurStyle.solid, color: Colors.transparent),
+          shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
         )),
-        GFButton(
-          onPressed: () async {
-            await widget.friendInteractionProvider
-                .respondToFriendRequest(user, true);
+        PurpleButton(
+          onClick: () async {
+            await widget.friendInteractionProvider.respondToFriendRequest(user, true);
           },
-          text: "אשר",
+          padding: EdgeInsets.all(15),
+          caption: FriendRequestConsts.approveButtonCaption,
         ),
         const SizedBox(width: 2),
-        GFButton(
-          color: Colors.redAccent,
-          onPressed: () async {
-            await widget.friendInteractionProvider
-                .respondToFriendRequest(user, false);
+        PurpleButton(
+          padding: EdgeInsets.all(15),
+          color: Colors.grey,
+          onClick: () async {
+            await widget.friendInteractionProvider.respondToFriendRequest(user, false);
           },
-          text: "דחה",
+          caption: FriendRequestConsts.denyButtonCaption,
         )
       ];
+}
+
+class FriendRequestConsts {
+  static const String approveButtonCaption = "אישור";
+  static const String denyButtonCaption = "דחייה";
+  static const String noPendingRequestsCaption = "אין בקשות ממתינות :)";
 }

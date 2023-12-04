@@ -79,13 +79,13 @@ class FriendSearchResultState extends State<FriendSearchResult> {
     return Container(
         margin: const EdgeInsets.only(bottom: 5, right: 15),
         child: Row(
-            textDirection: TextDirection.rtl,
+            // textDirection: TextDirection.rtl,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                   child: GFListTileDirectional(
                 title: Text(widget.user.fullName),
-                direction: TextDirection.rtl,
+                // direction: TextDirection.rtl,
                 margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
                 onLongPress: () {},
                 color: const Color.fromARGB(150, 170, 170, 170),

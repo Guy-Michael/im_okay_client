@@ -11,8 +11,7 @@ class Consts {
   static String deleteUserButtonCaption(String gender) =>
       gender == Gender.female ? "מחקי את חשבונך" : "מחק את חשבונך";
   static String reportButtonCaption(String nameHeb, String gender) {
-    String result = "$nameHeb, ";
-    return "❤️ $result${gender == Gender.female ? "שתפי שאת בטוחה" : "שתף שאתה בטוח"}";
+    return "${gender == Gender.female ? "שתפי שאת בטוחה" : "שתף שאתה בטוח"} ❤️";
   }
 
   static const String justNow = "לפני רגע";

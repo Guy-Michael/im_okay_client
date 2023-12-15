@@ -1,3 +1,4 @@
+import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
@@ -58,8 +59,8 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<List<User>> queryFriends(String searchQuery) async {
-    return _userList;
+  Future<List<(User user, FriendQueryType relationship)>> queryFriends(String searchQuery) async {
+    return _userList.map((e) => (e, FriendQueryType.NO_RELATIONSHIP)).toList();
   }
 
   @override

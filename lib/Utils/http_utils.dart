@@ -12,7 +12,7 @@ class HttpUtils {
   static const String _serverPort = "80";
   static const bool _isProduction = kReleaseMode;
   // static const bool _isProduction = true;
-
+  // static const bool _isProduction = false;
   static Uri composeUri({required String endpoint}) {
     String domain = _isProduction ? _serverDomain : _localDomain;
     String port = _isProduction ? _serverPort : _localPort;
@@ -32,15 +32,13 @@ class HttpUtils {
     return body;
   }
 
-  static Future<String> post(
-      {required String endpoint, required Map<String, Object> body}) async {
+  static Future<String> post({required String endpoint, required Map<String, Object> body}) async {
     String bodyString = formatJsonBody(body);
     var headers = _getHeaders();
 
     Uri uri = composeUri(endpoint: endpoint);
 
-    http.Response response =
-        await http.post(uri, body: bodyString, headers: headers);
+    http.Response response = await http.post(uri, body: bodyString, headers: headers);
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Request failed with status ${response.statusCode}');

@@ -3,7 +3,7 @@ class Consts {
   static const String loginCaption = r'התחברות';
   static const String registerCaption = r'הרשמה';
   static const String cancel = "ביטול";
-  static const String username = "שם משתמש";
+  static const String username = "כתובת אימייל";
 
   static const String reportedSuccessfully = "שיתפת בהצלחה";
   static String logoutButtonCaption(String gender) => gender == Gender.female ? "התנתקי" : "התנתק";

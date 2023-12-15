@@ -71,7 +71,7 @@ class ReportsPageState extends State<ReportsPage> {
                   return allUserTiles;
                 }()),
             bottomSheet: Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Row(
                   textDirection: TextDirection.rtl,
                   mainAxisAlignment: MainAxisAlignment.center,

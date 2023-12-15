@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
@@ -75,12 +74,12 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
           onClick: () async {
             await widget.friendInteractionProvider.respondToFriendRequest(user, true);
           },
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           caption: FriendRequestConsts.approveButtonCaption,
         ),
         const SizedBox(width: 2),
         PurpleButton(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           color: Colors.grey,
           onClick: () async {
             await widget.friendInteractionProvider.respondToFriendRequest(user, false);

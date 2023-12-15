@@ -89,8 +89,8 @@ class HubPageState extends State<HubPage> {
 }
 
 class BottomNavbarConsts {
-  static final String homeButtonCaption = "שיתופים";
-  static final String addFriendsButtonCaption = "מצא חברים";
-  static final String requestsButtonCaption = "בקשות";
-  static final String settingsButtonCaption = "הגדרות";
+  static const String homeButtonCaption = "שיתופים";
+  static const String addFriendsButtonCaption = "מצא חברים";
+  static const String requestsButtonCaption = "בקשות";
+  static const String settingsButtonCaption = "הגדרות";
 }

@@ -20,7 +20,7 @@ class SettingsPage extends StatelessWidget {
           bottomSheet: Center(
               heightFactor: 1,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

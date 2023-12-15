@@ -28,10 +28,7 @@ void main() async {
   FirebaseAuth.instance.authStateChanges().listen((User? user) async {
     if (user == null) {
       FirebaseMessaging.instance.deleteToken();
-      debugPrint('User is currently signed out!');
     } else {
-      debugPrint('User is signed in!');
-
       String? deviceToken = await FirebaseMessaging.instance.getToken();
 
       if (deviceToken != null) {
@@ -49,6 +46,7 @@ void main() async {
   );
 
   runApp(MaterialApp.router(
+    debugShowCheckedModeBanner: false,
     locale: const Locale('he', 'IL'),
     supportedLocales: const [Locale('he', 'IL')],
     localizationsDelegates: const [
@@ -59,54 +57,3 @@ void main() async {
     routerConfig: globalRouter,
   ));
 }
-
-// class RtlLocalization implements WidgetsLocalizations {
-//   @override
-//   TextDirection get textdirection => TextDirection.rtl;
-  
-//   @override
-//   // TODO: implement reorderItemDown
-//   String get reorderItemDown => throw UnimplementedError();
-  
-//   @override
-//   // TODO: implement reorderItemLeft
-//   String get reorderItemLeft => throw UnimplementedError();
-  
-//   @override
-//   // TODO: implement reorderItemRight
-//   String get reorderItemRight => throw UnimplementedError();
-  
-//   @override
-//   // TODO: implement reorderItemToEnd
-//   String get reorderItemToEnd => throw UnimplementedError();
-  
-//   @override
-//   // TODO: implement reorderItemToStart
-//   String get reorderItemToStart => throw UnimplementedError();
-  
-//   @override
-//   // TODO: implement reorderItemUp
-//   String get reorderItemUp => throw UnimplementedError();
-  
-//   @override
-//   // TODO: implement textDirection
-//   TextDirection get textDirection => throw UnimplementedError();
-// }
-
-// class RtlLocalizationDelegate extends LocalizationsDelegate<RtlLocalization> {
-//   final RtlLocalization rtlLocalization;
-
-//   RtlLocalizationDelegate(this.rtlLocalization);
-
-//   @override
-//   bool isSupported(Locale locale) => true;
-
-//   @override
-//   Future<RtlLocalization> load(Locale locale) async => rtlLocalization;
-
-//   @override
-//   bool shouldReload(covariant LocalizationsDelegate<RtlLocalization> old) {
-//     // TODO: implement shouldReload
-//     throw UnimplementedError();
-//   }
-// }

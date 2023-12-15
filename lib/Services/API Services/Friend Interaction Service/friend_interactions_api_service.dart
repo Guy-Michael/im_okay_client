@@ -1,22 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
+import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/user.dart';
 import 'dart:convert';
 
 class FriendInteractionsApiService implements IFriendInteractionsProvider {
   @override
-  Future<void> respondToFriendRequest(
-      User userToRespond, bool approveRequest) async {
+  Future<void> respondToFriendRequest(User userToRespond, bool approveRequest) async {
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
 
     String endpoint = UsersController.responseToRequest.endpoint;
-    var body = {
-      'uid': uid,
-      'friendEmail': userToRespond.email,
-      'approveRequest': approveRequest
-    };
+    var body = {'uid': uid, 'friendEmail': userToRespond.email, 'approveRequest': approveRequest};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
@@ -31,21 +28,23 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
     String responseBody = await HttpUtils.post(endpoint: endpoint, body: body);
 
     List<dynamic> list = json.decode(responseBody);
-    List<User> requestors =
-        list.map((dynamic element) => User.fromJson(element)).toList();
+    List<User> requestors = list.map((dynamic element) => User.fromJson(element)).toList();
     return requestors;
   }
 
-  @override
-  Future<List<User>> queryFriends(String searchQuery) async {
+  Future<List<(User user, FriendQueryType relationship)>> queryFriends(String searchQuery) async {
     String endpoint = UsersController.findFriends.endpoint;
-    var body = {'query': searchQuery};
+    String requestorUid = UserAuthenticationApiService.firebaseUser!.uid;
+    var body = {'requestorUid': requestorUid, 'query': searchQuery};
 
     String response = await HttpUtils.post(endpoint: endpoint, body: body);
-    List<User> friends = List<dynamic>.from(json.decode(response))
-        .map((e) => User.fromJson(e))
-        .toList();
-    return friends;
+    List<dynamic> map = json.decode(response);
+    List<(User user, FriendQueryType relationship)> fri = map.map((friend) {
+      dynamic user = friend['user'];
+      var json1 = User.fromJson(user);
+      return (json1, FriendQueryType.parse(friend['relationship'].toString()));
+    }).toList();
+    return fri;
   }
 
   @override

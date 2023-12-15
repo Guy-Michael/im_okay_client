@@ -25,17 +25,14 @@ class LoginState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // const SizedBox(height: 20),
             MyTextField(inputController: usernameController, hintText: Consts.username),
-            // const SizedBox(height: 20),
             MyTextField(
               inputController: passwordController,
               hintText: Consts.password,
               obscureText: true,
             ),
-            // const SizedBox(height: 20),
             Padding(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   PurpleButton(
                       onClick: () async => onButtonRegisterClicked(context),

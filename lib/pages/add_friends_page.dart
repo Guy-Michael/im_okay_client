@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
-import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
@@ -20,16 +19,19 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   TextEditingController searchController = TextEditingController();
   List<FriendSearchResult> searchList = [];
 
-  void getSearchResults() async {
+  Future<void> getSearchResults() async {
     String searchQuery = searchController.text;
-    List<User> searchResults =
+    if (searchQuery.isEmpty) {
+      return;
+    }
+    List<(User user, FriendQueryType relationship)> searchResults =
         await widget.friendInteractionProvider.queryFriends(searchQuery);
 
-    searchList = searchResults
-        .map((e) => FriendSearchResult(user: e, onAddClicked: onAddClicked))
-        .toList();
-
-    setState(() {});
+    setState(() {
+      searchList = searchResults
+          .map((e) => FriendSearchResult(user: e.$1, type: e.$2, onAddClicked: onAddClicked))
+          .toList();
+    });
   }
 
   void onAddClicked(User user) {
@@ -45,7 +47,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
               padding: const EdgeInsets.all(15.0),
               child: MyTextField(
                 inputController: searchController,
-                hintText: 'חפשו חברים',
+                hintText: AddFriendsPageConsts.searchBarCaption,
                 icon: Icons.search,
               )),
           Wrap(children: searchList),
@@ -53,17 +55,20 @@ class AddFriendsPageState extends State<AddFriendsPage> {
       ),
       bottomSheet: Center(
           heightFactor: 1,
-          child: PurpleButton(callback: getSearchResults, caption: "search")),
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: PurpleButton(
+                  onClick: getSearchResults, caption: AddFriendsPageConsts.searchButtonCaption))),
     );
   }
 }
 
 class FriendSearchResult extends StatefulWidget {
   final User user;
-  final Function(User user) onAddClicked;
+  FriendQueryType type;
+  Function(User user)? onAddClicked;
 
-  const FriendSearchResult(
-      {required this.user, required this.onAddClicked, super.key});
+  FriendSearchResult({required this.user, required this.type, this.onAddClicked, super.key});
 
   @override
   State<FriendSearchResult> createState() => FriendSearchResultState();
@@ -72,54 +77,78 @@ class FriendSearchResult extends StatefulWidget {
 class FriendSearchResultState extends State<FriendSearchResult> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.only(bottom: 5, right: 15),
-        child: Row(
-            textDirection: TextDirection.rtl,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: GFListTileDirectional(
-                title: Text(widget.user.fullName),
-                direction: TextDirection.rtl,
-                margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
-                onLongPress: () {},
-                color: const Color.fromARGB(150, 170, 170, 170),
-                avatar: const Icon(Icons.person_rounded),
-                shadow: const BoxShadow(
-                    blurStyle: BlurStyle.solid, color: Colors.transparent),
-              )),
-              GFButton(
-                onPressed: () => widget.onAddClicked(widget.user),
-                color: Colors.green,
-                child:
-                    Text("+", textScaleFactor: 2, textAlign: TextAlign.center),
-                // const Icon(Icons.add),
-              )
+    debugPrint("got here: ${widget.type}, ${widget.user}");
+    switch (widget.type) {
+      case (FriendQueryType.FRIENDSHIP_REQUESTED):
+        {
+          return friendshipRequested(widget.user, (user) {});
+        }
 
-              // Container(
-              //   alignment: Alignment.center,
-              //   width: 160,
-              //   height: 40,
-              //   decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(5),
-              //       color: const Color(0xffb4d3d7)),
-              //   child: Text(widget.user.fullName,
-              //       textDirection: TextDirection.rtl,
-              //       style: const TextStyle(
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.w700,
-              //       )),
-              // ),
-              // IconButton(
-              //     color: const Color(0xffb4d3d7),
-              //     style: ButtonStyle(
-              //         fixedSize: const MaterialStatePropertyAll(Size(50, 50)),
-              //         shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(5)))),
-              //     onPressed: () => widget.onAddClicked(widget.user),
-              //     alignment: Alignment.center,
-              //     icon: const Icon(Icons.add))
-            ]));
+      case (FriendQueryType.FRIENDS_WITH):
+        {
+          return alreadyFriend(widget.user);
+        }
+
+      default:
+        {
+          return notFriend(widget.user, widget.onAddClicked!);
+        }
+    }
   }
+}
+
+Container notFriend(User user, Function(User user) onAddClicked) => Container(
+    margin: margin,
+    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      userUi(user),
+      PurpleButton(
+        onClick: () => onAddClicked(user),
+        caption: AddFriendsPageConsts.addFriendButtonCaption,
+      )
+    ]));
+
+Container friendshipRequested(User user, Function(User user)? onCancelRequestClicked) => Container(
+    margin: margin,
+    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      userUi(user),
+      PurpleButton(
+        onClick: () async {},
+        color: Colors.grey,
+        caption: AddFriendsPageConsts.cancelRequestButtonCaption,
+      )
+    ]));
+
+Container alreadyFriend(User user) => Container(
+    margin: margin,
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        userUi(user),
+        PurpleButton(
+          onClick: () async {},
+          color: Colors.grey,
+          caption: AddFriendsPageConsts.alreadyFriendsCaption,
+        )
+        // GFListTileDirectional(title: Text(AddFriendsPageConsts.alreadyFriendsCaption))
+      ],
+    ));
+
+Expanded userUi(User user) => Expanded(
+        child: GFListTileDirectional(
+      title: Text(user.fullName),
+      margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+      onLongPress: () {},
+      color: const Color.fromARGB(150, 170, 170, 170),
+      avatar: const Icon(Icons.person_rounded),
+      shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
+    ));
+
+EdgeInsets margin = const EdgeInsets.only(bottom: 5, right: 15);
+
+class AddFriendsPageConsts {
+  static const String searchBarCaption = "חיפוש";
+  static const String searchButtonCaption = "חיפוש";
+  static const String addFriendButtonCaption = "+";
+  static const String cancelRequestButtonCaption = "ביטול";
+  static const String alreadyFriendsCaption = "חברים";
 }

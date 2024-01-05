@@ -15,7 +15,7 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
         controller: inputController,
         textDirection: TextDirection.rtl,
         textAlign: TextAlign.right,

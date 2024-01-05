@@ -15,7 +15,7 @@ class LoginPage extends StatefulWidget {
 class LoginState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  bool clicked = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,37 +25,37 @@ class LoginState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 20),
-            MyTextField(
-                inputController: usernameController, hintText: Consts.username),
-            const SizedBox(height: 20),
+            MyTextField(inputController: usernameController, hintText: Consts.username),
             MyTextField(
               inputController: passwordController,
               hintText: Consts.password,
               obscureText: true,
             ),
-            const SizedBox(height: 20),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              PurpleButton(
-                  callback: () => onButtonRegisterClicked(context),
-                  caption: Consts.registerCaption),
-              const SizedBox(width: 20),
-              PurpleButton(
-                  callback: onButtonLoginClicked, caption: Consts.loginCaption)
-            ])
+            Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  PurpleButton(
+                      onClick: () async => onButtonRegisterClicked(context),
+                      caption: Consts.registerCaption),
+                  const SizedBox(width: 20),
+                  PurpleButton(
+                    onClick: onButtonLoginClicked,
+                    caption: Consts.loginCaption,
+                    showProgressIndicatorAfterClick: true,
+                  ),
+                ]))
           ],
         ),
       ),
     ));
   }
 
-  void onButtonLoginClicked() async {
+  Future<void> onButtonLoginClicked() async {
     String username = usernameController.text.trim();
     String password = passwordController.text.trim();
 
-    bool authenticationSuccessfull =
-        await UserAuthenticationApiService.validateLoginAndGetUserData(
-            username: username, password: password);
+    bool authenticationSuccessfull = await UserAuthenticationApiService.validateLoginAndGetUserData(
+        username: username, password: password);
     if (authenticationSuccessfull) {
       globalRouter.push(Routes.hub);
     }

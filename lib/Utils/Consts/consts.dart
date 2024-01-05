@@ -1,18 +1,17 @@
 class Consts {
+  static const String appName = "I'm Okay";
   static const String loginCaption = r'התחברות';
   static const String registerCaption = r'הרשמה';
   static const String cancel = "ביטול";
-  static const String username = "שם משתמש";
+  static const String username = "כתובת אימייל";
 
   static const String reportedSuccessfully = "שיתפת בהצלחה";
-  static String logoutButtonCaption(String gender) =>
-      gender == Gender.female ? "התנתקי" : "התנתק";
+  static String logoutButtonCaption(String gender) => gender == Gender.female ? "התנתקי" : "התנתק";
 
   static String deleteUserButtonCaption(String gender) =>
       gender == Gender.female ? "מחקי את חשבונך" : "מחק את חשבונך";
   static String reportButtonCaption(String nameHeb, String gender) {
-    String result = "$nameHeb, ";
-    return "❤️ $result${gender == Gender.female ? "שתפי שאת בטוחה" : "שתף שאתה בטוח"}";
+    return "${gender == Gender.female ? "שתפי שאת בטוחה" : "שתף שאתה בטוח"} ❤️";
   }
 
   static const String justNow = "לפני רגע";
@@ -47,6 +46,8 @@ class Consts {
 class Gender {
   static const String male = "male";
   static const String female = "female";
+  static const String maleHeb = 'זכר';
+  static const String femaleHeb = 'נקבה';
   static String fromHebrew(String genderInHebrew) {
     return genderInHebrew == "נקבה" ? female : male;
   }

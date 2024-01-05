@@ -8,8 +8,7 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
-Future<(User activeUser, List<User> friends)> future(
-    IFriendInteractionsProvider provider) async {
+Future<(User activeUser, List<User> friends)> future(IFriendInteractionsProvider provider) async {
   List<User> users = await provider.getAllFriends();
   User activeUser = (await UserAuthenticationApiService.appUser)!;
   return (activeUser, users);
@@ -28,7 +27,7 @@ class ReportsPageState extends State<ReportsPage> {
   @override
   Widget build(BuildContext context) {
     var builder = FutureBuilder<(User activeUser, List<User> friends)>(
-      initialData: (const User(), List<User>.empty()),
+      initialData: (User(), List<User>.empty()),
       future: future(widget.friendInteractionProvider),
       builder: (context, snapshot) {
         User activeUser = snapshot.data!.$1;
@@ -42,22 +41,17 @@ class ReportsPageState extends State<ReportsPage> {
                 textDirection: TextDirection.rtl,
                 children: () {
                   if (users.isEmpty) {
-                    return [
-                      const Center(
-                          heightFactor: 5, child: Text("עוד לא הוספת חברים :)"))
-                    ];
+                    return [const Center(heightFactor: 5, child: Text("עוד לא הוספת חברים :)"))];
                   }
                   GFListTileDirectional activeUserTile = GFListTileDirectional(
-                    title: Text("השיתוף האחרון שלי"),
+                    title: const Text("השיתוף האחרון שלי"),
                     direction: TextDirection.rtl,
                     margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
                     onLongPress: () {},
                     color: const Color.fromARGB(150, 170, 170, 170),
-                    icon: Text(
-                        parseLastSeen(activeUser.lastSeen, activeUser.gender)),
+                    icon: Text(parseLastSeen(activeUser.lastSeen, activeUser.gender)),
                     avatar: const Icon(Icons.person_rounded),
-                    shadow: const BoxShadow(
-                        blurStyle: BlurStyle.solid, color: Colors.transparent),
+                    shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
                   );
 
                   List<GFListTileDirectional> allUserTiles = users
@@ -70,34 +64,36 @@ class ReportsPageState extends State<ReportsPage> {
                             icon: Text(parseLastSeen(e.lastSeen, e.gender)),
                             avatar: const Icon(Icons.person_rounded),
                             shadow: const BoxShadow(
-                                blurStyle: BlurStyle.solid,
-                                color: Colors.transparent),
+                                blurStyle: BlurStyle.solid, color: Colors.transparent),
                           ))
                       .toList();
                   allUserTiles.insert(0, activeUserTile);
                   return allUserTiles;
                 }()),
-            bottomSheet: Row(
-              textDirection: TextDirection.rtl,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PurpleButton(
-                    callback: onReportButtonClicked,
-                    caption: Consts.reportButtonCaption(
-                        activeUser.firstName, activeUser.gender)),
-                const SizedBox(width: 20),
-                PurpleButton(
-                    callback: () => setState(() {}),
-                    caption:
-                        activeUser.gender == Gender.female ? "רענני" : "רענן")
-              ],
-            ));
+            bottomSheet: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PurpleButton(
+                        showProgressIndicatorAfterClick: true,
+                        onClick: onReportButtonClicked,
+                        caption:
+                            Consts.reportButtonCaption(activeUser.firstName, activeUser.gender)),
+                    const SizedBox(width: 20),
+                    PurpleButton(
+                        showProgressIndicatorAfterClick: true,
+                        onClick: () async => setState(() {}),
+                        caption: activeUser.gender == Gender.female ? "רענני" : "רענן")
+                  ],
+                )));
       },
     );
     return builder;
   }
 
-  void onReportButtonClicked() async {
+  Future<void> onReportButtonClicked() async {
     await widget.friendInteractionProvider.reportOkay();
     setState(() {});
   }

@@ -16,7 +16,7 @@ void main() async {
   FirebaseMessaging.instance.requestPermission();
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
-  if (kDebugMode) {
+  if (!kReleaseMode) {
     try {
       debugPrint("Launching authentication emulator");
       await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);

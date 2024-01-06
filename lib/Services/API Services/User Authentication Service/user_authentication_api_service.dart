@@ -36,8 +36,6 @@ class UserAuthenticationApiService {
     credential = await auth.FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: user.email, password: password);
 
-    auth.FirebaseAuth.instance.signOut();
-
     String authToken = (await credential.user?.getIdToken())!;
 
     var body = {'authToken': authToken, 'user': user};
@@ -46,6 +44,8 @@ class UserAuthenticationApiService {
       await HttpUtils.post(endpoint: endpoint, body: body);
     } on Exception {
       return false;
+    } finally {
+      auth.FirebaseAuth.instance.signOut();
     }
 
     return true;

@@ -10,10 +10,10 @@
             "type": "dart"
         },
         {
-            "name": "im_okay (profile mode)",
+            "name": "im_okay (debug)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "debug"
         },
         {
             "name": "im_okay (release mode)",

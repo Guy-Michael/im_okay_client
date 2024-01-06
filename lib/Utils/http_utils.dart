@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-//
-
 class HttpUtils {
-  static const String _localDomain = "http://localhost";
+  static const String _localDomain = "http://127.0.0.1";
   static const String _localPort = "5129";
   static const String _serverDomain = "http://20.217.26.29";
   static const String _serverPort = "80";

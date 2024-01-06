@@ -55,6 +55,8 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
+
     }
 
    signingConfigs {
@@ -78,4 +80,6 @@ flutter {
 
 dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.3.0'
+    implementation 'com.android.support:multidex:1.0.3'
+
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
@@ -34,8 +35,12 @@ class AddFriendsPageState extends State<AddFriendsPage> {
     });
   }
 
-  void onAddClicked(User user) {
-    widget.friendInteractionProvider.sendFriendRequest(friend: user);
+  void onAddClicked(User user) async {
+    await widget.friendInteractionProvider.sendFriendRequest(friend: user);
+    InAppMessageService.showToast(
+        message: _AddFriendsPageConsts.FriendRequestSentMessage(user.fullName));
+
+    await getSearchResults();
   }
 
   @override
@@ -47,7 +52,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
               padding: const EdgeInsets.all(15.0),
               child: MyTextField(
                 inputController: searchController,
-                hintText: AddFriendsPageConsts.searchBarCaption,
+                hintText: _AddFriendsPageConsts.searchBarCaption,
                 icon: Icons.search,
               )),
           Wrap(children: searchList),
@@ -58,7 +63,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
           child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: PurpleButton(
-                  onClick: getSearchResults, caption: AddFriendsPageConsts.searchButtonCaption))),
+                  onClick: getSearchResults, caption: _AddFriendsPageConsts.searchButtonCaption))),
     );
   }
 }
@@ -77,7 +82,6 @@ class FriendSearchResult extends StatefulWidget {
 class FriendSearchResultState extends State<FriendSearchResult> {
   @override
   Widget build(BuildContext context) {
-    debugPrint("got here: ${widget.type}, ${widget.user}");
     switch (widget.type) {
       case (FriendQueryType.FRIENDSHIP_REQUESTED):
         {
@@ -103,7 +107,7 @@ Container notFriend(User user, Function(User user) onAddClicked) => Container(
       userUi(user),
       PurpleButton(
         onClick: () => onAddClicked(user),
-        caption: AddFriendsPageConsts.addFriendButtonCaption,
+        caption: _AddFriendsPageConsts.addFriendButtonCaption,
       )
     ]));
 
@@ -114,7 +118,7 @@ Container friendshipRequested(User user, Function(User user)? onCancelRequestCli
       PurpleButton(
         onClick: () async {},
         color: Colors.grey,
-        caption: AddFriendsPageConsts.cancelRequestButtonCaption,
+        caption: _AddFriendsPageConsts.cancelRequestButtonCaption,
       )
     ]));
 
@@ -127,7 +131,7 @@ Container alreadyFriend(User user) => Container(
         PurpleButton(
           onClick: () async {},
           color: Colors.grey,
-          caption: AddFriendsPageConsts.alreadyFriendsCaption,
+          caption: _AddFriendsPageConsts.alreadyFriendsCaption,
         )
         // GFListTileDirectional(title: Text(AddFriendsPageConsts.alreadyFriendsCaption))
       ],
@@ -145,10 +149,11 @@ Expanded userUi(User user) => Expanded(
 
 EdgeInsets margin = const EdgeInsets.only(bottom: 5, right: 15);
 
-class AddFriendsPageConsts {
+class _AddFriendsPageConsts {
   static const String searchBarCaption = "חיפוש";
   static const String searchButtonCaption = "חיפוש";
   static const String addFriendButtonCaption = "+";
   static const String cancelRequestButtonCaption = "ביטול";
   static const String alreadyFriendsCaption = "חברים";
+  static String FriendRequestSentMessage(String name) => "בקשת חברות נשלחה ל$name";
 }

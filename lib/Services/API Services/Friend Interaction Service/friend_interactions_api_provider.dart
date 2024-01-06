@@ -12,7 +12,7 @@ abstract class IFriendInteractionsProvider {
 
   Future<List<User>> getAllFriends();
 
-  void sendFriendRequest({required User friend});
+  Future<void> sendFriendRequest({required User friend});
 
   Future<void> reportOkay();
 }

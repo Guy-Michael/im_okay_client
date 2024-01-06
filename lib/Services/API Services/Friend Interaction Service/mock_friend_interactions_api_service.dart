@@ -74,7 +74,7 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  void sendFriendRequest({required User friend}) {
+  Future<void> sendFriendRequest({required User friend}) async {
     return;
   }
 }

@@ -16,6 +16,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         body: RegistrationForm(
       onSubmit: completeRegistration,
+			onCancel: navigateToLoginPage
     ));
   }
 
@@ -26,6 +27,10 @@ class RegisterPage extends StatelessWidget {
     await Future.delayed(
         const Duration(seconds: 2), () => globalRouter.go(Routes.authRedirectPage));
   }
+
+	void onCancel() {
+		globalRouter.pop();
+	}
 
   void navigateToLoginPage() async {
     globalRouter.push(Routes.authRedirectPage);

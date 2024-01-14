@@ -19,31 +19,31 @@ void main() async {
   if (!kReleaseMode) {
     try {
       debugPrint("Launching authentication emulator");
-      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+      await FirebaseAuth.instance.useAuthEmulator('10.0.2.2', 9099);
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-    if (user == null) {
-      FirebaseMessaging.instance.deleteToken();
-    } else {
-      String? deviceToken = await FirebaseMessaging.instance.getToken();
+  // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+  //   if (user == null) {
+  //     FirebaseMessaging.instance.deleteToken(); 
+  //   } else {
+  //     String? deviceToken = await FirebaseMessaging.instance.getToken();
 
-      if (deviceToken != null) {
-        await UserAuthenticationApiService.storeFcmToken(deviceToken);
-      }
-    }
-  });
+  //     if (deviceToken != null) {
+  //       await UserAuthenticationApiService.storeFcmToken(deviceToken);
+  //     }
+  //   }
+  // });
 
-  FirebaseMessaging.instance.onTokenRefresh.listen(
-    (token) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        await UserAuthenticationApiService.storeFcmToken(token);
-      }
-    },
-  );
+  // FirebaseMessaging.instance.onTokenRefresh.listen(
+  //   (token) async {
+  //     if (FirebaseAuth.instance.currentUser != null) {
+  //       await UserAuthenticationApiService.storeFcmToken(token);
+  //     }
+  //   },
+  // );
 
   runApp(MaterialApp.router(
     debugShowCheckedModeBanner: false,

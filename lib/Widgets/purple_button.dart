@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Utils/Consts/color_consts.dart';
 
 class PurpleButton extends StatefulWidget {
   final Future<void> Function() onClick;
@@ -11,7 +12,7 @@ class PurpleButton extends StatefulWidget {
       {required this.onClick,
       required this.caption,
       this.showProgressIndicatorAfterClick = false,
-      this.color = Colors.deepPurpleAccent,
+      this.color = ColorConsts.primaryButton,
       this.padding,
       super.key});
 
@@ -38,6 +39,12 @@ class PurpleButtonState extends State<PurpleButton> {
           widget.onClick().then((value) => setState(() {
                 isWaitingForCallback = false;
               }));
+
+          await Future.delayed(Duration(seconds: 2), () {
+            setState(() {
+              isWaitingForCallback = false;
+            });
+          });
         },
         style: ElevatedButton.styleFrom(
             minimumSize: minimumSize,

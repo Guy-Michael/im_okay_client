@@ -35,9 +35,11 @@ class HttpUtils {
     var headers = _getHeaders();
 
     Uri uri = composeUri(endpoint: endpoint);
+		debugPrint('request to $uri');
 
     http.Response response = await http.post(uri, body: bodyString, headers: headers);
 
+		debugPrint('response is ${response.body}');
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Request failed with status ${response.statusCode}');
     }

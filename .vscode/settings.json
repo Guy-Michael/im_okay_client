@@ -1,8 +1,10 @@
 {
+	"editor.mouseWheelZoom": true,
 	"[dart]": {
 		"editor.tabSize": 2,
 		"editor.insertSpaces": false,
 		"editor.detectIndentation": false,
+		"editor.formatOnSave": true,
 		"editor.suggest.insertMode": "insert",
 		"editor.defaultFormatter": "Dart-Code.dart-code",
 		"editor.inlayHints.enabled": "offUnlessPressed",

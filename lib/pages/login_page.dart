@@ -26,7 +26,8 @@ class LoginState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MyTextField(inputController: usernameController, hintText: Consts.username),
+            MyTextField(
+                inputController: usernameController, hintText: Consts.username),
             MyTextField(
               inputController: passwordController,
               hintText: Consts.password,
@@ -34,7 +35,8 @@ class LoginState extends State<LoginPage> {
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   PurpleButton(
                       onClick: () async => onButtonRegisterClicked(context),
                       caption: Consts.registerCaption),
@@ -55,10 +57,12 @@ class LoginState extends State<LoginPage> {
     String username = usernameController.text.trim();
     String password = passwordController.text.trim();
 
-    bool authenticationSuccessfull = await UserAuthenticationApiService.validateLoginAndGetUserData(
-        username: username, password: password);
+    bool authenticationSuccessfull =
+        await UserAuthenticationApiService.validateLoginAndGetUserData(
+            username: username, password: password);
     if (authenticationSuccessfull) {
-      InAppMessageService.showToast(message: _LoginConsts.loginSuccessfullMessage);
+      InAppMessageService.showToast(
+          message: _LoginConsts.loginSuccessfullMessage);
       globalRouter.push(Routes.hub);
     }
   }

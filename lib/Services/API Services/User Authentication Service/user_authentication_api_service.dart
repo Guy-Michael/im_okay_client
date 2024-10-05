@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/user.dart';
@@ -10,7 +11,7 @@ class UserAuthenticationApiService {
     return auth.FirebaseAuth.instance.currentUser;
   }
 
-  static Future<User?> get appUser async {
+  static Future<AppUser?> get appUser async {
     String endpoint = AuthController.signedInUserData.endpoint;
 
     String? authToken = await firebaseUser?.getIdToken();
@@ -22,47 +23,66 @@ class UserAuthenticationApiService {
     var body = {'authToken': authToken};
 
     String response = await HttpUtils.post(endpoint: endpoint, body: body);
-    debugPrint(response);
-    User user = User.fromJson((json.decode(response)));
+    AppUser user = AppUser.fromJson((json.decode(response)));
 
     return user;
   }
 
-  static Future<bool> registerNewUser({required String password, required User user}) async {
-    String endpoint = AuthController.registerEndpoint.endpoint;
-
-    auth.UserCredential credential;
-
-    credential = await auth.FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: user.email, password: password);
-
-    String authToken = (await credential.user?.getIdToken())!;
-
-    var body = {'authToken': authToken, 'user': user};
-
-    try {
-      await HttpUtils.post(endpoint: endpoint, body: body);
-    } on Exception {
-      return false;
-    } finally {
-      auth.FirebaseAuth.instance.signOut();
+  static Future<bool> registerNewUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String endpoint = AuthController.registerEndpoint.endpoint;
+      String authToken = (await user.getIdToken())!;
+      var body = {'authToken': authToken};
+      try {
+        await HttpUtils.post(endpoint: endpoint, body: body);
+      } on Exception {
+        return false;
+      } finally {
+        auth.FirebaseAuth.instance.signOut();
+      }
     }
+    // auth.UserCredential credential;
+    // credential = await auth.FirebaseAuth.instance
+    //     .createUserWithEmailAndPassword(email: user.email, password: password);
+
+    // String authToken = (await credential.user?.getIdToken())!;
 
     return true;
   }
+  // static Future<bool> registerNewUser({required String password, required AppUser user}) async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //   if (user != null) {
+  //     String endpoint = AuthController.registerEndpoint.endpoint;
+  //     String authToken = (await user.getIdToken())!;
+  //     var body = {'authToken': authToken};
+  //     try {
+  //       await HttpUtils.post(endpoint: endpoint, body: body);
+  //     } on Exception {
+  //       return false;
+  //     } finally {
+  //       auth.FirebaseAuth.instance.signOut();
+  //     }
+  //   }
+  //   // auth.UserCredential credential;
 
-  static Future<bool> validateLoginAndGetUserData(
-      {required String username, required String password}) async {
-    auth.UserCredential credentials = await auth.FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: username, password: password);
+  //   // credential = await auth.FirebaseAuth.instance
+  //   //     .createUserWithEmailAndPassword(email: user.email, password: password);
 
-    if (credentials.user == null) {
-      throw Exception("User not registered");
+  //   // String authToken = (await credential.user?.getIdToken())!;
+
+  //   return true;
+  // }
+
+  static Future<bool> validateLoginAndGetUserData() async {
+    auth.User? user = firebaseUser;
+    if (user == null) {
+      return false;
     }
 
     String uri = AuthController.validateEndpoint.endpoint;
 
-    var token = (await credentials.user!.getIdToken())!;
+    String token = (await user.getIdToken())!;
     var body = {'token': token};
 
     try {
@@ -86,7 +106,7 @@ class UserAuthenticationApiService {
   static Future<void> deleteSignedInUser() async {
     String endpoint = AuthController.deleteUser.endpoint;
 
-    User signedInUser = (await appUser)!;
+    AppUser signedInUser = (await appUser)!;
     var body = {'email': signedInUser.email};
 
     await HttpUtils.post(endpoint: endpoint, body: body);

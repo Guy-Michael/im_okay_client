@@ -12,7 +12,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(context) {
     return FutureBuilder<String>(future: () async {
-      User user = (await UserAuthenticationApiService.appUser)!;
+      AppUser user = (await UserAuthenticationApiService.appUser)!;
       return user.gender;
     }(), builder: (context, snapshot) {
       return Scaffold(

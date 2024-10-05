@@ -14,23 +14,19 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RegistrationForm(
-      onSubmit: completeRegistration,
-			onCancel: navigateToLoginPage
-    ));
+        body: RegistrationForm(onSubmit: completeRegistration, onCancel: navigateToLoginPage));
   }
 
-  void completeRegistration(User user, String password) async {
-    await UserAuthenticationApiService.registerNewUser(password: password, user: user);
-
+  void completeRegistration(AppUser user, String password) async {
+    // await UserAuthenticationApiService.registerNewUser(password: password, user: user);
     InAppMessageService.showToast(message: _RegisterPageConsts.successfullySignedUpMessage);
     await Future.delayed(
         const Duration(seconds: 2), () => globalRouter.go(Routes.authRedirectPage));
   }
 
-	void onCancel() {
-		globalRouter.pop();
-	}
+  void onCancel() {
+    globalRouter.pop();
+  }
 
   void navigateToLoginPage() async {
     globalRouter.push(Routes.authRedirectPage);

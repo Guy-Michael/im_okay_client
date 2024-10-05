@@ -1,7 +1,7 @@
 name: im_okay
 description: A check-in app for times of peril.
 publish_to: 'none'
-version: 1.0.0+5
+version: 1.0.2+7
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
@@ -22,6 +22,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   fluttertoast: ^8.2.4
+  google_sign_in: ^6.2.1
+  sign_in_button: ^3.2.0
+  firebase_ui_auth: ^1.14.0
+  firebase_ui_oauth_google: ^1.3.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

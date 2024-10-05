@@ -6,7 +6,6 @@ enum FriendQueryType {
   NO_RELATIONSHIP('NO_RELATIONSHIP');
 
   static FriendQueryType parse(String name) {
-    debugPrint(name);
     for (FriendQueryType enumVariant in FriendQueryType.values) {
       if (enumVariant.name == name) {
         return enumVariant;

@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class HttpUtils {
-  static const String _localDomain = "http://10.0.2.2";
+  static const String _localDomain = "http://127.0.0.1";
   static const String _localPort = "5129";
-  static const String _serverDomain = "http://20.217.26.29";
+  static const String _serverDomain = "http://20.51.219.132";
   static const String _serverPort = "80";
   static const bool _isProduction = kReleaseMode;
   // static const bool _isProduction = true;
@@ -35,11 +35,9 @@ class HttpUtils {
     var headers = _getHeaders();
 
     Uri uri = composeUri(endpoint: endpoint);
-		debugPrint('request to $uri');
 
     http.Response response = await http.post(uri, body: bodyString, headers: headers);
 
-		debugPrint('response is ${response.body}');
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Request failed with status ${response.statusCode}');
     }

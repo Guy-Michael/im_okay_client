@@ -6,11 +6,7 @@ class FriendReport extends StatefulWidget {
   final int lastSeen;
   final String gender;
 
-  const FriendReport(
-      {super.key,
-      this.name = '',
-      this.lastSeen = 0,
-      this.gender = Gender.female});
+  const FriendReport({super.key, this.name = '', this.lastSeen = 0, this.gender = Gender.female});
 
   @override
   State<FriendReport> createState() => _FriendReportState();
@@ -22,15 +18,7 @@ class _FriendReportState extends State<FriendReport> {
     return Row(
         textDirection: TextDirection.rtl,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        // mainAxisSize: MainAxisSize.max,
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        // spacing: 0,
-        // direction: Axis.horizontal,
-        // textDirection: TextDirection.rtl,
-        // runAlignment: WrapAlignment.center,
-        // alignment: WrapAlignment.start,
         children: getList(widget.name, widget.lastSeen, widget.gender));
-    // children: getList2());
   }
 }
 
@@ -63,7 +51,6 @@ List<Widget> getList2() {
 
 List<Widget> getList(String name, int lastSeen, String gender) {
   return [
-    // return Row(textDirection: TextDirection.rtl, children: [
     Expanded(
         child: Container(
             constraints: nameBoxConstraints,
@@ -90,24 +77,14 @@ String parseLastSeen(int lastSeen, String gender) {
   int delta = DateTime.now().millisecondsSinceEpoch - lastSeen;
   Duration duration = Duration(milliseconds: delta);
 
-  // if (duration.inHours < 1) {
   result = Consts.xTimeAgo(duration);
-  // } else {
-  //   DateTime time = DateTime.fromMillisecondsSinceEpoch(lastSeen);
-  //   result = " ${time.day}.${time.month}, ${time.hour}:${time.minute}";
-  // }
 
   return result;
 }
 
 const BoxConstraints nameBoxConstraints = BoxConstraints.expand(height: 40);
-// BoxConstraints(maxWidth: 120, maxHeight: 40, minWidth: 60, minHeight: 20);
-
 const BoxConstraints lastSeenBoxConstraints = BoxConstraints.expand(height: 40);
-// BoxConstraints(maxWidth: 120, maxHeight: 40, minWidth: 60, minHeight: 20);
+const TextStyle textStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w700);
 
-const TextStyle textStyle =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.w700);
-
-BoxDecoration boxDecoration = BoxDecoration(
-    borderRadius: BorderRadius.circular(5), color: const Color(0xffb4d3d7));
+BoxDecoration boxDecoration =
+    BoxDecoration(borderRadius: BorderRadius.circular(5), color: const Color(0xffb4d3d7));

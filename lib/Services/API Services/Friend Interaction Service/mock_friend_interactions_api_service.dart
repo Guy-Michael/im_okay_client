@@ -61,7 +61,7 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   @override
   Future<List<(AppUser user, FriendQueryType relationship)>> queryFriends(
       String searchQuery) async {
-    return _userList.map((e) => (e, FriendQueryType.NO_RELATIONSHIP)).toList();
+    return _userList.map((e) => (e, FriendQueryType.noRelationship)).toList();
   }
 
   @override

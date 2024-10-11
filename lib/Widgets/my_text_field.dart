@@ -23,10 +23,7 @@ class MyTextField extends StatelessWidget {
             hintText: hintText,
             suffixIcon: IconButton(
               icon: Icon(icon),
-              onPressed: () {
-                // Handle the search functionality here
-                // You can filter userEntries based on the search query
-              },
+              onPressed: () {},
             )),
         obscureText: obscureText);
   }

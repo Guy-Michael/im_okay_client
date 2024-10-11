@@ -83,12 +83,12 @@ class FriendSearchResultState extends State<FriendSearchResult> {
   @override
   Widget build(BuildContext context) {
     switch (widget.type) {
-      case (FriendQueryType.FRIENDSHIP_REQUESTED):
+      case (FriendQueryType.friendshipRequested):
         {
           return friendshipRequested(widget.user, (user) {});
         }
 
-      case (FriendQueryType.FRIENDS_WITH):
+      case (FriendQueryType.friendsWith):
         {
           return alreadyFriend(widget.user);
         }
@@ -134,7 +134,6 @@ Container alreadyFriend(AppUser user) => Container(
           color: Colors.grey,
           caption: _AddFriendsPageConsts.alreadyFriendsCaption,
         )
-        // GFListTileDirectional(title: Text(AddFriendsPageConsts.alreadyFriendsCaption))
       ],
     ));
 

@@ -2,37 +2,41 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 
 class HttpUtils {
-  static const String _localDomain = "http://127.0.0.1";
-  static const String _localPort = "5129";
+  static const String _localDomain = "http://10.0.2.2";
+  // static const String _localDomain = "http://127.0.0.1";
+  static const int _localPort = 5129;
   static const String _serverDomain = "http://20.51.219.132";
-  static const String _serverPort = "80";
+  static const int _serverPort = 80;
   static const bool _isProduction = kReleaseMode;
-  // static const bool _isProduction = true;
-  // static const bool _isProduction = false;
-  static Uri composeUri({required String endpoint}) {
+  static Uri composeUri({required String endpoint, Map<String, Object>? queryParams}) {
     String domain = _isProduction ? _serverDomain : _localDomain;
-    String port = _isProduction ? _serverPort : _localPort;
-    String url = "$domain:$port/$endpoint";
+    int port = _isProduction ? _serverPort : _localPort;
+    String url = "$domain:$port/api/$endpoint";
     Uri uri = Uri.parse(url);
     return uri;
   }
 
-  static Map<String, String> _getHeaders() {
-    var headers = {HttpHeaders.contentTypeHeader: 'Application/json'};
+  static Future<Map<String, String>> _getHeaders() async {
+    String idToken = await UserAuthenticationApiService.firebaseUser?.getIdToken() ?? '';
+    var headers = {
+      HttpHeaders.contentTypeHeader: 'Application/json',
+      HttpHeaders.authorizationHeader: idToken
+    };
 
     return headers;
   }
 
-  static String formatJsonBody(Map<String, Object> bodyMap) {
+  static String formatJsonBody(Map<String, dynamic> bodyMap) {
     String body = json.encode(bodyMap);
     return body;
   }
 
-  static Future<String> post({required String endpoint, required Map<String, Object> body}) async {
+  static Future<String> post({required String endpoint, required Map<String, dynamic> body}) async {
     String bodyString = formatJsonBody(body);
-    var headers = _getHeaders();
+    var headers = await _getHeaders();
 
     Uri uri = composeUri(endpoint: endpoint);
 
@@ -40,6 +44,18 @@ class HttpUtils {
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Request failed with status ${response.statusCode}');
+    }
+
+    return response.body;
+  }
+
+  static Future<String> get({required String endpoint, Map<String, Object>? queryParams}) async {
+    var headers = await _getHeaders();
+    Uri uri = composeUri(endpoint: endpoint, queryParams: queryParams);
+    http.Response response = await http.get(uri, headers: headers);
+
+    if (response.statusCode != HttpStatus.ok) {
+      throw Exception('Get request failed with stats ${response.statusCode}');
     }
 
     return response.body;

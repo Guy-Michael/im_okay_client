@@ -5,6 +5,7 @@ class AppUser extends Equatable {
   String email;
   String firstName;
   String lastName;
+  String imageUrl;
   String gender;
   int lastSeen;
 
@@ -16,6 +17,7 @@ class AppUser extends Equatable {
       this.firstName = '',
       this.lastName = '',
       this.lastSeen = 0,
+      this.imageUrl = '',
       this.gender = ''});
 
   AppUser.fromJson(Map<String, dynamic> json)
@@ -23,6 +25,7 @@ class AppUser extends Equatable {
         firstName = getValueOrDefault(json, 'firstName'),
         lastName = getValueOrDefault(json, 'lastName'),
         lastSeen = getValueOrDefault(json, 'lastSeen'),
+        imageUrl = getValueOrDefault(json, 'imageUrl'),
         gender = getValueOrDefault(json, 'gender');
 
   Map<String, dynamic> toJson() {
@@ -31,6 +34,7 @@ class AppUser extends Equatable {
       'firstName': firstName,
       'lastName': lastName,
       'lastSeen': lastSeen,
+      'imageUrl': imageUrl,
       'gender': gender
     };
   }

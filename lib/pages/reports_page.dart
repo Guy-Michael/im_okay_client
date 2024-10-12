@@ -9,7 +9,7 @@ import 'package:im_okay/Widgets/purple_button.dart';
 
 Future<(User? activeUser, List<AppUser> friends)> future(
     IFriendInteractionsProvider provider) async {
-  List<AppUser> users = await provider.getAllFriends();
+  List<AppUser> users = await []; //await provider.getAllFriends();
   User? activeUser = FirebaseAuth.instance.currentUser;
   return (activeUser, users);
 }
@@ -75,13 +75,13 @@ class ReportsPageState extends State<ReportsPage> {
                     PurpleButton(
                       showProgressIndicatorAfterClick: true,
                       onClick: onReportButtonClicked,
-                      caption: "TEMP",
+                      caption: _ReportsPageConsts.reportNow,
                     ),
                     const SizedBox(width: 20),
                     PurpleButton(
                         showProgressIndicatorAfterClick: true,
                         onClick: () async => setState(() {}),
-                        caption: "TEMP")
+                        caption: _ReportsPageConsts.refresh)
                   ],
                 )));
       },
@@ -107,4 +107,9 @@ String parseLastSeen(int lastSeen, String gender) {
 
   result = Consts.xTimeAgo(duration);
   return result;
+}
+
+class _ReportsPageConsts {
+  static const String reportNow = 'שיתוף';
+  static const String refresh = 'רענון';
 }

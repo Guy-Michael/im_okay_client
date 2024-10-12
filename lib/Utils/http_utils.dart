@@ -60,4 +60,16 @@ class HttpUtils {
 
     return response.body;
   }
+
+  static Future<bool> delete({required endpoint}) async {
+    Map<String, String> headers = await _getHeaders();
+    Uri uri = composeUri(endpoint: endpoint);
+    http.Response response = await http.delete(uri, headers: headers);
+
+    if (response.statusCode != HttpStatus.ok) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

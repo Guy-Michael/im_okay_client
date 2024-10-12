@@ -1,7 +1,7 @@
 enum AuthController {
   route('auth'),
   registerEndpoint('register'),
-  loginEndpoint('login'),
+  fetchUserEndpoint('fetch-user'),
   deleteUser('delete');
 
   final String value;

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 
 class UserAuthenticationApiService {
@@ -10,23 +14,34 @@ class UserAuthenticationApiService {
     return auth.FirebaseAuth.instance.currentUser;
   }
 
-  static Future<AppUser?> get appUser async {
-    return AppUser(firstName: 'fake', lastName: 'created in auth service', email: "fake@fake.com");
+  static AppUser? _appUser;
+
+  static AppUser? get appUser {
+    return _appUser;
+  }
+
+  static set appUser(AppUser? user) {
+    if (user != null) {
+      _appUser = user;
+    }
   }
 
   static Future<bool> registerNewUser(UserCredential credentials) async {
     String endpoint = AuthController.registerEndpoint.endpoint;
     Map<String, dynamic> profile = credentials.additionalUserInfo!.profile!;
 
-    Map<String, dynamic> body = AppUser(
-            firstName: profile['given_name'],
-            lastName: profile['family_name'],
-            email: profile['email'],
-            imageUrl: profile['picture'])
-        .toJson();
-
     try {
+      AppUser user = AppUser(
+          firstName: profile['given_name'],
+          lastName: profile['family_name'],
+          email: profile['email'],
+          imageUrl: profile['picture'],
+          lastSeen: 0);
+
+      Map<String, dynamic> body = user.toJson();
       await HttpUtils.post(endpoint: endpoint, body: body);
+
+      _appUser = user;
     } catch (e) {
       return false;
     } finally {
@@ -36,35 +51,29 @@ class UserAuthenticationApiService {
     return true;
   }
 
-  static Future<bool> login() async {
-    auth.User? user = firebaseUser;
-    if (user == null) {
-      return false;
-    }
-
-    String endpoint = AuthController.loginEndpoint.endpoint;
+  static Future<AppUser?> fetchUser() async {
+    String endpoint = AuthController.fetchUserEndpoint.endpoint;
 
     try {
-      await HttpUtils.get(endpoint: endpoint);
+      String userJson = await HttpUtils.get(endpoint: endpoint);
+      AppUser user = AppUser.fromJson(jsonDecode(userJson));
+      return user;
     } catch (e) {
-      return false;
+      return null;
     }
-
-    return true;
   }
 
-  static Future<void> deleteSignedInUser() async {
+  static Future<void> deleteSignedInUserAndSignOut() async {
     String endpoint = AuthController.deleteUser.endpoint;
 
-    AppUser signedInUser = (await appUser)!;
-    var body = {'email': signedInUser.email};
-
-    await HttpUtils.post(endpoint: endpoint, body: body);
+    bool deletedSuccessfully = await HttpUtils.delete(endpoint: endpoint);
+    await FirebaseAuth.instance.signOut();
+    globalRouter.go(Routes.authRedirectPage);
   }
 
   static Future<bool> registerOrSignIn() async {
-    await _googleSignIn.signOut();
-    GoogleSignInAccount? account = await _googleSignIn.signIn();
+    await googleSignIn.signOut();
+    GoogleSignInAccount? account = await googleSignIn.signIn();
     GoogleSignInAuthentication? auth = await account?.authentication;
 
     if (auth != null) {
@@ -79,9 +88,13 @@ class UserAuthenticationApiService {
       bool authenticationSuccessful = false;
       bool isNewUser = cred.additionalUserInfo?.isNewUser ?? false;
       if (isNewUser) {
-        authenticationSuccessful = await UserAuthenticationApiService.registerNewUser(cred);
+        await UserAuthenticationApiService.registerNewUser(cred);
+        authenticationSuccessful = true;
       } else {
-        authenticationSuccessful = await UserAuthenticationApiService.login();
+        AppUser? user = await UserAuthenticationApiService.fetchUser();
+        if (user != null) {
+          authenticationSuccessful = true;
+        }
       }
 
       return authenticationSuccessful;
@@ -90,7 +103,7 @@ class UserAuthenticationApiService {
     return false;
   }
 
-  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+  static final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [
       'email',
       'openid',

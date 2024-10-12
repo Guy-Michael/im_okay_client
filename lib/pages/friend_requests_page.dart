@@ -19,14 +19,14 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<List<User>>(
+        body: FutureBuilder<List<AppUser>>(
       initialData: const [],
       future: widget.friendInteractionProvider.getIncomingPendingRequests(),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return Column(
               children: snapshot.data!
-                  .map((User user) => PendingFriendRequest(
+                  .map((AppUser user) => PendingFriendRequest(
                         friendInteractionProvider: widget.friendInteractionProvider,
                         user: user,
                       ))
@@ -41,7 +41,7 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
 
 class PendingFriendRequest extends StatefulWidget {
   final IFriendInteractionsProvider friendInteractionProvider;
-  final User user;
+  final AppUser user;
 
   const PendingFriendRequest(
       {required this.friendInteractionProvider, required this.user, super.key});
@@ -59,7 +59,7 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
     );
   }
 
-  List<Widget> _getList({required User user}) => [
+  List<Widget> _getList({required AppUser user}) => [
         Expanded(
             child: GFListTileDirectional(
           title: Text(user.fullName),

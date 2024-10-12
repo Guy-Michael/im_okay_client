@@ -9,7 +9,7 @@ import 'dart:convert';
 
 class FriendInteractionsApiService implements IFriendInteractionsProvider {
   @override
-  Future<void> respondToFriendRequest(User userToRespond, bool approveRequest) async {
+  Future<void> respondToFriendRequest(AppUser userToRespond, bool approveRequest) async {
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
 
     String endpoint = UsersController.responseToRequest.endpoint;
@@ -19,7 +19,7 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<List<User>> getIncomingPendingRequests() async {
+  Future<List<AppUser>> getIncomingPendingRequests() async {
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
     var body = {'uid': uid};
 
@@ -28,40 +28,41 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
     String responseBody = await HttpUtils.post(endpoint: endpoint, body: body);
 
     List<dynamic> list = json.decode(responseBody);
-    List<User> requestors = list.map((dynamic element) => User.fromJson(element)).toList();
+    List<AppUser> requestors = list.map((dynamic element) => AppUser.fromJson(element)).toList();
     return requestors;
   }
 
-  Future<List<(User user, FriendQueryType relationship)>> queryFriends(String searchQuery) async {
+  Future<List<(AppUser user, FriendQueryType relationship)>> queryFriends(
+      String searchQuery) async {
     String endpoint = UsersController.findFriends.endpoint;
     String requestorUid = UserAuthenticationApiService.firebaseUser!.uid;
     var body = {'requestorUid': requestorUid, 'query': searchQuery};
 
     String response = await HttpUtils.post(endpoint: endpoint, body: body);
     List<dynamic> map = json.decode(response);
-    List<(User user, FriendQueryType relationship)> fri = map.map((friend) {
+    List<(AppUser user, FriendQueryType relationship)> fri = map.map((friend) {
       dynamic user = friend['user'];
-      var json1 = User.fromJson(user);
+      var json1 = AppUser.fromJson(user);
       return (json1, FriendQueryType.parse(friend['relationship'].toString()));
     }).toList();
     return fri;
   }
 
   @override
-  Future<User> getFullUserDataByEmail({required String email}) async {
+  Future<AppUser> getFullUserDataByEmail({required String email}) async {
     String endpoint = UsersController.getUserData.endpoint;
 
     var body = {'email': email};
 
     String response = await HttpUtils.post(endpoint: endpoint, body: body);
 
-    User user = User.fromJson(json.decode(response));
+    AppUser user = AppUser.fromJson(json.decode(response));
 
     return user;
   }
 
   @override
-  Future<List<User>> getAllFriends() async {
+  Future<List<AppUser>> getAllFriends() async {
     String endpoint = UsersController.getFriendList.endpoint;
 
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
@@ -70,15 +71,15 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
     String responseBody = await HttpUtils.post(endpoint: endpoint, body: body);
 
     List temp = json.decode(responseBody);
-    List<User> users = temp.map((u) {
-      return User.fromJson(u);
+    List<AppUser> users = temp.map((u) {
+      return AppUser.fromJson(u);
     }).toList();
 
     return users;
   }
 
   @override
-  Future<void> sendFriendRequest({required User friend}) async {
+  Future<void> sendFriendRequest({required AppUser friend}) async {
     String endpoint = UsersController.sendFriendRequest.endpoint;
 
     String requestorUid = auth.FirebaseAuth.instance.currentUser!.uid;

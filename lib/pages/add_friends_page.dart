@@ -25,7 +25,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
     if (searchQuery.isEmpty) {
       return;
     }
-    List<(User user, FriendQueryType relationship)> searchResults =
+    List<(AppUser user, FriendQueryType relationship)> searchResults =
         await widget.friendInteractionProvider.queryFriends(searchQuery);
 
     setState(() {
@@ -35,7 +35,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
     });
   }
 
-  void onAddClicked(User user) async {
+  void onAddClicked(AppUser user) async {
     await widget.friendInteractionProvider.sendFriendRequest(friend: user);
     InAppMessageService.showToast(
         message: _AddFriendsPageConsts.FriendRequestSentMessage(user.fullName));
@@ -69,9 +69,9 @@ class AddFriendsPageState extends State<AddFriendsPage> {
 }
 
 class FriendSearchResult extends StatefulWidget {
-  final User user;
+  final AppUser user;
   FriendQueryType type;
-  Function(User user)? onAddClicked;
+  Function(AppUser user)? onAddClicked;
 
   FriendSearchResult({required this.user, required this.type, this.onAddClicked, super.key});
 
@@ -83,12 +83,12 @@ class FriendSearchResultState extends State<FriendSearchResult> {
   @override
   Widget build(BuildContext context) {
     switch (widget.type) {
-      case (FriendQueryType.FRIENDSHIP_REQUESTED):
+      case (FriendQueryType.friendshipRequested):
         {
           return friendshipRequested(widget.user, (user) {});
         }
 
-      case (FriendQueryType.FRIENDS_WITH):
+      case (FriendQueryType.friendsWith):
         {
           return alreadyFriend(widget.user);
         }
@@ -101,7 +101,7 @@ class FriendSearchResultState extends State<FriendSearchResult> {
   }
 }
 
-Container notFriend(User user, Function(User user) onAddClicked) => Container(
+Container notFriend(AppUser user, Function(AppUser user) onAddClicked) => Container(
     margin: margin,
     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       userUi(user),
@@ -111,18 +111,19 @@ Container notFriend(User user, Function(User user) onAddClicked) => Container(
       )
     ]));
 
-Container friendshipRequested(User user, Function(User user)? onCancelRequestClicked) => Container(
-    margin: margin,
-    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      userUi(user),
-      PurpleButton(
-        onClick: () async {},
-        color: Colors.grey,
-        caption: _AddFriendsPageConsts.cancelRequestButtonCaption,
-      )
-    ]));
+Container friendshipRequested(AppUser user, Function(AppUser user)? onCancelRequestClicked) =>
+    Container(
+        margin: margin,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          userUi(user),
+          PurpleButton(
+            onClick: () async {},
+            color: Colors.grey,
+            caption: _AddFriendsPageConsts.cancelRequestButtonCaption,
+          )
+        ]));
 
-Container alreadyFriend(User user) => Container(
+Container alreadyFriend(AppUser user) => Container(
     margin: margin,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,11 +134,10 @@ Container alreadyFriend(User user) => Container(
           color: Colors.grey,
           caption: _AddFriendsPageConsts.alreadyFriendsCaption,
         )
-        // GFListTileDirectional(title: Text(AddFriendsPageConsts.alreadyFriendsCaption))
       ],
     ));
 
-Expanded userUi(User user) => Expanded(
+Expanded userUi(AppUser user) => Expanded(
         child: GFListTileDirectional(
       title: Text(user.fullName),
       margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),

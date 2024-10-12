@@ -7,9 +7,9 @@ import 'package:im_okay/Widgets/purple_button.dart';
 final _formKey = GlobalKey<FormState>();
 
 class RegistrationForm extends StatefulWidget {
-  Function(User user, String password) onSubmit;
+  Function(AppUser user, String password) onSubmit;
   Function() onCancel;
-  final User _user = User();
+  final AppUser _user = AppUser();
   String _password = '';
 
   RegistrationForm({super.key, required this.onSubmit, required this.onCancel});
@@ -30,46 +30,38 @@ class RegistrationFormState extends State<RegistrationForm> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: const InputDecoration(
-                      hintText: RegistrationConstants.firstNameHint),
-                  validator: (value) => (value!.isEmpty)
-                      ? RegistrationConstants.firstNameValidationMessage
-                      : null,
+                  decoration: const InputDecoration(hintText: RegistrationConstants.firstNameHint),
+                  validator: (value) =>
+                      (value!.isEmpty) ? RegistrationConstants.firstNameValidationMessage : null,
                   onSaved: (value) {
                     widget._user.firstName = value!;
                   },
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      hintText: RegistrationConstants.lastNameHint),
-                  validator: (value) => (value!.isEmpty)
-                      ? RegistrationConstants.lastNameValidationMessage
-                      : null,
+                  decoration: const InputDecoration(hintText: RegistrationConstants.lastNameHint),
+                  validator: (value) =>
+                      (value!.isEmpty) ? RegistrationConstants.lastNameValidationMessage : null,
                   onSaved: (value) {
                     widget._user.lastName = value!;
                   },
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      hintText: RegistrationConstants.emailHint),
-                  validator: (value) =>
-                      (!RegistrationConstants.emailRegexp.hasMatch(value!))
-                          ? RegistrationConstants.emailValidationMessage
-                          : null,
+                  decoration: const InputDecoration(hintText: RegistrationConstants.emailHint),
+                  validator: (value) => (!RegistrationConstants.emailRegexp.hasMatch(value!))
+                      ? RegistrationConstants.emailValidationMessage
+                      : null,
                   onSaved: (value) {
                     widget._user.email = value!;
                   },
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                      hintText: RegistrationConstants.passwordHint),
+                  decoration: const InputDecoration(hintText: RegistrationConstants.passwordHint),
                   onSaved: (value) {
                     widget._password = value!;
                   },
-                  validator: (value) =>
-                      (!RegistrationConstants.passwordRegExp.hasMatch(value!))
-                          ? RegistrationConstants.passwordValidationMessage
-                          : null,
+                  validator: (value) => (!RegistrationConstants.passwordRegExp.hasMatch(value!))
+                      ? RegistrationConstants.passwordValidationMessage
+                      : null,
                 ),
                 DropdownButtonFormField(
                     onSaved: (value) {
@@ -77,16 +69,14 @@ class RegistrationFormState extends State<RegistrationForm> {
                     },
                     value: null,
                     hint: const Text(RegistrationConstants.genderHint),
-                    validator: (value) => value == null
-                        ? RegistrationConstants.genderValidationMessage
-                        : null,
+                    validator: (value) =>
+                        value == null ? RegistrationConstants.genderValidationMessage : null,
                     items: const [
                       DropdownMenuItem(
                         value: Gender.female,
                         child: Text(Gender.femaleHeb),
                       ),
-                      DropdownMenuItem(
-                          value: Gender.male, child: Text(Gender.maleHeb)),
+                      DropdownMenuItem(value: Gender.male, child: Text(Gender.maleHeb)),
                     ],
                     onChanged: (a) {}),
                 Row(
@@ -100,9 +90,7 @@ class RegistrationFormState extends State<RegistrationForm> {
                               return;
                             }
                             _formKey.currentState!.save();
-                            debugPrint(widget._user.toString());
-                            await widget.onSubmit(
-                                widget._user, widget._password);
+                            await widget.onSubmit(widget._user, widget._password);
                           },
                           caption: RegistrationConstants.submitButtonText),
                       PurpleButton(
@@ -127,8 +115,7 @@ class RegistrationConstants {
   static const String genderHint = 'לשון פניה';
   static const String submitButtonText = 'הרשמה';
   static const String cancelButtonText = 'ביטול';
-  static final RegExp passwordRegExp =
-      RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$');
+  static final RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$');
   static const String passwordValidationMessage =
       'תנאים לסיסמה: לפחות 6 תווים, לפחות אות קטנה אחת ואות גדולה אחת';
   static final RegExp emailRegexp = RegExp(

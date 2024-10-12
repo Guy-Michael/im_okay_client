@@ -1,10 +1,8 @@
 enum AuthController {
   route('auth'),
-  signedInUserData('signed-in-user-data'),
   registerEndpoint('register'),
-  validateEndpoint('validate'),
-  registerFcmToken('store-token'),
-  deleteUser('delete-user');
+  fetchUserEndpoint('fetch-user'),
+  deleteUser('delete');
 
   final String value;
   const AuthController(this.value);

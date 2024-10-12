@@ -4,20 +4,20 @@ import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/f
 import 'package:im_okay/Utils/Consts/consts.dart';
 
 class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
-  final List<User> _userList = [
-    User(
+  final List<AppUser> _userList = [
+    AppUser(
         firstName: 'Test 1',
         lastName: 'User 1',
         email: 'fake@imokay.com',
         gender: Gender.male,
         lastSeen: 0),
-    User(
+    AppUser(
         firstName: 'Test 2',
         lastName: 'User 2',
         email: 'fake@imokay.com',
         gender: Gender.male,
         lastSeen: 0),
-    User(
+    AppUser(
         firstName: 'Test 3',
         lastName: 'User 3',
         email: 'fake@imokay.com',
@@ -25,7 +25,7 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
         lastSeen: 0),
   ];
 
-  final User _singleUser = User(
+  final AppUser _singleUser = AppUser(
       firstName: 'Kamila',
       lastName: 'Flowers',
       email: 'kamila@imokay.com',
@@ -38,29 +38,30 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<List<User>> getAllFriends() async {
+  Future<List<AppUser>> getAllFriends() async {
     await _waitASec();
 
     return _userList;
   }
 
   @override
-  Future<User> getFullUserDataByEmail({required String email}) async {
+  Future<AppUser> getFullUserDataByEmail({required String email}) async {
     await _waitASec();
 
     return _singleUser;
   }
 
   @override
-  Future<List<User>> getIncomingPendingRequests() async {
+  Future<List<AppUser>> getIncomingPendingRequests() async {
     await _waitASec();
 
     return _userList;
   }
 
   @override
-  Future<List<(User user, FriendQueryType relationship)>> queryFriends(String searchQuery) async {
-    return _userList.map((e) => (e, FriendQueryType.NO_RELATIONSHIP)).toList();
+  Future<List<(AppUser user, FriendQueryType relationship)>> queryFriends(
+      String searchQuery) async {
+    return _userList.map((e) => (e, FriendQueryType.noRelationship)).toList();
   }
 
   @override
@@ -69,12 +70,12 @@ class MockFriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<void> respondToFriendRequest(User userToRespond, bool approveRequest) async {
+  Future<void> respondToFriendRequest(AppUser userToRespond, bool approveRequest) async {
     return;
   }
 
   @override
-  Future<void> sendFriendRequest({required User friend}) async {
+  Future<void> sendFriendRequest({required AppUser friend}) async {
     return;
   }
 }

@@ -10,12 +10,12 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 
 class UserAuthenticationApiService {
-  static Future<String> getFirebaseAuthToken({bool forceRefreash = true}) async {
+  static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
     if (auth.FirebaseAuth.instance.currentUser == null) {
       await signIn();
     }
 
-    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken(forceRefreash))!;
+    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken(forceRefresh))!;
   }
 
   static AppUser? _appUser;

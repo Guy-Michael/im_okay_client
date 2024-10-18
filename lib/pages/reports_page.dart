@@ -9,7 +9,7 @@ import 'package:im_okay/Widgets/purple_button.dart';
 
 Future<(User? activeUser, List<AppUser> friends)> future(
     IFriendInteractionsProvider provider) async {
-  List<AppUser> users = await []; //await provider.getAllFriends();
+  List<AppUser> users = await provider.getAllFriends();
   User? activeUser = FirebaseAuth.instance.currentUser;
   return (activeUser, users);
 }

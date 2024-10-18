@@ -15,7 +15,6 @@ enum UsersController {
   route('social'),
   reportOkay('report'),
   findFriends('query'),
-  getUserData('full-user-data'),
   getFriendList('friends-status'),
   sendFriendRequest("add-friend"),
   responseToRequest("respond"),

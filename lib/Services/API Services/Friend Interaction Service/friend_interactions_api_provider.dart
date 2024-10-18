@@ -9,8 +9,6 @@ abstract class IFriendInteractionsProvider {
 
   Future<List<SearchQueryResponse>> queryFriends(String searchQuery);
 
-  Future<AppUser> getFullUserDataByEmail({required String email});
-
   Future<List<AppUser>> getAllFriends();
 
   Future<void> sendFriendRequest({required AppUser friend});

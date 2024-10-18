@@ -43,26 +43,10 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<AppUser> getFullUserDataByEmail({required String email}) async {
-    String endpoint = UsersController.getUserData.endpoint;
-
-    var body = {'email': email};
-
-    String response = await HttpUtils.post(endpoint: endpoint, body: body);
-
-    AppUser user = AppUser.fromJson(json.decode(response));
-
-    return user;
-  }
-
-  @override
   Future<List<AppUser>> getAllFriends() async {
     String endpoint = UsersController.getFriendList.endpoint;
 
-    String uid = auth.FirebaseAuth.instance.currentUser!.uid;
-    var body = {'uid': uid};
-
-    String responseBody = await HttpUtils.post(endpoint: endpoint, body: body);
+    String responseBody = await HttpUtils.get(endpoint: endpoint);
 
     List temp = json.decode(responseBody);
     List<AppUser> users = temp.map((u) {
@@ -85,9 +69,7 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
   @override
   Future<void> reportOkay() async {
     String endpoint = UsersController.reportOkay.endpoint;
-    String uid = auth.FirebaseAuth.instance.currentUser!.uid;
-    var body = {'uid': uid};
 
-    await HttpUtils.post(endpoint: endpoint, body: body);
+    await HttpUtils.get(endpoint: endpoint);
   }
 }

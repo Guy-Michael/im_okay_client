@@ -18,12 +18,7 @@ class UserAuthenticationApiService {
     return (await auth.FirebaseAuth.instance.currentUser!.getIdToken(forceRefresh))!;
   }
 
-  static AppUser? _appUser;
-
-  static Future<AppUser?> get appUser async {
-    _appUser ??= await fetchUser();
-    return _appUser;
-  }
+  static Future<AppUser?> get appUser async => await fetchUser();
 
   static Future<bool> registerNewUser(UserCredential credentials) async {
     String endpoint = AuthController.registerEndpoint.endpoint;
@@ -39,8 +34,6 @@ class UserAuthenticationApiService {
 
       Map<String, dynamic> body = user.toJson();
       await HttpUtils.post(endpoint: endpoint, body: body);
-
-      _appUser = user;
     } catch (e) {
       return false;
     } finally {

@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_service.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
-import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/Widgets/Reports%20Page/friend_context_menu.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -31,10 +27,13 @@ class ReportsPageState extends State<ReportsPage> {
   @override
   Widget build(BuildContext context) {
     var builder = FutureBuilder<(AppUser? activeUser, List<AppUser> friends)>(
-      initialData: (new AppUser(), List<AppUser>.empty()),
+      // initialData: (AppUser(), List<AppUser>.empty()),
       future: future(widget.friendInteractionProvider),
       builder: (context, snapshot) {
-        AppUser? activeUser = snapshot.data?.$1;
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        AppUser user = snapshot.data!.$1!;
         List<AppUser> users = snapshot.data?.$2 ?? [];
 
         return Scaffold(
@@ -46,6 +45,7 @@ class ReportsPageState extends State<ReportsPage> {
                   }
                   GFListTileDirectional activeUserTile = GFListTileDirectional(
                     title: const Text("השיתוף האחרון שלי"),
+                    icon: Text(parseLastSeen(user.lastSeen, user.gender)),
                     direction: TextDirection.rtl,
                     margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
                     onLongPress: () {},

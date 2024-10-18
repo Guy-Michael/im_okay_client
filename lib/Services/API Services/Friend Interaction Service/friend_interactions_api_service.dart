@@ -60,8 +60,7 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
   Future<void> sendFriendRequest({required AppUser friend}) async {
     String endpoint = UsersController.sendFriendRequest.endpoint;
 
-    String requestorUid = auth.FirebaseAuth.instance.currentUser!.uid;
-    var body = {'requestorUid': requestorUid, 'friendEmail': friend.email};
+    var body = {'friendEmail': friend.email};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
@@ -71,5 +70,14 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
     String endpoint = UsersController.reportOkay.endpoint;
 
     await HttpUtils.get(endpoint: endpoint);
+  }
+
+  @override
+  Future<void> cancelFriendRequest({required AppUser friend}) async {
+    String endpoint = UsersController.cancelFriendRequest.endpoint;
+
+    var body = {'friendEmail': friend.email};
+
+    await HttpUtils.post(endpoint: endpoint, body: body);
   }
 }

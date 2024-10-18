@@ -13,5 +13,7 @@ abstract class IFriendInteractionsProvider {
 
   Future<void> sendFriendRequest({required AppUser friend});
 
+  Future<void> cancelFriendRequest({required AppUser friend});
+
   Future<void> reportOkay();
 }

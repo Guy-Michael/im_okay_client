@@ -31,8 +31,11 @@ class AddFriendsPageState extends State<AddFriendsPage> {
 
     setState(() {
       searchList = searchResults
-          .map((e) =>
-              FriendSearchResult(user: e.user, type: e.relationship, onAddClicked: onAddClicked))
+          .map((e) => FriendSearchResult(
+              user: e.user,
+              type: e.relationship,
+              onAddClicked: onAddClicked,
+              onCancelClicked: onCancelRequestClicked))
           .toList();
     });
   }
@@ -43,6 +46,10 @@ class AddFriendsPageState extends State<AddFriendsPage> {
         message: _AddFriendsPageConsts.FriendRequestSentMessage(user.fullName));
 
     await getSearchResults();
+  }
+
+  void onCancelRequestClicked(AppUser user) async {
+    await widget.friendInteractionProvider.cancelFriendRequest(friend: user);
   }
 
   @override
@@ -74,8 +81,10 @@ class FriendSearchResult extends StatefulWidget {
   final AppUser user;
   FriendQueryType type;
   Function(AppUser user)? onAddClicked;
+  Function(AppUser user)? onCancelClicked;
 
-  FriendSearchResult({required this.user, required this.type, this.onAddClicked, super.key});
+  FriendSearchResult(
+      {required this.user, required this.type, this.onAddClicked, this.onCancelClicked, super.key});
 
   @override
   State<FriendSearchResult> createState() => FriendSearchResultState();
@@ -87,7 +96,7 @@ class FriendSearchResultState extends State<FriendSearchResult> {
     switch (widget.type) {
       case (FriendQueryType.friendshipRequested):
         {
-          return friendshipRequested(widget.user, (user) {});
+          return friendshipRequested(widget.user, widget.onCancelClicked!);
         }
 
       case (FriendQueryType.friendsWith):
@@ -113,13 +122,13 @@ Container notFriend(AppUser user, Function(AppUser user) onAddClicked) => Contai
       )
     ]));
 
-Container friendshipRequested(AppUser user, Function(AppUser user)? onCancelRequestClicked) =>
+Container friendshipRequested(AppUser user, Function(AppUser user) onCancelRequestClicked) =>
     Container(
         margin: margin,
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           userUi(user),
           PurpleButton(
-            onClick: () async {},
+            onClick: () => onCancelRequestClicked(user),
             color: Colors.grey,
             caption: _AddFriendsPageConsts.cancelRequestButtonCaption,
           )

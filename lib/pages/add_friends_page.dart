@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
+import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
@@ -25,12 +26,13 @@ class AddFriendsPageState extends State<AddFriendsPage> {
     if (searchQuery.isEmpty) {
       return;
     }
-    List<(AppUser user, FriendQueryType relationship)> searchResults =
+    List<SearchQueryResponse> searchResults =
         await widget.friendInteractionProvider.queryFriends(searchQuery);
 
     setState(() {
       searchList = searchResults
-          .map((e) => FriendSearchResult(user: e.$1, type: e.$2, onAddClicked: onAddClicked))
+          .map((e) =>
+              FriendSearchResult(user: e.user, type: e.relationship, onAddClicked: onAddClicked))
           .toList();
     });
   }

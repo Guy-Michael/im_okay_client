@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 
 class HttpUtils {
-  static const String _localDomain = "http://10.0.2.2";
+  static const String _localDomain = "10.0.2.2";
   // static const String _localDomain = "http://127.0.0.1";
   static const int _localPort = 5129;
   static const String _serverDomain = "http://20.51.219.132";
@@ -14,18 +14,16 @@ class HttpUtils {
   static Uri composeUri({required String endpoint, Map<String, Object>? queryParams}) {
     String domain = _isProduction ? _serverDomain : _localDomain;
     int port = _isProduction ? _serverPort : _localPort;
-    String url = "$domain:$port/api/$endpoint";
-    Uri uri = Uri.parse(url);
+    Uri uri = Uri.http("$domain:$port", endpoint, queryParams);
     return uri;
   }
 
   static Future<Map<String, String>> _getHeaders() async {
-    String idToken = await UserAuthenticationApiService.firebaseUser?.getIdToken() ?? '';
+    String idToken = await UserAuthenticationApiService.firebaseUser?.getIdToken(true) ?? '';
     var headers = {
       HttpHeaders.contentTypeHeader: 'Application/json',
       HttpHeaders.authorizationHeader: idToken
     };
-
     return headers;
   }
 
@@ -52,7 +50,10 @@ class HttpUtils {
   static Future<String> get({required String endpoint, Map<String, Object>? queryParams}) async {
     var headers = await _getHeaders();
     Uri uri = composeUri(endpoint: endpoint, queryParams: queryParams);
-    http.Response response = await http.get(uri, headers: headers);
+    http.Response response = await http.get(
+      uri,
+      headers: headers,
+    );
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Get request failed with stats ${response.statusCode}');

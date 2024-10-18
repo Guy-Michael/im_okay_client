@@ -1,4 +1,5 @@
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
+import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Models/user.dart';
 
 abstract class IFriendInteractionsProvider {
@@ -6,7 +7,7 @@ abstract class IFriendInteractionsProvider {
 
   Future<List<AppUser>> getIncomingPendingRequests();
 
-  Future<List<(AppUser user, FriendQueryType relationship)>> queryFriends(String searchQuery);
+  Future<List<SearchQueryResponse>> queryFriends(String searchQuery);
 
   Future<AppUser> getFullUserDataByEmail({required String email});
 

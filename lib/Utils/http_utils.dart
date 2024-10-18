@@ -19,7 +19,7 @@ class HttpUtils {
   }
 
   static Future<Map<String, String>> _getHeaders() async {
-    String idToken = await UserAuthenticationApiService.firebaseUser?.getIdToken(true) ?? '';
+    String idToken = await UserAuthenticationApiService.getFirebaseAuthToken();
     var headers = {
       HttpHeaders.contentTypeHeader: 'Application/json',
       HttpHeaders.authorizationHeader: idToken

@@ -17,8 +17,9 @@ enum UsersController {
   findFriends('query'),
   getFriendList('friends-status'),
   sendFriendRequest("add-friend"),
-  cancelFriendRequest("cancel-request"),
-  responseToRequest("respond"),
+  cancelFriendRequest('cancel-request'),
+  unfriend('unfriend'),
+  responseToRequest('respond'),
   getFriendRequests('get-requests');
 
   final String value;

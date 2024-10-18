@@ -10,20 +10,19 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 
 class UserAuthenticationApiService {
-  static auth.User? get firebaseUser {
-    return auth.FirebaseAuth.instance.currentUser;
+  static Future<String> getFirebaseAuthToken({bool forceRefreash = true}) async {
+    if (auth.FirebaseAuth.instance.currentUser == null) {
+      await signIn();
+    }
+
+    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken(forceRefreash))!;
   }
 
   static AppUser? _appUser;
 
-  static AppUser? get appUser {
+  static Future<AppUser?> get appUser async {
+    _appUser ??= await fetchUser();
     return _appUser;
-  }
-
-  static set appUser(AppUser? user) {
-    if (user != null) {
-      _appUser = user;
-    }
   }
 
   static Future<bool> registerNewUser(UserCredential credentials) async {
@@ -72,6 +71,35 @@ class UserAuthenticationApiService {
   }
 
   static Future<bool> registerOrSignIn() async {
+    UserCredential? cred = await signIn();
+    if (cred == null) {
+      return false;
+    }
+
+    bool authenticationSuccessful = false;
+    bool isNewUser = cred.additionalUserInfo?.isNewUser ?? false;
+    if (isNewUser) {
+      await UserAuthenticationApiService.registerNewUser(cred);
+      authenticationSuccessful = true;
+    } else {
+      AppUser? user = await UserAuthenticationApiService.fetchUser();
+      if (user != null) {
+        authenticationSuccessful = true;
+      }
+    }
+
+    return authenticationSuccessful;
+  }
+
+  static final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'openid',
+      'profile',
+    ],
+  );
+
+  static Future<UserCredential?> signIn() async {
     await googleSignIn.signOut();
     GoogleSignInAccount? account = await googleSignIn.signIn();
     GoogleSignInAuthentication? auth = await account?.authentication;
@@ -85,29 +113,9 @@ class UserAuthenticationApiService {
 
       UserCredential? cred = await FirebaseAuth.instance.signInWithCredential(credential);
 
-      bool authenticationSuccessful = false;
-      bool isNewUser = cred.additionalUserInfo?.isNewUser ?? false;
-      if (isNewUser) {
-        await UserAuthenticationApiService.registerNewUser(cred);
-        authenticationSuccessful = true;
-      } else {
-        AppUser? user = await UserAuthenticationApiService.fetchUser();
-        if (user != null) {
-          authenticationSuccessful = true;
-        }
-      }
-
-      return authenticationSuccessful;
+      return cred;
     }
 
-    return false;
+    return null;
   }
-
-  static final GoogleSignIn googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'openid',
-      'profile',
-    ],
-  );
 }

@@ -15,5 +15,7 @@ abstract class IFriendInteractionsProvider {
 
   Future<void> cancelFriendRequest({required AppUser friend});
 
+  Future<void> unfriendUser({required AppUser friend});
+
   Future<void> reportOkay();
 }

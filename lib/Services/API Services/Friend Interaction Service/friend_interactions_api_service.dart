@@ -80,4 +80,12 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
+
+  @override
+  Future<void> unfriendUser({required AppUser friend}) async {
+    String endpoint = UsersController.unfriend.endpoint;
+    var body = {'friendEmail': friend.email};
+
+    await HttpUtils.post(endpoint: endpoint, body: body);
+  }
 }

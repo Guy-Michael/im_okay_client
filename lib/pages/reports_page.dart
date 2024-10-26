@@ -7,11 +7,9 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
-Future<(AppUser? activeUser, List<AppUser> friends)> future(
-    IFriendInteractionsProvider provider) async {
+Future<List<AppUser>> future(IFriendInteractionsProvider provider) async {
   List<AppUser> users = await provider.getAllFriends();
-  AppUser? user = await UserAuthenticationApiService.appUser;
-  return (user, users);
+  return users;
 }
 
 class ReportsPage extends StatefulWidget {
@@ -24,87 +22,91 @@ class ReportsPage extends StatefulWidget {
 }
 
 class ReportsPageState extends State<ReportsPage> {
+  late Stream<List<AppUser>> friendStream;
+  late StreamController<List<AppUser>> friendStreamController;
+
+  late Stream<AppUser?> activeUserStream;
+  late StreamController<AppUser?> activeUserStreamController;
+
+  @override
+  void dispose() {
+    super.dispose();
+    friendStreamController.close();
+    activeUserStreamController.close();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initStreams();
+  }
+
+  void initStreams() {
+    friendStreamController = StreamController<List<AppUser>>();
+
+    friendStreamController.addStream(initStreamWithInitial(
+        Duration(seconds: 5), () async => future(widget.friendInteractionProvider)));
+
+    activeUserStreamController = StreamController<AppUser?>();
+
+    activeUserStreamController.addStream(
+        initStreamWithInitial(Duration(seconds: 5), UserAuthenticationApiService.fetchUser));
+  }
+
+  List<AppUser> cachedUsers = [];
   @override
   Widget build(BuildContext context) {
-    var builder = FutureBuilder<(AppUser? activeUser, List<AppUser> friends)>(
-      // initialData: (AppUser(), List<AppUser>.empty()),
-      future: future(widget.friendInteractionProvider),
+    var friendListBuilder = StreamBuilder<List<AppUser>>(
+      initialData: cachedUsers,
+      stream: friendStreamController.stream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator();
-        }
-        AppUser user = snapshot.data!.$1!;
-        List<AppUser> users = snapshot.data?.$2 ?? [];
+        // if (snapshot.hasError) {
+        //   return Center(
+        //     child: Text("Error :("),
+        //   );
+        // }
+        List<AppUser> users = snapshot.data ?? cachedUsers;
+        cachedUsers = users;
 
-        return Scaffold(
-            body: Wrap(
-                textDirection: TextDirection.rtl,
-                children: () {
-                  if (users.isEmpty) {
-                    return [const Center(heightFactor: 5, child: Text("עוד לא הוספת חברים :)"))];
-                  }
-                  GFListTileDirectional activeUserTile = GFListTileDirectional(
-                    title: const Text("השיתוף האחרון שלי"),
-                    icon: Text(parseLastSeen(user.lastSeen, user.gender)),
-                    direction: TextDirection.rtl,
-                    margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
-                    onLongPress: () {},
-                    color: const Color.fromARGB(150, 170, 170, 170),
-                    avatar: const Icon(Icons.person_rounded),
-                    shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
-                  );
+        return Wrap(
+            textDirection: TextDirection.rtl,
+            children: () {
+              if (users.isEmpty) {
+                return [const Center(heightFactor: 5, child: Text("עוד לא הוספת חברים :)"))];
+              }
 
-                  List<GFListTileDirectional> allUserTiles = users
-                      .map((e) => GFListTileDirectional(
-                            title: Text(e.fullName),
-                            direction: TextDirection.rtl,
-                            margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
-                            onLongPress: () async {
-                              await showMenu(
-                                  context: context,
-                                  position: RelativeRect.fromLTRB(100, 100, 100, 100),
-                                  items: [
-                                    PopupMenuItem(
-                                      onTap: () async {
-                                        await widget.friendInteractionProvider
-                                            .unfriendUser(friend: e);
-                                        setState(() {});
-                                      },
-                                      child: Text(_ReportsPageConsts.deleteFriend),
-                                    )
-                                  ]);
-                            },
-                            color: const Color.fromARGB(150, 170, 170, 170),
-                            icon: Text(parseLastSeen(e.lastSeen, e.gender)),
-                            avatar: const Icon(Icons.person_rounded),
-                            shadow: const BoxShadow(
-                                blurStyle: BlurStyle.solid, color: Colors.transparent),
-                          ))
-                      .toList();
-                  allUserTiles.insert(0, activeUserTile);
-                  return allUserTiles;
-                }()),
-            bottomSheet: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Row(
-                  textDirection: TextDirection.rtl,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PurpleButton(
-                      showProgressIndicatorAfterClick: true,
-                      onClick: onReportButtonClicked,
-                      caption: _ReportsPageConsts.reportNow,
-                    ),
-                    const SizedBox(width: 20),
-                    PurpleButton(
-                        showProgressIndicatorAfterClick: true,
-                        onClick: () async => setState(() {}),
-                        caption: _ReportsPageConsts.refresh)
-                  ],
-                )));
+              List<GFListTileDirectional> allUserTiles = users
+                  .map<GFListTileDirectional>((user) => getUserListing(user, context,
+                      onUnfriendButtonClicked: widget.friendInteractionProvider.unfriendUser))
+                  .toList();
+              return allUserTiles;
+            }());
       },
     );
-    return builder;
+
+    var bottomSheetBuilder = StreamBuilder(
+      stream: activeUserStreamController.stream,
+      initialData: AppUser(),
+      builder: (context, snapshot) {
+        AppUser user = snapshot.data!;
+
+        return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [getUserListing(user, context), ...buttons(onReportButtonClicked)]));
+      },
+    );
+
+    var scaffold = Scaffold(
+      body: friendListBuilder,
+      bottomSheet: bottomSheetBuilder,
+      resizeToAvoidBottomInset: true,
+    );
+
+    return scaffold;
   }
 
   Future<void> onReportButtonClicked() async {
@@ -129,6 +131,49 @@ String parseLastSeen(int lastSeen, String gender) {
 
 class _ReportsPageConsts {
   static const String reportNow = 'שיתוף';
-  static const String refresh = 'רענון';
   static const String deleteFriend = 'מחיקת חיבור';
+}
+
+var buttons = (Future<void> Function() onReportButtonClicked) => [
+      PurpleButton(
+        showProgressIndicatorAfterClick: true,
+        onClick: onReportButtonClicked,
+        caption: _ReportsPageConsts.reportNow,
+      ),
+    ];
+
+GFListTileDirectional getUserListing(AppUser user, BuildContext context,
+    {Future<void> Function({required AppUser friend})? onUnfriendButtonClicked}) {
+  void Function()? onLongPress = onUnfriendButtonClicked == null
+      ? null
+      : () async {
+          await showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(100, 100, 100, 100),
+              items: [
+                PopupMenuItem(
+                  onTap: () async {
+                    await onUnfriendButtonClicked(friend: user);
+                    // setState(() {});
+                  },
+                  child: Text(_ReportsPageConsts.deleteFriend),
+                )
+              ]);
+        };
+  return GFListTileDirectional(
+    title: Text(user.fullName),
+    direction: TextDirection.rtl,
+    margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
+    onLongPress: onLongPress,
+    color: const Color.fromARGB(150, 170, 170, 170),
+    icon: Text(parseLastSeen(user.lastSeen, user.gender)),
+    avatar: const Icon(Icons.person_rounded),
+    shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
+  );
+}
+
+Stream<T> initStreamWithInitial<T>(Duration duration, Future<T> Function() func) async* {
+  Stream<T> stream = Stream.periodic(duration).asyncMap((event) async => await func());
+  yield await func();
+  yield* stream;
 }

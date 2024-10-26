@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
+import 'package:im_okay/Exceptions/user_signed_out_exception.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Services/router_service.dart';
@@ -12,10 +13,10 @@ import 'package:im_okay/Utils/http_utils.dart';
 class UserAuthenticationApiService {
   static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
     if (auth.FirebaseAuth.instance.currentUser == null) {
-      await signIn();
+      throw UserSignedOutException();
     }
 
-    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken(forceRefresh))!;
+    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;
   }
 
   static Future<AppUser?> get appUser async => await fetchUser();
@@ -46,13 +47,14 @@ class UserAuthenticationApiService {
   static Future<AppUser?> fetchUser() async {
     String endpoint = AuthController.fetchUserEndpoint.endpoint;
 
-    try {
-      String userJson = await HttpUtils.get(endpoint: endpoint);
-      AppUser user = AppUser.fromJson(jsonDecode(userJson));
-      return user;
-    } catch (e) {
-      return null;
-    }
+    // try {
+    String userJson = await HttpUtils.get(endpoint: endpoint);
+    AppUser user = AppUser.fromJson(jsonDecode(userJson));
+    return user;
+    // } catch (e) {
+
+    //   return null;
+    // }
   }
 
   static Future<void> deleteSignedInUserAndSignOut() async {
@@ -94,21 +96,33 @@ class UserAuthenticationApiService {
 
   static Future<UserCredential?> signIn() async {
     await googleSignIn.signOut();
-    GoogleSignInAccount? account = await googleSignIn.signIn();
-    GoogleSignInAuthentication? auth = await account?.authentication;
+    GoogleSignInAccount? user = await googleSignIn.signIn();
 
-    if (auth != null) {
-      String? token = auth.idToken;
+    GoogleSignInAuthentication? auth = await user?.authentication;
 
-      final credential = GoogleAuthProvider.credential(
-        idToken: token,
-      );
-
-      UserCredential? cred = await FirebaseAuth.instance.signInWithCredential(credential);
-
-      return cred;
+    if (auth == null) {
+      return null;
     }
 
-    return null;
+    final credentials = GoogleAuthProvider.credential(idToken: auth.idToken);
+    UserCredential? firebaseCreds = await FirebaseAuth.instance.signInWithCredential(credentials);
+
+    return firebaseCreds;
+    // GoogleSignInAccount? user = googleSignIn.i
+
+    // User? user = FirebaseAuth.instance.is;
+    // if(user == null) {
+    // 	GoogleSignInAccount acc = googleSignIn.
+    // GoogleSignInAccount? account = await googleSignIn.signIn();
+    // GoogleSignInAuthentication? auth = await account?.authentication;
+
+    // if (auth != null) {
+    //   String? token = auth.idToken;
+
+    //   final credential = GoogleAuthProvider.credential(
+    //     idToken: token,
+    //   );
+
+    //   UserCredential? cred = await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }

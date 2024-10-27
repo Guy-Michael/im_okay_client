@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/firebase_options.dart';
 
@@ -24,29 +25,28 @@ void main() async {
     }
   }
 
-  // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-  //   if (user != null) {
-  //     // UserAuthenticationApiService.validateLoginAndGetUserData(await user.getIdToken());
-  //   }
-  //   debugPrint(user == null ? "Logged out!" : "In main: " + user.toString());
-  //   // if (user == null) {
-  //   //   FirebaseMessaging.instance.deleteToken();
-  //   // } else {
-  //   //   // String? deviceToken = await FirebaseMessaging.instance.getToken();
+  FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+    if (user == null) {
+      await UserAuthenticationApiService.signOut();
+      FirebaseMessaging.instance.deleteToken();
+    }
+    // if (user == null) {
+    // } else {
+    //   // String? deviceToken = await FirebaseMessaging.instance.getToken();
 
-  //   //   // if (deviceToken != null) {
-  //   //   //   await UserAuthenticationApiService.storeFcmToken(deviceToken);
-  //   //   // }
-  //   // }
-  // });
+    //   // if (deviceToken != null) {
+    //   //   await UserAuthenticationApiService.storeFcmToken(deviceToken);
+    //   // }
+    // }
+  });
 
-  // FirebaseMessaging.instance.onTokenRefresh.listen(
-  //   (token) async {
-  //     if (FirebaseAuth.instance.currentUser != null) {
-  //       await UserAuthenticationApiService.storeFcmToken(token);
-  //     }
-  //   },
-  // );
+  FirebaseMessaging.instance.onTokenRefresh.listen(
+    (token) async {
+      if (FirebaseAuth.instance.currentUser != null) {
+        // await UserAuthenticationApiService.storeFcmToken(token);
+      }
+    },
+  );
 
   runApp(MaterialApp.router(
     debugShowCheckedModeBanner: false,

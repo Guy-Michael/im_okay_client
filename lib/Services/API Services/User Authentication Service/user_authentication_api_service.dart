@@ -61,8 +61,7 @@ class UserAuthenticationApiService {
     String endpoint = AuthController.deleteUser.endpoint;
 
     bool deletedSuccessfully = await HttpUtils.delete(endpoint: endpoint);
-    await FirebaseAuth.instance.signOut();
-    globalRouter.go(Routes.authRedirectPage);
+    await signOut();
   }
 
   static Future<bool> registerOrSignIn() async {
@@ -108,21 +107,10 @@ class UserAuthenticationApiService {
     UserCredential? firebaseCreds = await FirebaseAuth.instance.signInWithCredential(credentials);
 
     return firebaseCreds;
-    // GoogleSignInAccount? user = googleSignIn.i
+  }
 
-    // User? user = FirebaseAuth.instance.is;
-    // if(user == null) {
-    // 	GoogleSignInAccount acc = googleSignIn.
-    // GoogleSignInAccount? account = await googleSignIn.signIn();
-    // GoogleSignInAuthentication? auth = await account?.authentication;
-
-    // if (auth != null) {
-    //   String? token = auth.idToken;
-
-    //   final credential = GoogleAuthProvider.credential(
-    //     idToken: token,
-    //   );
-
-    //   UserCredential? cred = await FirebaseAuth.instance.signInWithCredential(credential);
+  static Future<void> signOut() async {
+    await auth.FirebaseAuth.instance.signOut();
+    globalRouter.push(Routes.authRedirectPage);
   }
 }

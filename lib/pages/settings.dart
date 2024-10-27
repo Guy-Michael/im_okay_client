@@ -30,8 +30,7 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> onLogoutButtonClicked() async {
-    await auth.FirebaseAuth.instance.signOut();
-    globalRouter.push(Routes.authRedirectPage);
+    await UserAuthenticationApiService.signOut();
   }
 
   Future<void> onDeleteUserButtonClicked() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
+import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
@@ -25,12 +26,16 @@ class AddFriendsPageState extends State<AddFriendsPage> {
     if (searchQuery.isEmpty) {
       return;
     }
-    List<(AppUser user, FriendQueryType relationship)> searchResults =
+    List<SearchQueryResponse> searchResults =
         await widget.friendInteractionProvider.queryFriends(searchQuery);
 
     setState(() {
       searchList = searchResults
-          .map((e) => FriendSearchResult(user: e.$1, type: e.$2, onAddClicked: onAddClicked))
+          .map((e) => FriendSearchResult(
+              user: e.user,
+              type: e.relationship,
+              onAddClicked: onAddClicked,
+              onCancelClicked: onCancelRequestClicked))
           .toList();
     });
   }
@@ -41,6 +46,10 @@ class AddFriendsPageState extends State<AddFriendsPage> {
         message: _AddFriendsPageConsts.FriendRequestSentMessage(user.fullName));
 
     await getSearchResults();
+  }
+
+  void onCancelRequestClicked(AppUser user) async {
+    await widget.friendInteractionProvider.cancelFriendRequest(friend: user);
   }
 
   @override
@@ -72,8 +81,10 @@ class FriendSearchResult extends StatefulWidget {
   final AppUser user;
   FriendQueryType type;
   Function(AppUser user)? onAddClicked;
+  Function(AppUser user)? onCancelClicked;
 
-  FriendSearchResult({required this.user, required this.type, this.onAddClicked, super.key});
+  FriendSearchResult(
+      {required this.user, required this.type, this.onAddClicked, this.onCancelClicked, super.key});
 
   @override
   State<FriendSearchResult> createState() => FriendSearchResultState();
@@ -85,7 +96,7 @@ class FriendSearchResultState extends State<FriendSearchResult> {
     switch (widget.type) {
       case (FriendQueryType.friendshipRequested):
         {
-          return friendshipRequested(widget.user, (user) {});
+          return friendshipRequested(widget.user, widget.onCancelClicked!);
         }
 
       case (FriendQueryType.friendsWith):
@@ -111,13 +122,13 @@ Container notFriend(AppUser user, Function(AppUser user) onAddClicked) => Contai
       )
     ]));
 
-Container friendshipRequested(AppUser user, Function(AppUser user)? onCancelRequestClicked) =>
+Container friendshipRequested(AppUser user, Function(AppUser user) onCancelRequestClicked) =>
     Container(
         margin: margin,
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           userUi(user),
           PurpleButton(
-            onClick: () async {},
+            onClick: () => onCancelRequestClicked(user),
             color: Colors.grey,
             caption: _AddFriendsPageConsts.cancelRequestButtonCaption,
           )

@@ -3,29 +3,31 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger();
 
 class HttpUtils {
-  static const String _localDomain = "http://10.0.2.2";
+  static const String _localDomain = "10.0.2.2";
   // static const String _localDomain = "http://127.0.0.1";
   static const int _localPort = 5129;
-  static const String _serverDomain = "http://20.51.219.132";
+  static const String _serverDomain = "20.51.219.132";
   static const int _serverPort = 80;
   static const bool _isProduction = kReleaseMode;
   static Uri composeUri({required String endpoint, Map<String, Object>? queryParams}) {
     String domain = _isProduction ? _serverDomain : _localDomain;
     int port = _isProduction ? _serverPort : _localPort;
-    String url = "$domain:$port/api/$endpoint";
-    Uri uri = Uri.parse(url);
+    Uri uri = Uri.http("$domain:$port", endpoint, queryParams);
+
     return uri;
   }
 
   static Future<Map<String, String>> _getHeaders() async {
-    String idToken = await UserAuthenticationApiService.firebaseUser?.getIdToken() ?? '';
+    String idToken = await UserAuthenticationApiService.getFirebaseAuthToken();
     var headers = {
       HttpHeaders.contentTypeHeader: 'Application/json',
       HttpHeaders.authorizationHeader: idToken
     };
-
     return headers;
   }
 
@@ -39,9 +41,10 @@ class HttpUtils {
     var headers = await _getHeaders();
 
     Uri uri = composeUri(endpoint: endpoint);
-
+    log1(uri, headers);
     http.Response response = await http.post(uri, body: bodyString, headers: headers);
 
+    log2(response);
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Request failed with status ${response.statusCode}');
     }
@@ -52,7 +55,13 @@ class HttpUtils {
   static Future<String> get({required String endpoint, Map<String, Object>? queryParams}) async {
     var headers = await _getHeaders();
     Uri uri = composeUri(endpoint: endpoint, queryParams: queryParams);
-    http.Response response = await http.get(uri, headers: headers);
+    log1(uri, headers);
+    http.Response response = await http.get(
+      uri,
+      headers: headers,
+    );
+
+    log2(response);
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Get request failed with stats ${response.statusCode}');
@@ -64,12 +73,31 @@ class HttpUtils {
   static Future<bool> delete({required endpoint}) async {
     Map<String, String> headers = await _getHeaders();
     Uri uri = composeUri(endpoint: endpoint);
+
+    log1(uri, headers);
+
     http.Response response = await http.delete(uri, headers: headers);
+    log2(response);
 
     if (response.statusCode != HttpStatus.ok) {
       return false;
     } else {
       return true;
     }
+  }
+
+  static void log1(Uri uri, Map<String, String> headers) {
+    log('***********************************');
+    log("uri: $uri");
+    log("headers: $headers");
+  }
+
+  static void log2(http.Response response) {
+    log("response: ${response.statusCode}: ${response.body}");
+    log('***********************************');
+  }
+
+  static void log(String message) {
+    logger.i('im-okay: $message');
   }
 }

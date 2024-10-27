@@ -17,19 +17,19 @@ class HubPage extends StatefulWidget {
 
 class HubPageState extends State<HubPage> {
   int selectedIndex = 0;
-  late ReportsPage reportsPage;
-  late SettingsPage settingsPage;
-  late AddFriendsPage addFriendsPage;
-  late FriendRequestsPage friendRequestsPage;
+  // late ReportsPage reportsPage;
+  // late SettingsPage settingsPage;
+  // late AddFriendsPage addFriendsPage;
+  // late FriendRequestsPage friendRequestsPage;
 
   @override
   void initState() {
     super.initState();
-    reportsPage = ReportsPage(friendInteractionProvider: widget.friendInteractionProvider);
-    settingsPage = const SettingsPage();
-    addFriendsPage = AddFriendsPage(friendInteractionProvider: widget.friendInteractionProvider);
-    friendRequestsPage =
-        FriendRequestsPage(friendInteractionProvider: widget.friendInteractionProvider);
+    // reportsPage = ReportsPage(friendInteractionProvider: widget.friendInteractionProvider);
+    // settingsPage = const SettingsPage();
+    // addFriendsPage = AddFriendsPage(friendInteractionProvider: widget.friendInteractionProvider);
+    // friendRequestsPage =
+    //     FriendRequestsPage(friendInteractionProvider: widget.friendInteractionProvider);
   }
 
   @override
@@ -62,25 +62,29 @@ class HubPageState extends State<HubPage> {
   List<({Widget page, String label, IconData icon, IconData iconSelected})>
       _getBottomNavigationWidgets() => [
             (
-              page: reportsPage,
+              page: ReportsPage(friendInteractionProvider: widget.friendInteractionProvider),
+              // page: reportsPage,
               label: BottomNavbarConsts.homeButtonCaption,
               icon: Icons.home_outlined,
               iconSelected: Icons.home
             ),
             (
-              page: addFriendsPage,
+              page: AddFriendsPage(friendInteractionProvider: widget.friendInteractionProvider),
+              // page: addFriendsPage,
               label: BottomNavbarConsts.addFriendsButtonCaption,
               icon: Icons.plus_one_outlined,
               iconSelected: Icons.plus_one
             ),
             (
-              page: friendRequestsPage,
+              page: FriendRequestsPage(friendInteractionProvider: widget.friendInteractionProvider),
+              // page: friendRequestsPage,
               label: BottomNavbarConsts.requestsButtonCaption,
               icon: Icons.waves_outlined,
               iconSelected: Icons.waves
             ),
             (
-              page: settingsPage,
+              page: SettingsPage(),
+              // page: settingsPage,
               label: BottomNavbarConsts.settingsButtonCaption,
               icon: Icons.settings_outlined,
               iconSelected: Icons.settings

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
@@ -18,10 +20,12 @@ class LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            height: 500,
-            width: 500,
-            child: PurpleButton(onClick: onButtonLoginClicked, caption: "Google Signin!")));
+        body:
+            Center(child: PurpleButton(onClick: onButtonLoginClicked, caption: "Google Signin!")));
+    // 			ElevatedButton(
+    // onPressed: onButtonLoginClicked,
+    // child: Text(_LoginConsts.loginButtonCaption),
+    // )));
   }
 
   Future<void> onButtonLoginClicked() async {
@@ -36,6 +40,7 @@ class LoginState extends State<LoginPage> {
 }
 
 class _LoginConsts {
+  static const String loginButtonCaption = 'התחברות עם גוגל';
   static const String loginSuccessfullMessage = "התחברת בהצלחה!";
   static const String loginFailed = "התחברות נכשלה :(";
 }

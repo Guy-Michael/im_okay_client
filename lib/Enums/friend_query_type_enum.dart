@@ -5,7 +5,7 @@ enum FriendQueryType {
 
   static FriendQueryType parse(String name) {
     for (FriendQueryType enumVariant in FriendQueryType.values) {
-      if (enumVariant.name == name) {
+      if (enumVariant.value == name) {
         return enumVariant;
       }
     }

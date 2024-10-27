@@ -12,13 +12,14 @@ enum AuthController {
 }
 
 enum UsersController {
-  route('friends'),
+  route('social'),
   reportOkay('report'),
-  findFriends('find-friends'),
-  getUserData('full-user-data'),
+  findFriends('query'),
   getFriendList('friends-status'),
   sendFriendRequest("add-friend"),
-  responseToRequest("respond"),
+  cancelFriendRequest('cancel-request'),
+  unfriend('unfriend'),
+  responseToRequest('respond'),
   getFriendRequests('get-requests');
 
   final String value;

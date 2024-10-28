@@ -25,28 +25,28 @@ void main() async {
     }
   }
 
-  FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-    if (user == null) {
-      await UserAuthenticationApiService.signOut();
-      FirebaseMessaging.instance.deleteToken();
-    }
-    // if (user == null) {
-    // } else {
-    //   // String? deviceToken = await FirebaseMessaging.instance.getToken();
+  // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+  //   if (user == null) {
+  //     await UserAuthenticationApiService.signOut();
+  //     FirebaseMessaging.instance.deleteToken();
+  //   }
+  // if (user == null) {
+  // } else {
+  //   // String? deviceToken = await FirebaseMessaging.instance.getToken();
 
-    //   // if (deviceToken != null) {
-    //   //   await UserAuthenticationApiService.storeFcmToken(deviceToken);
-    //   // }
-    // }
-  });
+  //   // if (deviceToken != null) {
+  //   //   await UserAuthenticationApiService.storeFcmToken(deviceToken);
+  //   // }
+  // }
+  // });
 
-  FirebaseMessaging.instance.onTokenRefresh.listen(
-    (token) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        // await UserAuthenticationApiService.storeFcmToken(token);
-      }
-    },
-  );
+  // FirebaseMessaging.instance.onTokenRefresh.listen(
+  //   (token) async {
+  //     if (FirebaseAuth.instance.currentUser != null) {
+  //       // await UserAuthenticationApiService.storeFcmToken(token);
+  //     }
+  //   },
+  // );
 
   runApp(MaterialApp.router(
     debugShowCheckedModeBanner: false,

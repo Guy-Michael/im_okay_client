@@ -4,6 +4,7 @@ import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -22,17 +23,20 @@ class ReportsPage extends StatefulWidget {
 }
 
 class ReportsPageState extends State<ReportsPage> {
-  late Stream<List<AppUser>> friendStream;
-  late StreamController<List<AppUser>> friendStreamController;
+  // late Stream<List<AppUser>>? friendStream;
+  late StreamController<List<AppUser>>? friendStreamController;
 
-  late Stream<AppUser?> activeUserStream;
-  late StreamController<AppUser?> activeUserStreamController;
+  // late Stream<AppUser?> activeUserStream;
+  late StreamController<AppUser?>? activeUserStreamController;
 
   @override
   void dispose() {
     super.dispose();
-    friendStreamController.close();
-    activeUserStreamController.close();
+    debugPrint("disposing streams");
+    friendStreamController?.close();
+    activeUserStreamController?.close();
+    friendStreamController = null;
+    activeUserStreamController = null;
   }
 
   @override
@@ -44,13 +48,13 @@ class ReportsPageState extends State<ReportsPage> {
   void initStreams() {
     friendStreamController = StreamController<List<AppUser>>();
 
-    friendStreamController.addStream(initStreamWithInitial(
+    friendStreamController?.addStream(StreamUtils.initStreamWithInitial(
         Duration(seconds: 5), () async => future(widget.friendInteractionProvider)));
 
     activeUserStreamController = StreamController<AppUser?>();
 
-    activeUserStreamController.addStream(
-        initStreamWithInitial(Duration(seconds: 5), UserAuthenticationApiService.fetchUser));
+    activeUserStreamController?.addStream(StreamUtils.initStreamWithInitial(
+        Duration(seconds: 5), UserAuthenticationApiService.fetchUser));
   }
 
   List<AppUser> cachedUsers = [];
@@ -58,7 +62,7 @@ class ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     var friendListBuilder = StreamBuilder<List<AppUser>>(
       initialData: cachedUsers,
-      stream: friendStreamController.stream,
+      stream: friendStreamController?.stream,
       builder: (context, snapshot) {
         // if (snapshot.hasError) {
         //   return Center(
@@ -85,7 +89,7 @@ class ReportsPageState extends State<ReportsPage> {
     );
 
     var bottomSheetBuilder = StreamBuilder(
-      stream: activeUserStreamController.stream,
+      stream: activeUserStreamController?.stream,
       initialData: AppUser(),
       builder: (context, snapshot) {
         AppUser user = snapshot.data!;
@@ -170,10 +174,4 @@ GFListTileDirectional getUserListing(AppUser user, BuildContext context,
     avatar: const Icon(Icons.person_rounded),
     shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
   );
-}
-
-Stream<T> initStreamWithInitial<T>(Duration duration, Future<T> Function() func) async* {
-  Stream<T> stream = Stream.periodic(duration).asyncMap((event) async => await func());
-  yield await func();
-  yield* stream;
 }

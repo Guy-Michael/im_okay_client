@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -14,28 +17,36 @@ class FriendRequestsPage extends StatefulWidget {
 }
 
 class FriendRequestsPageState extends State<FriendRequestsPage> {
+  late StreamController<List<AppUser>> friendRequestStreamController;
   List<PendingFriendRequest> friendRequestsList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    friendRequestStreamController = StreamController<List<AppUser>>();
+    friendRequestStreamController.addStream(StreamUtils.initStreamWithInitial(
+        Duration(seconds: 5), widget.friendInteractionProvider.getIncomingPendingRequests));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<List<AppUser>>(
-      initialData: const [],
-      future: widget.friendInteractionProvider.getIncomingPendingRequests(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-          return Column(
-              children: snapshot.data!
-                  .map((AppUser user) => PendingFriendRequest(
-                        friendInteractionProvider: widget.friendInteractionProvider,
-                        user: user,
-                      ))
-                  .toList());
-        }
+        body: StreamBuilder<List<AppUser>>(
+            initialData: const [],
+            stream: friendRequestStreamController.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return Column(
+                    children: snapshot.data!
+                        .map((AppUser user) => PendingFriendRequest(
+                              friendInteractionProvider: widget.friendInteractionProvider,
+                              user: user,
+                            ))
+                        .toList());
+              }
 
-        return const Center(child: Text(FriendRequestConsts.noPendingRequestsCaption));
-      },
-    ));
+              return const Center(child: Text(FriendRequestConsts.noPendingRequestsCaption));
+            }));
   }
 }
 
@@ -54,7 +65,6 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      // textDirection: TextDirection.rtl,
       children: _getList(user: widget.user),
     );
   }
@@ -73,6 +83,7 @@ class PendingFriendRequestState extends State<PendingFriendRequest> {
         PurpleButton(
           onClick: () async {
             await widget.friendInteractionProvider.respondToFriendRequest(user, true);
+            setState(() {});
           },
           padding: const EdgeInsets.all(15),
           caption: FriendRequestConsts.approveButtonCaption,

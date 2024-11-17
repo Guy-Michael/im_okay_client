@@ -8,6 +8,7 @@ class AppUser extends Equatable {
   String imageUrl;
   String gender;
   int lastSeen;
+  int lastAlertTime;
 
   String get fullName => "$firstName $lastName";
   bool get isFemale => gender == Gender.female;
@@ -17,6 +18,7 @@ class AppUser extends Equatable {
       this.firstName = '',
       this.lastName = '',
       this.lastSeen = 0,
+      this.lastAlertTime = 0,
       this.imageUrl = '',
       this.gender = ''});
 
@@ -25,6 +27,7 @@ class AppUser extends Equatable {
         firstName = getValueOrDefault(json, 'firstName'),
         lastName = getValueOrDefault(json, 'lastName'),
         lastSeen = getValueOrDefault(json, 'lastSeen'),
+        lastAlertTime = getValueOrDefault(json, 'lastAlertTime'),
         imageUrl = getValueOrDefault(json, 'imageUrl'),
         gender = getValueOrDefault(json, 'gender');
 
@@ -34,6 +37,7 @@ class AppUser extends Equatable {
       'firstName': firstName,
       'lastName': lastName,
       'lastSeen': lastSeen,
+      'lastAlertTime': lastAlertTime,
       'imageUrl': imageUrl,
       'gender': gender
     };
@@ -44,5 +48,6 @@ class AppUser extends Equatable {
   }
 
   @override
-  List<Object?> get props => [firstName, lastName, email, gender, lastSeen];
+  List<Object?> get props =>
+      [firstName, lastName, email, gender, lastSeen, lastAlertTime, imageUrl];
 }

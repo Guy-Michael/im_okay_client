@@ -136,6 +136,9 @@ String parseLastSeen(int lastSeen, String gender) {
 class _ReportsPageConsts {
   static const String reportNow = 'שיתוף';
   static const String deleteFriend = 'מחיקת חיבור';
+  static const neutralColor = Color.fromARGB(150, 170, 170, 170);
+  static const dangerColor = Colors.redAccent;
+  static const safeColor = Colors.greenAccent;
 }
 
 var buttons = (Future<void> Function() onReportButtonClicked) => [
@@ -169,9 +172,23 @@ GFListTileDirectional getUserListing(AppUser user, BuildContext context,
     direction: TextDirection.rtl,
     margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
     onLongPress: onLongPress,
-    color: const Color.fromARGB(150, 170, 170, 170),
+    color: chooseUserColor(user),
     icon: Text(parseLastSeen(user.lastSeen, user.gender)),
     avatar: const Icon(Icons.person_rounded),
     shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
   );
+}
+
+Color chooseUserColor(AppUser user) {
+  int diff = user.lastSeen - user.lastAlertTime;
+  int tenMinutes = 1000 * 60 * 10;
+
+  //user reported in the range of 10 minutes after alert
+  if (diff > 0 && diff <= tenMinutes) {
+    return _ReportsPageConsts.safeColor;
+  } else if (diff < 0) {
+    return _ReportsPageConsts.dangerColor;
+  } else {
+    return _ReportsPageConsts.neutralColor;
+  }
 }

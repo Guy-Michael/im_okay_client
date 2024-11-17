@@ -31,7 +31,8 @@ class UserAuthenticationApiService {
           lastName: profile['family_name'],
           email: profile['email'],
           imageUrl: profile['picture'],
-          lastSeen: 0);
+          lastSeen: 0,
+          lastAlertTime: 0);
 
       Map<String, dynamic> body = user.toJson();
       await HttpUtils.post(endpoint: endpoint, body: body);

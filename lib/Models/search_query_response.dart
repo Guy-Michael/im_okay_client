@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
-import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Models/app_user.dart';
 
 class SearchQueryResponse {
   AppUser user;

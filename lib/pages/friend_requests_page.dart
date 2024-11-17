@@ -104,4 +104,5 @@ class FriendRequestConsts {
   static const String approveButtonCaption = "אישור";
   static const String denyButtonCaption = "דחייה";
   static const String noPendingRequestsCaption = "אין בקשות ממתינות :)";
+  static String alertZoneCaption(String alertZone) => "אזור ההתראה שלך: " + alertZone;
 }

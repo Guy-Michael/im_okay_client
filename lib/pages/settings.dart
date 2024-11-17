@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Models/alert_area.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Services/location_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
@@ -9,8 +11,29 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(context) {
+    // return FutureBuilder<String>(
+    //   future: getAlertZoneName(),-
+    //   builder: (context, snapshot) {
+    //     if (!snapshot.hasData) {
+    //       return CircularProgressIndicator();
+    //     }
+
+    //     return Container(child: Text(snapshot.data!));
+    //   },
+    // );
+
     return Scaffold(
-        body: const Center(child: Text("בבנייה, יגיע בקרוב!")),
+        body: FutureBuilder(
+          future: getAlertZoneName(),
+          builder: (context, snapshot) {
+            Widget child =
+                snapshot.hasData ? Text(snapshot.data!) : CircularProgressIndicator.adaptive();
+
+            return Center(
+              child: child,
+            );
+          },
+        ),
         bottomSheet: Center(
             heightFactor: 1,
             child: Padding(
@@ -21,10 +44,12 @@ class SettingsPage extends StatelessWidget {
                     children: [
                       PurpleButton(
                         onClick: onLogoutButtonClicked,
-                        caption: "התנתקות",
+                        caption: SettingsPageConsts.logoutButtonCaption,
                         color: Colors.grey,
                       ),
-                      PurpleButton(onClick: onDeleteUserButtonClicked, caption: "מחיקת חשבון"),
+                      PurpleButton(
+                          onClick: onDeleteUserButtonClicked,
+                          caption: SettingsPageConsts.deleteAccountButtonCaption),
                     ]))));
   }
 
@@ -37,4 +62,15 @@ class SettingsPage extends StatelessWidget {
 
     globalRouter.go(Routes.authRedirectPage);
   }
+
+  Future<String> getAlertZoneName() async {
+    String alertAreaName = await LocationService.getUserAlertZone();
+    return alertAreaName;
+  }
+}
+
+class SettingsPageConsts {
+  static const String building = "בבנייה, יגיע בקרוב!";
+  static const String logoutButtonCaption = "התנתקות";
+  static const String deleteAccountButtonCaption = "מחיקת חשבון";
 }

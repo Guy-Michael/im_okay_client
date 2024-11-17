@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Utils/Consts/color_consts.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';

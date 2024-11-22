@@ -12,7 +12,12 @@ class AlertArea {
   num lat = 0;
   num lng = 0;
 
-  List<List<num>> coordinates = [[]];
+  List<List<num>> coordinates = [];
+
+  AlertArea.none() {
+    id = "NONE";
+    name = "NONE";
+  }
 
   AlertArea(
       {required this.id,

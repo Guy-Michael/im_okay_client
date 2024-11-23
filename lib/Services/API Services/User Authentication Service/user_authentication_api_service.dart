@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
-import 'package:im_okay/Exceptions/user_signed_out_exception.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Services/router_service.dart';
@@ -13,7 +12,7 @@ import 'package:im_okay/Utils/http_utils.dart';
 class UserAuthenticationApiService {
   static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
     if (auth.FirebaseAuth.instance.currentUser == null) {
-      throw UserSignedOutException();
+      return '';
     }
 
     return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;

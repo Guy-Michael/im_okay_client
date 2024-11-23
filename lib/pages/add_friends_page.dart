@@ -43,7 +43,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   void onAddClicked(AppUser user) async {
     await widget.friendInteractionProvider.sendFriendRequest(friend: user);
     InAppMessageService.showToast(
-        message: _AddFriendsPageConsts.FriendRequestSentMessage(user.fullName));
+        message: _AddFriendsPageConsts.friendRequestSentMessage(user.fullName));
 
     await getSearchResults();
   }
@@ -166,5 +166,5 @@ class _AddFriendsPageConsts {
   static const String addFriendButtonCaption = "+";
   static const String cancelRequestButtonCaption = "ביטול";
   static const String alreadyFriendsCaption = "חברים";
-  static String FriendRequestSentMessage(String name) => "בקשת חברות נשלחה ל$name";
+  static String friendRequestSentMessage(String name) => "בקשת חברות נשלחה ל$name";
 }

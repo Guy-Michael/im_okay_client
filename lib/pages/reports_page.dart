@@ -23,11 +23,14 @@ class ReportsPage extends StatefulWidget {
 }
 
 class ReportsPageState extends State<ReportsPage> {
-  // late Stream<List<AppUser>>? friendStream;
   late StreamController<List<AppUser>>? friendStreamController;
-
-  // late Stream<AppUser?> activeUserStream;
   late StreamController<AppUser?>? activeUserStreamController;
+
+  @override
+  void initState() {
+    super.initState();
+    initStreams();
+  }
 
   @override
   void dispose() {
@@ -37,12 +40,6 @@ class ReportsPageState extends State<ReportsPage> {
     activeUserStreamController?.close();
     friendStreamController = null;
     activeUserStreamController = null;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initStreams();
   }
 
   void initStreams() {
@@ -64,11 +61,6 @@ class ReportsPageState extends State<ReportsPage> {
       initialData: cachedUsers,
       stream: friendStreamController?.stream,
       builder: (context, snapshot) {
-        // if (snapshot.hasError) {
-        //   return Center(
-        //     child: Text("Error :("),
-        //   );
-        // }
         List<AppUser> users = snapshot.data ?? cachedUsers;
         cachedUsers = users;
 
@@ -180,14 +172,16 @@ GFListTileDirectional getUserListing(AppUser user, BuildContext context,
 }
 
 Color chooseUserColor(AppUser user) {
-  int diff = user.lastSeen - user.lastAlertTime;
+  int realTime = DateTime.now().millisecondsSinceEpoch;
   int tenMinutes = 1000 * 60 * 10;
 
-  //user reported in the range of 10 minutes after alert
-  if (diff > 0 && diff <= tenMinutes) {
-    return _ReportsPageConsts.safeColor;
-  } else if (diff < 0) {
+  bool isUserMarkedSafe = user.lastAlertTime <= user.lastSeen;
+  bool has10MinutesPassedSinceLastAlert = (user.lastAlertTime + tenMinutes) <= realTime;
+
+  if (!isUserMarkedSafe) {
     return _ReportsPageConsts.dangerColor;
+  } else if (isUserMarkedSafe && !has10MinutesPassedSinceLastAlert) {
+    return _ReportsPageConsts.safeColor;
   } else {
     return _ReportsPageConsts.neutralColor;
   }

@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/alert_area.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Services/location_service.dart' as location_service;
 import 'package:im_okay/Services/location_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -16,34 +18,31 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  late StreamController<AlertArea> alertAreaStreamController;
+  late StreamController<AlertArea>? alertAreaStreamController;
 
   @override
   void initState() {
     super.initState();
     alertAreaStreamController = StreamController<AlertArea>();
-    alertAreaStreamController.addStream(getAlertAreaStream());
+    alertAreaStreamController?.addStream(location_service.getAlertAreaStream());
   }
 
   @override
   void dispose() {
     super.dispose();
-    alertAreaStreamController.close();
+    debugPrint('disposing streams');
+    alertAreaStreamController?.close();
+    alertAreaStreamController = null;
   }
 
   @override
   Widget build(context) {
     return Scaffold(
-        body: StreamBuilder<AlertArea>(
-          builder: (context, snapshot) {
-            Widget child =
-                snapshot.hasData ? Text(snapshot.data!.name) : CircularProgressIndicator.adaptive();
-
-            return Center(
-              child: child,
-            );
+        body: Consumer<LocationProvider>(
+          builder: (context, value, child) {
+            debugPrint("notified with ${value.alertArea.name}");
+            return Center(child: Text(value.alertArea.name));
           },
-          stream: alertAreaStreamController.stream,
         ),
         bottomSheet: Center(
             heightFactor: 1,

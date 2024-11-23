@@ -55,7 +55,7 @@ class PurpleButtonState extends State<PurpleButton> {
             ? const CircularProgressIndicator()
             : Text(
                 widget.caption,
-                textScaleFactor: 1.5,
+                textScaler: TextScaler.linear(1.5),
               ));
   }
 }

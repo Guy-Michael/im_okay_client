@@ -4,7 +4,6 @@ import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/f
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/auth_redirect_page.dart';
 import 'package:im_okay/pages/hub_page.dart';
-import 'package:im_okay/pages/register_page.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 final _friendInteractionProvider = FriendInteractionsApiService();
@@ -18,11 +17,6 @@ final GoRouter globalRouter = GoRouter(
         builder: (context, state) => AuthRedirectPage(
               friendInteractionProvider: _friendInteractionProvider,
             )),
-    GoRoute(
-      parentNavigatorKey: _rootNavigationKey,
-      path: Routes.registrationPage,
-      builder: (context, state) => const RegisterPage(),
-    ),
     GoRoute(
         parentNavigatorKey: _rootNavigationKey,
         path: Routes.hub,

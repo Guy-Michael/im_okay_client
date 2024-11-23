@@ -1,15 +1,30 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'package:flutter/foundation.dart';
 import 'package:im_okay/Models/alert_area.dart';
 import 'package:im_okay/Services/API%20Services/polygons.dart' as data;
-
 import 'package:geolocator/geolocator.dart';
-import 'package:im_okay/Utils/http_utils.dart';
 import 'package:point_in_polygon/point_in_polygon.dart';
 
 List<AlertArea> polygons = data.polygons;
 AlertArea activeAlertArea = AlertArea.none();
+
+initStream() {
+  getAlertAreaStream().listen((event) {
+    activeAlertArea = event;
+  });
+}
+
+StreamController<AlertArea>? _alertAreaStreamController;
+
+StreamController<AlertArea> get alertAreaStreamController {
+  if (_alertAreaStreamController == null) {
+    _alertAreaStreamController = StreamController<AlertArea>();
+    _alertAreaStreamController?.addStream(getAlertAreaStream());
+  }
+
+  return _alertAreaStreamController!;
+}
 
 Stream<AlertArea> getAlertAreaStream() async* {
   bool serviceEnabled;
@@ -44,7 +59,9 @@ Stream<AlertArea> getAlertAreaStream() async* {
     sink.add(newArea);
   });
 
-  yield* positionStream.transform(transformer);
+  yield* positionStream.transform(transformer).asBroadcastStream(
+      onCancel: (subscription) => subscription.pause(),
+      onListen: (subscription) => subscription.resume);
 }
 
 Future<AlertArea> _getUserAlertZone() async {
@@ -98,4 +115,15 @@ List<AlertArea> getClosestAlertAreas(Position userPosition) {
 double calcPointDistance(Position userPosition, Point areaCenter) {
   return sqrt(
       pow(userPosition.latitude - areaCenter.x, 2) + pow(userPosition.longitude - areaCenter.y, 2));
+}
+
+class LocationProvider with ChangeNotifier {
+  AlertArea get alertArea => activeAlertArea;
+  LocationProvider() {
+    getAlertAreaStream().listen((event) {
+      debugPrint("changing location to ${event.name}");
+      activeAlertArea = event;
+      notifyListeners();
+    });
+  }
 }

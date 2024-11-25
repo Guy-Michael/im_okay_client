@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/alert_area.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
@@ -65,6 +66,7 @@ class SettingsPageState extends State<SettingsPage> {
 }
 
 Future<void> onLogoutButtonClicked() async {
+  // debugPrint(await FirebaseMessaging.instance.getToken());
   await UserAuthenticationApiService.signOut();
 }
 

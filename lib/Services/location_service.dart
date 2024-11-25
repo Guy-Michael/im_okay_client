@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:im_okay/Models/alert_area.dart';
 import 'package:im_okay/Services/API%20Services/polygons.dart' as data;
@@ -7,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:point_in_polygon/point_in_polygon.dart';
 
 List<AlertArea> polygons = data.polygons;
+AlertArea previousAlertArea = AlertArea.none();
 AlertArea activeAlertArea = AlertArea.none();
 
 initStream() {
@@ -120,8 +122,13 @@ double calcPointDistance(Position userPosition, Point areaCenter) {
 class LocationProvider with ChangeNotifier {
   AlertArea get alertArea => activeAlertArea;
   LocationProvider() {
-    getAlertAreaStream().listen((event) {
-      debugPrint("changing location to ${event.name}");
+    getAlertAreaStream().listen((event) async {
+      // debugPrint("changing location to ${event.name}");
+      debugPrint("unsubscribing from ${previousAlertArea.id}, subscribing to ${event.id}");
+
+      await FirebaseMessaging.instance.unsubscribeFromTopic(previousAlertArea.id);
+      await FirebaseMessaging.instance.subscribeToTopic(event.id);
+      previousAlertArea = activeAlertArea;
       activeAlertArea = event;
       notifyListeners();
     });

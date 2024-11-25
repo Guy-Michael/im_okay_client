@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -22,18 +23,8 @@ class ReportsPage extends StatefulWidget {
 }
 
 class ReportsPageState extends State<ReportsPage> {
-  late Stream<List<AppUser>> friendStream;
-  late StreamController<List<AppUser>> friendStreamController;
-
-  late Stream<AppUser?> activeUserStream;
-  late StreamController<AppUser?> activeUserStreamController;
-
-  @override
-  void dispose() {
-    super.dispose();
-    friendStreamController.close();
-    activeUserStreamController.close();
-  }
+  late StreamController<List<AppUser>>? friendStreamController;
+  late StreamController<AppUser?>? activeUserStreamController;
 
   @override
   void initState() {
@@ -41,16 +32,26 @@ class ReportsPageState extends State<ReportsPage> {
     initStreams();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    debugPrint("disposing streams");
+    friendStreamController?.close();
+    activeUserStreamController?.close();
+    friendStreamController = null;
+    activeUserStreamController = null;
+  }
+
   void initStreams() {
     friendStreamController = StreamController<List<AppUser>>();
 
-    friendStreamController.addStream(initStreamWithInitial(
+    friendStreamController?.addStream(StreamUtils.initStreamWithInitial(
         Duration(seconds: 5), () async => future(widget.friendInteractionProvider)));
 
     activeUserStreamController = StreamController<AppUser?>();
 
-    activeUserStreamController.addStream(
-        initStreamWithInitial(Duration(seconds: 5), UserAuthenticationApiService.fetchUser));
+    activeUserStreamController?.addStream(StreamUtils.initStreamWithInitial(
+        Duration(seconds: 5), UserAuthenticationApiService.fetchUser));
   }
 
   List<AppUser> cachedUsers = [];
@@ -58,13 +59,8 @@ class ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     var friendListBuilder = StreamBuilder<List<AppUser>>(
       initialData: cachedUsers,
-      stream: friendStreamController.stream,
+      stream: friendStreamController?.stream,
       builder: (context, snapshot) {
-        // if (snapshot.hasError) {
-        //   return Center(
-        //     child: Text("Error :("),
-        //   );
-        // }
         List<AppUser> users = snapshot.data ?? cachedUsers;
         cachedUsers = users;
 
@@ -85,7 +81,7 @@ class ReportsPageState extends State<ReportsPage> {
     );
 
     var bottomSheetBuilder = StreamBuilder(
-      stream: activeUserStreamController.stream,
+      stream: activeUserStreamController?.stream,
       initialData: AppUser(),
       builder: (context, snapshot) {
         AppUser user = snapshot.data!;
@@ -132,6 +128,9 @@ String parseLastSeen(int lastSeen, String gender) {
 class _ReportsPageConsts {
   static const String reportNow = 'שיתוף';
   static const String deleteFriend = 'מחיקת חיבור';
+  static const neutralColor = Color.fromARGB(150, 170, 170, 170);
+  static const dangerColor = Colors.redAccent;
+  static const safeColor = Colors.greenAccent;
 }
 
 var buttons = (Future<void> Function() onReportButtonClicked) => [
@@ -165,15 +164,25 @@ GFListTileDirectional getUserListing(AppUser user, BuildContext context,
     direction: TextDirection.rtl,
     margin: const EdgeInsets.fromLTRB(5, 1, 1, 5),
     onLongPress: onLongPress,
-    color: const Color.fromARGB(150, 170, 170, 170),
+    color: chooseUserColor(user),
     icon: Text(parseLastSeen(user.lastSeen, user.gender)),
     avatar: const Icon(Icons.person_rounded),
     shadow: const BoxShadow(blurStyle: BlurStyle.solid, color: Colors.transparent),
   );
 }
 
-Stream<T> initStreamWithInitial<T>(Duration duration, Future<T> Function() func) async* {
-  Stream<T> stream = Stream.periodic(duration).asyncMap((event) async => await func());
-  yield await func();
-  yield* stream;
+Color chooseUserColor(AppUser user) {
+  int realTime = DateTime.now().millisecondsSinceEpoch;
+  int tenMinutes = 1000 * 60 * 10;
+
+  bool isUserMarkedSafe = user.lastAlertTime <= user.lastSeen;
+  bool has10MinutesPassedSinceLastAlert = (user.lastAlertTime + tenMinutes) <= realTime;
+
+  if (!isUserMarkedSafe) {
+    return _ReportsPageConsts.dangerColor;
+  } else if (isUserMarkedSafe && !has10MinutesPassedSinceLastAlert) {
+    return _ReportsPageConsts.safeColor;
+  } else {
+    return _ReportsPageConsts.neutralColor;
+  }
 }

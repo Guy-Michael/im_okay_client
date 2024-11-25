@@ -1,5 +1,5 @@
 import 'package:im_okay/Models/search_query_response.dart';
-import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Models/app_user.dart';
 
 abstract class IFriendInteractionsProvider {
   Future<void> respondToFriendRequest(AppUser userToRespond, bool approveRequest);

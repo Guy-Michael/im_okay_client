@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/search_query_response.dart';
-import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
@@ -43,7 +43,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   void onAddClicked(AppUser user) async {
     await widget.friendInteractionProvider.sendFriendRequest(friend: user);
     InAppMessageService.showToast(
-        message: _AddFriendsPageConsts.FriendRequestSentMessage(user.fullName));
+        message: _AddFriendsPageConsts.friendRequestSentMessage(user.fullName));
 
     await getSearchResults();
   }
@@ -166,5 +166,5 @@ class _AddFriendsPageConsts {
   static const String addFriendButtonCaption = "+";
   static const String cancelRequestButtonCaption = "ביטול";
   static const String alreadyFriendsCaption = "חברים";
-  static String FriendRequestSentMessage(String name) => "בקשת חברות נשלחה ל$name";
+  static String friendRequestSentMessage(String name) => "בקשת חברות נשלחה ל$name";
 }

@@ -3,7 +3,7 @@ import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Utils/http_utils.dart';
-import 'package:im_okay/Models/user.dart';
+import 'package:im_okay/Models/app_user.dart';
 import 'dart:convert';
 
 class FriendInteractionsApiService implements IFriendInteractionsProvider {

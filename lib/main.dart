@@ -4,7 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:im_okay/Models/alert.dart';
+import 'package:im_okay/Services/API%20Services/Alerts%20Service/alerts_service.dart';
+import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
+import 'package:im_okay/Services/location_service.dart' as location_service;
+import 'package:im_okay/Services/location_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/firebase_options.dart';
 
@@ -13,7 +18,9 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  // FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.instance.requestPermission();
+  await Geolocator.requestPermission();
+
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   if (!kReleaseMode) {
@@ -25,26 +32,21 @@ void main() async {
     }
   }
 
-  FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-    if (user == null) {
-      await UserAuthenticationApiService.signOut();
-      FirebaseMessaging.instance.deleteToken();
-    }
-    // if (user == null) {
-    // } else {
-    //   // String? deviceToken = await FirebaseMessaging.instance.getToken();
-
-    //   // if (deviceToken != null) {
-    //   //   await UserAuthenticationApiService.storeFcmToken(deviceToken);
-    //   // }
-    // }
-  });
-
-  FirebaseMessaging.instance.onTokenRefresh.listen(
-    (token) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        // await UserAuthenticationApiService.storeFcmToken(token);
-      }
+  //initialize location stream.
+  location_service.initStream();
+  location_service.getAlertAreaStream().listen(
+    (event) async {
+      debugPrint("unsubscribing from ${previousAlertArea.id}, subscribing to ${event.id}");
+      await FirebaseMessaging.instance.unsubscribeFromTopic(previousAlertArea.id);
+      await FirebaseMessaging.instance.subscribeToTopic(event.id);
+    },
+  );
+  // await FirebaseMessaging.instance.subscribeToTopic("users");
+  FirebaseMessaging.onMessage.listen(
+    (event) async {
+      Alert alert = Alert.fromJson(event.data);
+      await AlertsService.reportActiveAlert(alert);
+      InAppMessageService.showToast(message: alert.alertArea);
     },
   );
 

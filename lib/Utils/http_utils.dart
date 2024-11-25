@@ -87,17 +87,17 @@ class HttpUtils {
   }
 
   static void log1(Uri uri, Map<String, String> headers) {
-    log('***********************************');
-    log("uri: $uri");
-    log("headers: $headers");
+    // log('***********************************');
+    // log("uri: $uri");
+    // log("headers: $headers");
   }
 
   static void log2(http.Response response) {
-    log("response: ${response.statusCode}: ${response.body}");
-    log('***********************************');
+    // log("response: ${response.statusCode}: ${response.body}");
+    // log('***********************************');
   }
 
   static void log(String message) {
-    logger.i('im-okay: $message');
+    // logger.i('im-okay: $message');
   }
 }

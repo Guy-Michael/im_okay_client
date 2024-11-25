@@ -26,3 +26,12 @@ enum UsersController {
   const UsersController(this.value);
   String get endpoint => '${route.value}/$value';
 }
+
+enum AlertsController {
+  route('alerts'),
+  reportActiveAlert('user-alert');
+
+  final String value;
+  const AlertsController(this.value);
+  String get endpoint => '${route.value}/$value';
+}

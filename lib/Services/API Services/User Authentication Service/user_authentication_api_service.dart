@@ -8,14 +8,16 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
+import 'package:im_okay/main.dart';
 
 class UserAuthenticationApiService {
   static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
-    if (auth.FirebaseAuth.instance.currentUser == null) {
-      return '';
-    }
+    return cacheService.getAuthToken() ?? '';
+    // if (auth.FirebaseAuth.instance.currentUser == null) {
+    //   return '';
+    // }
 
-    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;
+    // return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;
   }
 
   static Future<AppUser?> get appUser async => await fetchUser();

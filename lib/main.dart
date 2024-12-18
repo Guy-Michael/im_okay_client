@@ -7,11 +7,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/API%20Services/Alerts%20Service/alerts_service.dart';
+import 'package:im_okay/Services/API%20Services/CacheService/Abstract/cache_service.dart';
+import 'package:im_okay/Services/API%20Services/CacheService/Concrete/local_cache_service.dart';
+import 'package:im_okay/Services/Logger/logger.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Services/location_service.dart' as location_service;
 import 'package:im_okay/Services/location_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/firebase_options.dart';
+import 'package:localstorage/localstorage.dart';
+
+CacheService cacheService = LocalCacheService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +27,7 @@ void main() async {
   FirebaseMessaging.instance.requestPermission();
   await Geolocator.requestPermission();
 
+  await initLocalStorage();
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   if (!kReleaseMode) {
@@ -42,11 +49,29 @@ void main() async {
     },
   );
   // await FirebaseMessaging.instance.subscribeToTopic("users");
+  FirebaseMessaging.onBackgroundMessage(notifyUserIsInAlertZoneBackground);
+
   FirebaseMessaging.onMessage.listen(
     (event) async {
-      Alert alert = Alert.fromJson(event.data);
-      await AlertsService.reportActiveAlert(alert);
-      InAppMessageService.showToast(message: alert.alertArea);
+      notifyUserIsInAlertZoneForeground(event);
+    },
+  );
+
+  FirebaseAuth.instance.idTokenChanges().listen(
+    (user) async {
+      Logger.log('token refresh event');
+      if (user == null) {
+        Logger.log('no user');
+        return;
+      }
+
+      String? token = await user.getIdToken();
+      if (token == null) {
+        return;
+      }
+
+      cacheService.setAuthToken(token);
+      Logger.log('cached token');
     },
   );
 
@@ -61,4 +86,28 @@ void main() async {
     ],
     routerConfig: globalRouter,
   ));
+}
+
+@pragma('vm:entry-point')
+Future<void> notifyUserIsInAlertZoneBackground(RemoteMessage event) async {
+  if (event == null) {
+    return;
+  }
+  Logger.log('intercepting in background');
+  Alert alert = Alert.fromJson(event.data);
+  await AlertsService.reportActiveAlert(alert);
+  Logger.log("done!!");
+}
+
+Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
+  Logger.log('intercepting in foreground');
+
+  if (event == null) {
+    return;
+  }
+
+  InAppMessageService.showToast(message: "אזעקה באיזורך!");
+  Alert alert = Alert.fromJson(event.data);
+  await AlertsService.reportActiveAlert(alert);
+  Logger.log("done!!");
 }

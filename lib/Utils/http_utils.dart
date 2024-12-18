@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
-import 'package:logger/logger.dart';
+import 'package:im_okay/Services/Logger/logger.dart';
 
-var logger = Logger();
+// var logger = Logger();
 
 class HttpUtils {
   static const String _localDomain = "10.0.2.2";
@@ -55,13 +55,13 @@ class HttpUtils {
   static Future<String> get({required String endpoint, Map<String, Object>? queryParams}) async {
     var headers = await _getHeaders();
     Uri uri = composeUri(endpoint: endpoint, queryParams: queryParams);
-    log1(uri, headers);
+    // log1(uri, headers);
     http.Response response = await http.get(
       uri,
       headers: headers,
     );
 
-    log2(response);
+    // log2(response);
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Get request failed with stats ${response.statusCode}');
@@ -87,17 +87,13 @@ class HttpUtils {
   }
 
   static void log1(Uri uri, Map<String, String> headers) {
-    // log('***********************************');
-    // log("uri: $uri");
-    // log("headers: $headers");
+    Logger.log('***********************************');
+    Logger.log("uri: $uri");
+    Logger.log("headers: $headers");
   }
 
   static void log2(http.Response response) {
-    // log("response: ${response.statusCode}: ${response.body}");
-    // log('***********************************');
-  }
-
-  static void log(String message) {
-    // logger.i('im-okay: $message');
+    Logger.log("response: ${response.statusCode}: ${response.body}");
+    Logger.log('***********************************');
   }
 }

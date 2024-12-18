@@ -41,7 +41,6 @@ class SettingsPageState extends State<SettingsPage> {
     return Scaffold(
         body: Consumer<LocationProvider>(
           builder: (context, value, child) {
-            debugPrint("notified with ${value.alertArea.name}");
             return Center(child: Text(value.alertArea.name));
           },
         ),

@@ -84,7 +84,7 @@ class ReportsPageState extends State<ReportsPage> {
       stream: activeUserStreamController?.stream,
       initialData: AppUser(),
       builder: (context, snapshot) {
-        AppUser user = snapshot.data!;
+        AppUser user = snapshot.hasData ? snapshot.data! : AppUser();
 
         return Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),

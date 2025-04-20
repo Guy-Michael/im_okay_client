@@ -23,9 +23,8 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
   @override
   void initState() {
     super.initState();
-    friendRequestStreamController = StreamController<List<AppUser>>();
-    friendRequestStreamController.addStream(StreamUtils.initStreamWithInitial(
-        Duration(seconds: 5), widget.friendInteractionProvider.getIncomingPendingRequests));
+    // friendRequestStreamController = StreamController<List<AppUser>>();
+    // friendRequestStreamController.addStream();
   }
 
   @override
@@ -33,7 +32,8 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
     return Scaffold(
         body: StreamBuilder<List<AppUser>>(
             initialData: const [],
-            stream: friendRequestStreamController.stream,
+            stream: StreamUtils.initStream(
+                func: widget.friendInteractionProvider.getIncomingPendingRequests),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                 return Column(

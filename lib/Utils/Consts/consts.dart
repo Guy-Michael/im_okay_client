@@ -61,4 +61,5 @@ class Routes {
   static const String friendRequests = "/requests";
   static const String addFriendsPage = 'add-friends';
   static const String hub = '/hub';
+  static const String login = '/login';
 }

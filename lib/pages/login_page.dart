@@ -17,6 +17,8 @@ class LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // globalRouter.go("")
+
     return Scaffold(
         body:
             Center(child: PurpleButton(onClick: onButtonLoginClicked, caption: "Google Signin!")));
@@ -30,7 +32,7 @@ class LoginState extends State<LoginPage> {
     bool success = await UserAuthenticationApiService.registerOrSignIn();
     if (success) {
       InAppMessageService.showToast(message: _LoginConsts.loginSuccessfullMessage);
-      globalRouter.push(Routes.hub);
+      globalRouter.replace(Routes.hub);
     } else {
       InAppMessageService.showToast(message: _LoginConsts.loginFailed);
     }

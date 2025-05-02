@@ -113,7 +113,6 @@ class UserAuthenticationApiService {
 
   static Future<void> signOut() async {
     await auth.FirebaseAuth.instance.signOut();
-    // globalRouter.pop();
     globalRouter.replace(Routes.authRedirectPage);
   }
 }

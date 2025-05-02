@@ -1,22 +1,10 @@
 class StreamUtils {
   static Stream<T> initStream<T>(
-      {Duration? duration,
-      required Future<T> Function() func,
-      bool invokeWithoutDelay = false}) async* {
-    duration ??= Duration(seconds: 5);
-    Stream<T> stream = Stream.periodic(duration).asyncMap((event) async => await func());
-
-    if (invokeWithoutDelay) {
-      yield await func();
+      {Duration duration = const Duration(seconds: 5), required Future<T> Function() func}) async* {
+    while (true) {
+      T value = await func();
+      yield value;
+      await Future.delayed(duration);
     }
-    yield* stream;
   }
-
-  // static Stream<T> initStream<T>(
-  // 	{Duration? duration,
-  // 	required Future<T> Function() func}) async* {
-  // 		duration ??= Duration(seconds: 5);
-  // 		Stream<Future<T>> stream =  Stream.periodic(duration, (int _) async => await func())
-  // 	}
-  // )
 }

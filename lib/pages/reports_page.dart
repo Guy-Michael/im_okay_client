@@ -4,6 +4,7 @@ import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -22,8 +23,8 @@ class ReportsPage extends StatefulWidget {
 }
 
 class ReportsPageState extends State<ReportsPage> {
-  late StreamController<List<AppUser>> friendStreamController;
-  late StreamController<AppUser?> activeUserStreamController;
+  late StreamController<List<AppUser>>? friendStreamController;
+  late StreamController<AppUser?>? activeUserStreamController;
 
   @override
   void initState() {
@@ -31,30 +32,21 @@ class ReportsPageState extends State<ReportsPage> {
     friendStreamController = StreamController<List<AppUser>>();
     activeUserStreamController = StreamController<AppUser?>();
 
-    // Initialize the streams
-    _initFriendStream();
-    _initActiveUserStream();
+    friendStreamController
+        ?.addStream(StreamUtils.initStream(func: widget.friendInteractionProvider.getAllFriends));
+
+    activeUserStreamController
+        ?.addStream(StreamUtils.initStream(func: UserAuthenticationApiService.fetchUser));
   }
 
   @override
   void dispose() {
-    friendStreamController.close();
-    activeUserStreamController.close();
+    friendStreamController?.close();
+    activeUserStreamController?.close();
+    friendStreamController = null;
+    activeUserStreamController = null;
+
     super.dispose();
-  }
-
-  void _initFriendStream() {
-    Timer.periodic(Duration(seconds: 5), (_) async {
-      List<AppUser> friends = await widget.friendInteractionProvider.getAllFriends();
-      friendStreamController.add(friends);
-    });
-  }
-
-  void _initActiveUserStream() async {
-    Timer.periodic(Duration(seconds: 5), (_) async {
-      AppUser? user = await UserAuthenticationApiService.fetchUser();
-      activeUserStreamController.add(user);
-    });
   }
 
   List<AppUser> cachedUsers = [];
@@ -62,7 +54,7 @@ class ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     var friendListBuilder = StreamBuilder<List<AppUser>>(
       initialData: cachedUsers,
-      stream: friendStreamController.stream,
+      stream: friendStreamController?.stream,
       builder: (context, snapshot) {
         List<AppUser> users = snapshot.data ?? cachedUsers;
         cachedUsers = users;
@@ -84,7 +76,7 @@ class ReportsPageState extends State<ReportsPage> {
     );
 
     var bottomSheetBuilder = StreamBuilder<AppUser?>(
-      stream: activeUserStreamController.stream,
+      stream: activeUserStreamController?.stream,
       initialData: AppUser(),
       builder: (context, snapshot) {
         AppUser user = snapshot.hasData ? snapshot.data! : AppUser();

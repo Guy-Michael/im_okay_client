@@ -62,12 +62,12 @@ class HttpUtils {
   static Future<String> get({required String endpoint, Map<String, Object>? queryParams}) async {
     var headers = await _getHeaders();
     Uri uri = composeUri(endpoint: endpoint, queryParams: queryParams);
-    log1(uri, headers);
     http.Response response = await http.get(
       uri,
       headers: headers,
     );
 
+    log1(uri, headers);
     log2(response);
 
     if (response.statusCode != HttpStatus.ok) {

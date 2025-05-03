@@ -5,21 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "im_okay",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "im_okay (debug)",
+            "name": "debug",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "debug"
+            "flutterMode": "debug",
+            "args": ["--dart-define", "serverUrl=10.0.0.2:5129"],
+            "env": {
+                "serverUrl": "10.0.0.2:5129",
+                "isProd": "false"
+            }
         },
         {
-            "name": "im_okay (release mode)",
+            "name": "debug physical",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "debug",
+
+            //THESE DONT WORK WTFFF
+            // "args": ["--dart-define", "serverUrl=10.0.0.2:5129"],
+            // "env": {
+            //     "serverUrl": "10.0.0.2:5129",
+            //     "isProd": "false"
+            }
+        },
+        {
+            "name": "release",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "env": {
+                "serverUrl": "20.51.219.132:80",
+                "authEmulator": "10.0.2.2",
+                "isProd": "false"
+            }
         }
     ]
 }

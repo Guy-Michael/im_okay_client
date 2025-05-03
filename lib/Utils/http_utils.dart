@@ -3,21 +3,28 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
-import 'package:im_okay/Services/Logger/logger.dart';
+import 'package:im_okay/Services/Logger/my_logger.dart';
+import 'package:im_okay/Services/Logger/my_logger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // var logger = Logger();
 
 class HttpUtils {
-  static const String _localDomain = "10.0.2.2";
+  static const String _localDomain = "192.168.68.105";
+  // static const String _localDomain = "http://localhost";
+  // static const String _localDomain = "10.0.2.2";
   // static const String _localDomain = "http://127.0.0.1";
   static const int _localPort = 5129;
   static const String _serverDomain = "20.51.219.132";
   static const int _serverPort = 80;
   static const bool _isProduction = kReleaseMode;
   static Uri composeUri({required String endpoint, Map<String, Object>? queryParams}) {
-    String domain = _isProduction ? _serverDomain : _localDomain;
-    int port = _isProduction ? _serverPort : _localPort;
-    Uri uri = Uri.http("$domain:$port", endpoint, queryParams);
+    // String domain = _isProduction ? _serverDomain : _localDomain;
+    // int port = _isProduction ? _serverPort : _localPort;
+    String url = dotenv.get('serverUrl');
+
+    Uri uri = Uri.http(url, endpoint, queryParams);
+    // Uri uri = Uri.http("$domain:$port", endpoint, queryParams);
 
     return uri;
   }
@@ -55,13 +62,13 @@ class HttpUtils {
   static Future<String> get({required String endpoint, Map<String, Object>? queryParams}) async {
     var headers = await _getHeaders();
     Uri uri = composeUri(endpoint: endpoint, queryParams: queryParams);
-    // log1(uri, headers);
     http.Response response = await http.get(
       uri,
       headers: headers,
     );
 
-    // log2(response);
+    log1(uri, headers);
+    log2(response);
 
     if (response.statusCode != HttpStatus.ok) {
       throw Exception('Get request failed with stats ${response.statusCode}');
@@ -87,13 +94,13 @@ class HttpUtils {
   }
 
   static void log1(Uri uri, Map<String, String> headers) {
-    Logger.log('***********************************');
-    Logger.log("uri: $uri");
-    Logger.log("headers: $headers");
+    logger.log('***********************************');
+    logger.log("uri: $uri");
+    // logger.log("headers: $headers");
   }
 
   static void log2(http.Response response) {
-    Logger.log("response: ${response.statusCode}: ${response.body}");
-    Logger.log('***********************************');
+    logger.log("response: ${response.statusCode}: ${response.body}");
+    logger.log('***********************************');
   }
 }

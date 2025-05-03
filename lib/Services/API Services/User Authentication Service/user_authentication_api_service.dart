@@ -11,13 +11,22 @@ import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/main.dart';
 
 class UserAuthenticationApiService {
-  static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
-    return cacheService.getAuthToken() ?? '';
-    // if (auth.FirebaseAuth.instance.currentUser == null) {
-    //   return '';
-    // }
+  static final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'openid',
+      'profile',
+    ],
+  );
 
-    // return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;
+  static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
+    // return cacheService.getAuthToken() ?? '';
+    if (auth.FirebaseAuth.instance.currentUser == null) {
+      // await signOut();
+      return '';
+    }
+
+    return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;
   }
 
   static Future<AppUser?> get appUser async => await fetchUser();
@@ -39,8 +48,6 @@ class UserAuthenticationApiService {
       await HttpUtils.post(endpoint: endpoint, body: body);
     } catch (e) {
       return false;
-    } finally {
-      auth.FirebaseAuth.instance.signOut();
     }
 
     return true;
@@ -49,14 +56,13 @@ class UserAuthenticationApiService {
   static Future<AppUser?> fetchUser() async {
     String endpoint = AuthController.fetchUserEndpoint.endpoint;
 
-    // try {
-    String userJson = await HttpUtils.get(endpoint: endpoint);
-    AppUser user = AppUser.fromJson(jsonDecode(userJson));
-    return user;
-    // } catch (e) {
-
-    //   return null;
-    // }
+    try {
+      String userJson = await HttpUtils.get(endpoint: endpoint);
+      AppUser user = AppUser.fromJson(jsonDecode(userJson));
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 
   static Future<void> deleteSignedInUserAndSignOut() async {
@@ -81,19 +87,13 @@ class UserAuthenticationApiService {
       AppUser? user = await UserAuthenticationApiService.fetchUser();
       if (user != null) {
         authenticationSuccessful = true;
+      } else {
+        await UserAuthenticationApiService.registerNewUser(cred);
       }
     }
 
     return authenticationSuccessful;
   }
-
-  static final GoogleSignIn googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'openid',
-      'profile',
-    ],
-  );
 
   static Future<UserCredential?> signIn() async {
     await googleSignIn.signOut();
@@ -113,6 +113,6 @@ class UserAuthenticationApiService {
 
   static Future<void> signOut() async {
     await auth.FirebaseAuth.instance.signOut();
-    globalRouter.push(Routes.authRedirectPage);
+    globalRouter.replace(Routes.authRedirectPage);
   }
 }

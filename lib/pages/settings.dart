@@ -19,31 +19,30 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  late StreamController<AlertArea>? alertAreaStreamController;
-
   @override
   void initState() {
     super.initState();
-    alertAreaStreamController = StreamController<AlertArea>();
-    alertAreaStreamController?.addStream(location_service.getAlertAreaStream());
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    debugPrint('disposing streams');
-    alertAreaStreamController?.close();
-    alertAreaStreamController = null;
+  Future<String> future() async {
+    AlertArea area = await location_service.getUserAlertZone();
+    return "${area.name} - ${area.id}";
   }
 
   @override
   Widget build(context) {
     return Scaffold(
-        body: Consumer<LocationProvider>(
-          builder: (context, value, child) {
-            return Center(child: Text(value.alertArea.name));
+        body: Center(
+            child: FutureBuilder<String>(
+          future: future(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
+
+            return Text(snapshot.data!);
           },
-        ),
+        )),
         bottomSheet: Center(
             heightFactor: 1,
             child: Padding(
@@ -65,7 +64,6 @@ class SettingsPageState extends State<SettingsPage> {
 }
 
 Future<void> onLogoutButtonClicked() async {
-  // debugPrint(await FirebaseMessaging.instance.getToken());
   await UserAuthenticationApiService.signOut();
 }
 

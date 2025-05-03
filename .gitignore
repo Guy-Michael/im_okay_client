@@ -1,3 +1,6 @@
+# env files
+*.env
+
 # Temp
 ios/
 linux/

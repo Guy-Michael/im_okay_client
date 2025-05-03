@@ -58,7 +58,7 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
   Future<void> sendFriendRequest({required AppUser friend}) async {
     String endpoint = UsersController.sendFriendRequest.endpoint;
 
-    var body = {'friendEmail': friend.email};
+    var body = {'friendEmail': friend.email, "uid": "45z0GadJpRpF960AWXIMkr0jYjOR"};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }

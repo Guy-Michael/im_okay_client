@@ -29,29 +29,24 @@ class ReportsPageState extends State<ReportsPage> {
   @override
   void initState() {
     super.initState();
-    initStreams();
+    friendStreamController = StreamController<List<AppUser>>();
+    activeUserStreamController = StreamController<AppUser?>();
+
+    friendStreamController
+        ?.addStream(StreamUtils.initStream(func: widget.friendInteractionProvider.getAllFriends));
+
+    activeUserStreamController
+        ?.addStream(StreamUtils.initStream(func: UserAuthenticationApiService.fetchUser));
   }
 
   @override
   void dispose() {
-    super.dispose();
-    debugPrint("disposing streams");
     friendStreamController?.close();
     activeUserStreamController?.close();
     friendStreamController = null;
     activeUserStreamController = null;
-  }
 
-  void initStreams() {
-    friendStreamController = StreamController<List<AppUser>>();
-
-    friendStreamController?.addStream(StreamUtils.initStreamWithInitial(
-        Duration(seconds: 5), () async => future(widget.friendInteractionProvider)));
-
-    activeUserStreamController = StreamController<AppUser?>();
-
-    activeUserStreamController?.addStream(StreamUtils.initStreamWithInitial(
-        Duration(seconds: 5), UserAuthenticationApiService.fetchUser));
+    super.dispose();
   }
 
   List<AppUser> cachedUsers = [];
@@ -80,7 +75,7 @@ class ReportsPageState extends State<ReportsPage> {
       },
     );
 
-    var bottomSheetBuilder = StreamBuilder(
+    var bottomSheetBuilder = StreamBuilder<AppUser?>(
       stream: activeUserStreamController?.stream,
       initialData: AppUser(),
       builder: (context, snapshot) {

@@ -1,74 +1,16 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:im_okay/Models/alert_area.dart';
 import 'package:im_okay/Services/API%20Services/polygons.dart' as data;
 import 'package:geolocator/geolocator.dart';
 import 'package:point_in_polygon/point_in_polygon.dart';
 
 List<AlertArea> polygons = data.polygons;
-AlertArea previousAlertArea = AlertArea.none();
-AlertArea activeAlertArea = AlertArea.none();
 
-initStream() {
-  getAlertAreaStream().listen((event) {
-    activeAlertArea = event;
-  });
-}
-
-StreamController<AlertArea>? _alertAreaStreamController;
-
-StreamController<AlertArea> get alertAreaStreamController {
-  if (_alertAreaStreamController == null) {
-    _alertAreaStreamController = StreamController<AlertArea>();
-    _alertAreaStreamController?.addStream(getAlertAreaStream());
-  }
-
-  return _alertAreaStreamController!;
-}
-
-Stream<AlertArea> getAlertAreaStream() async* {
-  bool serviceEnabled;
-  LocationPermission permission;
-
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    return;
-  }
-
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      return;
-    }
-  }
-
-  if (permission == LocationPermission.deniedForever) {
-    return;
-  }
-
-  LocationSettings settings = LocationSettings(accuracy: LocationAccuracy.best);
-  Stream<Position> positionStream = Geolocator.getPositionStream(locationSettings: settings);
-  final transformer =
-      StreamTransformer<Position, AlertArea>.fromHandlers(handleData: (data, sink) async {
-    if (_locationInPolygon(data, activeAlertArea.coordinates)) {
-      return;
-    }
-
-    AlertArea newArea = await _getUserAlertZone();
-    sink.add(newArea);
-  });
-
-  yield* positionStream.transform(transformer).asBroadcastStream(
-      onCancel: (subscription) => subscription.pause(),
-      onListen: (subscription) => subscription.resume);
-}
-
-Future<AlertArea> _getUserAlertZone() async {
+Future<AlertArea> getUserAlertZone() async {
+  await checkForLocationPermission();
   Position position = await Geolocator.getCurrentPosition();
-  List<AlertArea> closestAreas = getClosestAlertAreas(position);
+  List<AlertArea> closestAreas = _getClosestAlertAreas(position);
   for (AlertArea area in closestAreas) {
     if (_locationInPolygon(position, area.coordinates)) {
       return area;
@@ -86,16 +28,16 @@ bool _locationInPolygon(Position position, List<List<num>> polygon) {
       polygon.map((point) => Point(x: point[0].toDouble(), y: point[1].toDouble())).toList());
 }
 
-List<AlertArea> getClosestAlertAreas(Position userPosition) {
+List<AlertArea> _getClosestAlertAreas(Position userPosition) {
   List<AlertArea> areas = [polygons[0]];
   List<double> distances = [
-    calcPointDistance(userPosition, Point(x: areas[0].lat.toDouble(), y: areas[0].lng.toDouble()))
+    _calcPointDistance(userPosition, Point(x: areas[0].lat.toDouble(), y: areas[0].lng.toDouble()))
   ];
 
   int maxSize = 5;
   for (AlertArea area in polygons) {
     double currentDistance =
-        calcPointDistance(userPosition, Point(x: area.lat.toDouble(), y: area.lng.toDouble()));
+        _calcPointDistance(userPosition, Point(x: area.lat.toDouble(), y: area.lng.toDouble()));
 
     for (int i = 0; i < areas.length; i++) {
       if (currentDistance <= distances[i]) {
@@ -114,23 +56,47 @@ List<AlertArea> getClosestAlertAreas(Position userPosition) {
   return areas;
 }
 
-double calcPointDistance(Position userPosition, Point areaCenter) {
+double _calcPointDistance(Position userPosition, Point areaCenter) {
   return sqrt(
       pow(userPosition.latitude - areaCenter.x, 2) + pow(userPosition.longitude - areaCenter.y, 2));
 }
 
-class LocationProvider with ChangeNotifier {
-  AlertArea get alertArea => activeAlertArea;
-  LocationProvider() {
-    getAlertAreaStream().listen((event) async {
-      // debugPrint("changing location to ${event.name}");
-      debugPrint("unsubscribing from ${previousAlertArea.id}, subscribing to ${event.id}");
+Future<bool> checkForLocationPermission() async {
+  bool serviceEnabled;
+  LocationPermission permission;
 
-      await FirebaseMessaging.instance.unsubscribeFromTopic(previousAlertArea.id);
-      await FirebaseMessaging.instance.subscribeToTopic(event.id);
-      previousAlertArea = activeAlertArea;
-      activeAlertArea = event;
-      notifyListeners();
-    });
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return false;
   }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return false;
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return false;
+  }
+
+  return true;
 }
+
+// class LocationProvider with ChangeNotifier {
+//   AlertArea get alertArea => activeAlertArea;
+//   LocationProvider() {
+//     getAlertAreaStream().listen((event) async {
+//       // debugPrint("changing location to ${event.name}");
+//       debugPrint("unsubscribing from ${previousAlertArea.id}, subscribing to ${event.id}");
+
+//       await FirebaseMessaging.instance.unsubscribeFromTopic(previousAlertArea.id);
+//       await FirebaseMessaging.instance.subscribeToTopic(event.id);
+//       previousAlertArea = activeAlertArea;
+//       activeAlertArea = event;
+//       notifyListeners();
+//     });
+//   }
+// }

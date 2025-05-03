@@ -27,32 +27,33 @@ class HubPageState extends State<HubPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => LocationProvider())],
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text(Consts.appName),
-            backgroundColor: const Color.fromARGB(255, 157, 100, 255),
-          ),
-          body: _getBottomNavigationWidgets()[selectedIndex].page,
-          bottomNavigationBar: NavigationBar(
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (value) {
-                setState(
-                  () {
-                    selectedIndex = value;
-                  },
-                );
-              },
+    return
+        //  MultiProvider(
+        //   providers: [ChangeNotifierProvider(create: (_) => LocationProvider())],
+        //   child:
+        Scaffold(
+            appBar: AppBar(
+              title: const Text(Consts.appName),
               backgroundColor: const Color.fromARGB(255, 157, 100, 255),
-              destinations: _getBottomNavigationWidgets()
-                  .map((e) => NavigationDestination(
-                        label: e.label,
-                        icon: Icon(e.icon),
-                        selectedIcon: Icon(e.iconSelected),
-                      ))
-                  .toList())),
-    );
+            ),
+            body: _getBottomNavigationWidgets()[selectedIndex].page,
+            bottomNavigationBar: NavigationBar(
+                selectedIndex: selectedIndex,
+                onDestinationSelected: (value) {
+                  setState(
+                    () {
+                      selectedIndex = value;
+                    },
+                  );
+                },
+                backgroundColor: const Color.fromARGB(255, 157, 100, 255),
+                destinations: _getBottomNavigationWidgets()
+                    .map((e) => NavigationDestination(
+                          label: e.label,
+                          icon: Icon(e.icon),
+                          selectedIcon: Icon(e.iconSelected),
+                        ))
+                    .toList()));
   }
 
   List<({Widget page, String label, IconData icon, IconData iconSelected})>

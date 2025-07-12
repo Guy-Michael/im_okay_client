@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Services/API Services/Friend Interaction Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Services/location_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/pages/Kin/Kin%20Management/kin_management_page.dart';
 import 'package:im_okay/pages/add_friends_page.dart';
 import 'package:im_okay/pages/friend_requests_page.dart';
 import 'package:im_okay/pages/reports_page.dart';
@@ -27,33 +28,27 @@ class HubPageState extends State<HubPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        //  MultiProvider(
-        //   providers: [ChangeNotifierProvider(create: (_) => LocationProvider())],
-        //   child:
-        Scaffold(
-            appBar: AppBar(
-              title: const Text(Consts.appName),
-              backgroundColor: const Color.fromARGB(255, 157, 100, 255),
-            ),
-            body: _getBottomNavigationWidgets()[selectedIndex].page,
-            bottomNavigationBar: NavigationBar(
-                selectedIndex: selectedIndex,
-                onDestinationSelected: (value) {
-                  setState(
-                    () {
-                      selectedIndex = value;
-                    },
-                  );
+    return Scaffold(
+        body: Container(
+            margin: EdgeInsets.fromLTRB(0, 58, 0, 58),
+            child: _getBottomNavigationWidgets()[selectedIndex].page),
+        bottomNavigationBar: NavigationBar(
+            selectedIndex: selectedIndex,
+            onDestinationSelected: (value) {
+              setState(
+                () {
+                  selectedIndex = value;
                 },
-                backgroundColor: const Color.fromARGB(255, 157, 100, 255),
-                destinations: _getBottomNavigationWidgets()
-                    .map((e) => NavigationDestination(
-                          label: e.label,
-                          icon: Icon(e.icon),
-                          selectedIcon: Icon(e.iconSelected),
-                        ))
-                    .toList()));
+              );
+            },
+            backgroundColor: const Color.fromARGB(255, 157, 100, 255),
+            destinations: _getBottomNavigationWidgets()
+                .map((e) => NavigationDestination(
+                      label: e.label,
+                      icon: Icon(e.icon),
+                      selectedIcon: Icon(e.iconSelected),
+                    ))
+                .toList()));
   }
 
   List<({Widget page, String label, IconData icon, IconData iconSelected})>
@@ -66,7 +61,8 @@ class HubPageState extends State<HubPage> {
               iconSelected: Icons.home
             ),
             (
-              page: AddFriendsPage(friendInteractionProvider: widget.friendInteractionProvider),
+              page: KinManagementPage(),
+              // page: AddFriendsPage(friendInteractionProvider: widget.friendInteractionProvider),
               // page: addFriendsPage,
               label: BottomNavbarConsts.addFriendsButtonCaption,
               icon: Icons.plus_one_outlined,

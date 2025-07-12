@@ -110,13 +110,13 @@ String parseLastSeen(int lastSeen, String gender) {
   String result = '';
 
   if (lastSeen == 0) {
-    return Consts.notReportedYet(gender);
+    return Strings.notReportedYet(gender);
   }
 
   int delta = DateTime.now().millisecondsSinceEpoch - lastSeen;
   Duration duration = Duration(milliseconds: delta);
 
-  result = Consts.xTimeAgo(duration);
+  result = Strings.xTimeAgo(duration);
   return result;
 }
 

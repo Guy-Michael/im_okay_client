@@ -1,4 +1,4 @@
-class Consts {
+class Strings {
   static const String appName = "I'm Okay";
   static const String loginCaption = r'התחברות';
   static const String registerCaption = r'הרשמה';
@@ -41,6 +41,9 @@ class Consts {
   static const String email = "אימייל";
 
   static const String searchFriendsFieldHintText = "חפשו חברים";
+
+  static const String PhoneVerificationPageButton = "אישור";
+  static const String PhoneVerificationInput = "מספר טלפון";
 }
 
 class Gender {
@@ -62,4 +65,6 @@ class Routes {
   static const String addFriendsPage = 'add-friends';
   static const String hub = '/hub';
   static const String login = '/login';
+  static const String phoneVerification = '/phone-verification';
+  static const String KingManagement = '/kin-management';
 }

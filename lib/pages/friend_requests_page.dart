@@ -6,6 +6,7 @@ import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/f
 import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
+import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
 
 class FriendRequestsPage extends StatefulWidget {
   final IFriendInteractionsProvider friendInteractionProvider;
@@ -30,12 +31,9 @@ class FriendRequestsPageState extends State<FriendRequestsPage> {
     return Scaffold(
         body: Column(children: [
       Container(
-          margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Text(
-            FriendRequestConsts.title,
-            textAlign: TextAlign.start,
-            style: TextStyle(fontFamily: "Inter", fontSize: 28),
-          )),
+          child: KinPageTitle(
+        title: FriendRequestConsts.title,
+      )),
       StreamBuilder<List<AppUser>>(
           initialData: const [],
           stream: StreamUtils.initStream(

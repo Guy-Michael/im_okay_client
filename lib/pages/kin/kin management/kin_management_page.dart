@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_management_button.dart';
+import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
 
 class KinManagementPage extends StatefulWidget {
+  const KinManagementPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _KinManagementPageState();
 }
@@ -9,33 +12,30 @@ class KinManagementPage extends StatefulWidget {
 class _KinManagementPageState extends State<KinManagementPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-        child: Column(spacing: 32, children: [
-          Text(
-            "ניהול קרובים",
-            textAlign: TextAlign.right,
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          KinManagementButton(
-            destination: "",
-            label: "הקרובים שלי",
-            icon: Icons.account_box_sharp,
-          ),
-          KinManagementButton(
-            destination: "",
-            label: "הוספת קרובים",
-            icon: Icons.account_box_sharp,
-          ),
-          KinManagementButton(
-            destination: "",
-            label: "בקשות חדשות",
-            icon: Icons.account_box_sharp,
-          ),
-        ]));
+    return Column(spacing: 32, children: [
+      KinPageTitle(title: _KinManagementPageConsts.pageTitle),
+      KinManagementButton(
+        destination: "",
+        label: _KinManagementPageConsts.myKinPageTitle,
+        icon: Icons.account_box_sharp,
+      ),
+      KinManagementButton(
+        destination: "",
+        label: _KinManagementPageConsts.addKinPageTitle,
+        icon: Icons.account_box_sharp,
+      ),
+      KinManagementButton(
+        destination: "",
+        label: _KinManagementPageConsts.newKinRequestsPageTitle,
+        icon: Icons.account_box_sharp,
+      ),
+    ]);
   }
+}
+
+class _KinManagementPageConsts {
+  static const String pageTitle = "ניהול קרובים";
+  static const String myKinPageTitle = "הקרובים שלי";
+  static const String addKinPageTitle = "הוספת קרובים";
+  static const String newKinRequestsPageTitle = "בקשות חדשות";
 }

@@ -29,9 +29,17 @@ class HubPageState extends State<HubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            margin: EdgeInsets.fromLTRB(0, 58, 0, 58),
-            child: _getBottomNavigationWidgets()[selectedIndex].page),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.of(context).maybePop(),
+          ),
+          elevation: 0,
+        ),
+        body: Expanded(
+            child: Container(
+                margin: EdgeInsets.fromLTRB(16, 58, 16, 58),
+                child: _getBottomNavigationWidgets()[selectedIndex].page)),
         bottomNavigationBar: NavigationBar(
             selectedIndex: selectedIndex,
             onDestinationSelected: (value) {

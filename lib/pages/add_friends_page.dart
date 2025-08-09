@@ -9,7 +9,7 @@ import 'package:im_okay/Widgets/my_text_field.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
 class AddFriendsPage extends StatefulWidget {
-  final IFriendInteractionsProvider friendInteractionProvider;
+  final IKinInteractionsService friendInteractionProvider;
 
   const AddFriendsPage({required this.friendInteractionProvider, super.key});
 
@@ -41,7 +41,7 @@ class AddFriendsPageState extends State<AddFriendsPage> {
   }
 
   void onAddClicked(AppUser user) async {
-    await widget.friendInteractionProvider.sendFriendRequest(friend: user);
+    await widget.friendInteractionProvider.sendFriendRequest(user: user);
     InAppMessageService.showToast(
         message: _AddFriendsPageConsts.friendRequestSentMessage(user.fullName));
 

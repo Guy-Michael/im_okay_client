@@ -8,7 +8,7 @@ import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dar
 import 'package:im_okay/pages/kin/kin%20requests/components/pending_kin_request.dart';
 
 class KinRequestsPage extends StatefulWidget {
-  final IFriendInteractionsProvider friendInteractionProvider;
+  final IKinInteractionsService friendInteractionProvider;
 
   const KinRequestsPage({required this.friendInteractionProvider, super.key});
 
@@ -41,11 +41,7 @@ class KinRequestsPageState extends State<KinRequestsPage> {
             AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
             AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
             AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
-            return
-                // Container(
-                // margin: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                // child:
-                Center(
+            return Center(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         spacing: 20,

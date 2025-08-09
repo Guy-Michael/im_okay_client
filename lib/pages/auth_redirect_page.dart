@@ -9,7 +9,7 @@ import 'package:im_okay/pages/hub_page.dart';
 import 'package:im_okay/pages/login_page.dart';
 
 class AuthRedirectPage extends StatelessWidget {
-  final IFriendInteractionsProvider friendInteractionProvider;
+  final IKinInteractionsService friendInteractionProvider;
 
   const AuthRedirectPage({required this.friendInteractionProvider, super.key});
 

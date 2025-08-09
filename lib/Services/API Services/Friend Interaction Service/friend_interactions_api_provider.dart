@@ -1,7 +1,7 @@
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Models/app_user.dart';
 
-abstract class IFriendInteractionsProvider {
+abstract class IKinInteractionsService {
   Future<void> respondToFriendRequest(AppUser userToRespond, bool approveRequest);
 
   Future<List<AppUser>> getIncomingPendingRequests();
@@ -10,7 +10,7 @@ abstract class IFriendInteractionsProvider {
 
   Future<List<AppUser>> getAllFriends();
 
-  Future<void> sendFriendRequest({required AppUser friend});
+  Future<void> sendFriendRequest({required AppUser user});
 
   Future<void> cancelFriendRequest({required AppUser friend});
 

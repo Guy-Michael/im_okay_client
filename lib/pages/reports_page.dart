@@ -8,13 +8,13 @@ import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
-Future<List<AppUser>> future(IFriendInteractionsProvider provider) async {
+Future<List<AppUser>> future(IKinInteractionsService provider) async {
   List<AppUser> users = await provider.getAllFriends();
   return users;
 }
 
 class ReportsPage extends StatefulWidget {
-  final IFriendInteractionsProvider friendInteractionProvider;
+  final IKinInteractionsService friendInteractionProvider;
 
   const ReportsPage({required this.friendInteractionProvider, super.key});
 

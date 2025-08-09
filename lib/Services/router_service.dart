@@ -10,7 +10,7 @@ import 'package:im_okay/pages/login_page.dart';
 import 'package:im_okay/pages/phone_verification_page.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
-final _friendInteractionProvider = FriendInteractionsApiService();
+final _friendInteractionProvider = KinInteractionsApiService();
 final GoRouter globalRouter = GoRouter(
   initialLocation: Routes.authRedirectPage,
   navigatorKey: _rootNavigationKey,
@@ -45,7 +45,9 @@ final GoRouter globalRouter = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
       path: Routes.addKinPage,
-      builder: (context, state) => AddKinPage(),
+      builder: (context, state) => AddKinPage(
+        friendInteractionProvider: _friendInteractionProvider,
+      ),
     ),
   ],
 );

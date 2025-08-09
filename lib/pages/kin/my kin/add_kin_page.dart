@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
+import 'package:im_okay/pages/kin/my%20kin/components/add_kin_button.dart';
 
 class AddKinPage extends StatefulWidget {
-  const AddKinPage({super.key});
+  final IKinInteractionsService friendInteractionProvider;
+
+  const AddKinPage({super.key, required this.friendInteractionProvider});
 
   @override
   State<StatefulWidget> createState() => AddKinPageState();
@@ -17,69 +22,31 @@ class AddKinPageState extends State<AddKinPage> {
     AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
     return Scaffold(
         body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Kin(
+        KinPageTitle(title: AddKinPageConsts.pageTitle),
+        AddKinButton(
           user: user,
+          onAddClicked: widget.friendInteractionProvider.sendFriendRequest,
         ),
-        Kin(
+        AddKinButton(
           user: user2,
+          onAddClicked: widget.friendInteractionProvider.sendFriendRequest,
         ),
-        Kin(
+        AddKinButton(
           user: user3,
+          onAddClicked: widget.friendInteractionProvider.sendFriendRequest,
         ),
-        Kin(
+        AddKinButton(
           user: user4,
+          onAddClicked: widget.friendInteractionProvider.sendFriendRequest,
         ),
       ],
     ));
   }
 }
 
-class Kin extends StatefulWidget {
-  final AppUser user;
-
-  const Kin({super.key, required this.user});
-
-  @override
-  State<StatefulWidget> createState() => KinState();
-}
-
-class KinState extends State<Kin> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 100,
-        width: 400,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-          border: Border.all(color: Colors.black),
-          gradient: LinearGradient(colors: [Colors.white, Colors.grey]),
-          backgroundBlendMode: BlendMode.color,
-        ),
-        child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              spacing: 12,
-              children: [
-                Text("Image"),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Text(widget.user.fullName), Text("Phone")],
-                ),
-                Spacer(
-                  flex: 1,
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal, minimumSize: Size(112, 35)),
-                  child: Text(
-                    "Add",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-              ],
-            )));
-  }
+class AddKinPageConsts {
+  static const String pageTitle = "הוספת קרובים";
+  static const String searchBarCaption = "חיפוש איש קשר";
 }

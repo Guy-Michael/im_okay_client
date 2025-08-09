@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_management_button.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
 
@@ -15,17 +16,17 @@ class _KinManagementPageState extends State<KinManagementPage> {
     return Column(spacing: 32, children: [
       KinPageTitle(title: _KinManagementPageConsts.pageTitle),
       KinManagementButton(
-        destination: "",
+        destination: '',
         label: _KinManagementPageConsts.myKinPageTitle,
-        icon: Icons.account_box_sharp,
+        icon: Icons.people_alt_outlined,
       ),
       KinManagementButton(
-        destination: "",
+        destination: Routes.addKinPage, // TODO: Set correct route for add kin page
         label: _KinManagementPageConsts.addKinPageTitle,
-        icon: Icons.account_box_sharp,
+        icon: Icons.add,
       ),
       KinManagementButton(
-        destination: "",
+        destination: '', // TODO: Set correct route for new kin requests page
         label: _KinManagementPageConsts.newKinRequestsPageTitle,
         icon: Icons.account_box_sharp,
       ),

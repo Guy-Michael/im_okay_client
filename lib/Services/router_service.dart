@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/pages/Kin/Kin%20Management/kin_management_page.dart';
+import 'package:im_okay/pages/kin/kin management/kin_management_page.dart';
 import 'package:im_okay/pages/auth_redirect_page.dart';
 import 'package:im_okay/pages/hub_page.dart';
+import 'package:im_okay/pages/kin/my%20kin/add_kin_page.dart';
 import 'package:im_okay/pages/login_page.dart';
 import 'package:im_okay/pages/phone_verification_page.dart';
 
@@ -38,8 +39,13 @@ final GoRouter globalRouter = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
-      path: Routes.KingManagement,
+      path: Routes.kinManagement,
       builder: (context, state) => KinManagementPage(),
-    )
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigationKey,
+      path: Routes.addKinPage,
+      builder: (context, state) => AddKinPage(),
+    ),
   ],
 );

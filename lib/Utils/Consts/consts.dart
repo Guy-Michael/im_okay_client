@@ -58,13 +58,15 @@ class Gender {
 
 class Routes {
   static const String authRedirectPage = "/auth";
-  static const String reportsPage = "report";
+  static const String reportsPage = "/report";
   static const String registrationPage = '/register';
   static const String settings = '/settings';
   static const String friendRequests = "/requests";
-  static const String addFriendsPage = 'add-friends';
+  static const String addFriendsPage = '/add-friends';
   static const String hub = '/hub';
   static const String login = '/login';
   static const String phoneVerification = '/phone-verification';
-  static const String KingManagement = '/kin-management';
+  static const String kinManagement = '/kin-management';
+  static const String myKin = '/my-kin';
+  static const String addKinPage = '/add-kin';
 }

@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 
-class MyKinPage extends StatefulWidget {
+class AddKinPage extends StatefulWidget {
+  const AddKinPage({super.key});
+
   @override
-  State<StatefulWidget> createState() => MyKinPageState();
+  State<StatefulWidget> createState() => AddKinPageState();
 }
 
-class MyKinPageState extends State<MyKinPage> {
+class AddKinPageState extends State<AddKinPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    AppUser user = AppUser(firstName: "טל", lastName: "כספי");
+    AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
+    AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
+    AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
+    return Scaffold(
+        body: Column(
+      children: [
+        Kin(
+          user: user,
+        ),
+        Kin(
+          user: user2,
+        ),
+        Kin(
+          user: user3,
+        ),
+        Kin(
+          user: user4,
+        ),
+      ],
+    ));
   }
 }
 

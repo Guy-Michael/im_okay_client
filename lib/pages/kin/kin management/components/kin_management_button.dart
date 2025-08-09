@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class KinManagementButton extends StatefulWidget {
   final String destination;
@@ -14,15 +15,14 @@ class KinManagementButton extends StatefulWidget {
 class _KinManagementButtonState extends State<KinManagementButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // width: 361,
-      // height: 56,
-      padding: const EdgeInsets.all(16),
-      decoration: ShapeDecoration(
-        color: Color.fromARGB(28, 27, 31, 1),
+    return ElevatedButton(
+      onPressed: () => context.push(widget.destination),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
+        backgroundColor: const Color(0xFFE9E9E9),
       ),
       child: Row(
         textDirection: TextDirection.rtl,
@@ -33,7 +33,11 @@ class _KinManagementButtonState extends State<KinManagementButton> {
               textDirection: TextDirection.rtl,
               spacing: 8,
               children: [
-                Icon(widget.icon),
+                Icon(
+                  widget.icon,
+                  color: Colors.teal,
+                  size: 24,
+                ),
                 Text(
                   widget.label,
                   textAlign: TextAlign.start,
@@ -54,9 +58,5 @@ class _KinManagementButtonState extends State<KinManagementButton> {
         ],
       ),
     );
-    // return ElevatedButton(
-    //   onPressed: () => globalRouter.pushNamed(widget.destination),
-    //   child: Text(widget.label),
-    // );
   }
 }

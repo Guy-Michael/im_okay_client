@@ -17,8 +17,6 @@ class KinPageTitleState extends State<KinPageTitle> {
         alignment: Alignment.centerRight,
         child: Text(
           widget.title,
-          textAlign: TextAlign.right,
-          textDirection: TextDirection.rtl,
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,

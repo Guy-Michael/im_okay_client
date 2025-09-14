@@ -62,6 +62,12 @@ class HubPageState extends State<HubPage> {
   List<({Widget page, String label, IconData icon, IconData iconSelected})>
       _getBottomNavigationWidgets() => [
             (
+              page: SettingsPage(),
+              label: BottomNavbarConsts.settingsButtonCaption,
+              icon: Icons.settings_outlined,
+              iconSelected: Icons.settings
+            ),
+            (
               page: ReportsPage(friendInteractionProvider: widget.friendInteractionProvider),
               // page: reportsPage,
               label: BottomNavbarConsts.homeButtonCaption,
@@ -70,32 +76,16 @@ class HubPageState extends State<HubPage> {
             ),
             (
               page: KinManagementPage(),
-              // page: AddFriendsPage(friendInteractionProvider: widget.friendInteractionProvider),
-              // page: addFriendsPage,
-              label: BottomNavbarConsts.addFriendsButtonCaption,
+              label: BottomNavbarConsts.kinManagement,
               icon: Icons.plus_one_outlined,
               iconSelected: Icons.plus_one
             ),
-            (
-              page: KinRequestsPage(friendInteractionProvider: widget.friendInteractionProvider),
-              // page: friendRequestsPage,
-              label: BottomNavbarConsts.requestsButtonCaption,
-              icon: Icons.waves_outlined,
-              iconSelected: Icons.waves
-            ),
-            (
-              page: SettingsPage(),
-              // page: settingsPage,
-              label: BottomNavbarConsts.settingsButtonCaption,
-              icon: Icons.settings_outlined,
-              iconSelected: Icons.settings
-            )
           ];
 }
 
 class BottomNavbarConsts {
-  static const String homeButtonCaption = "שיתופים";
-  static const String addFriendsButtonCaption = "מצא חברים";
+  static const String homeButtonCaption = "בית";
+  static const String kinManagement = "ניהול קרובים";
   static const String requestsButtonCaption = "בקשות";
   static const String settingsButtonCaption = "הגדרות";
 }

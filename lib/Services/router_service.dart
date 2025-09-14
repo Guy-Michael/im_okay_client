@@ -5,6 +5,7 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/kin/kin management/kin_management_page.dart';
 import 'package:im_okay/pages/auth_redirect_page.dart';
 import 'package:im_okay/pages/hub_page.dart';
+import 'package:im_okay/pages/kin/kin%20requests/kin_requests_page.dart';
 import 'package:im_okay/pages/kin/my%20kin/add_kin_page.dart';
 import 'package:im_okay/pages/login_page.dart';
 import 'package:im_okay/pages/phone_verification_page.dart';
@@ -49,5 +50,11 @@ final GoRouter globalRouter = GoRouter(
         friendInteractionProvider: _friendInteractionProvider,
       ),
     ),
+    GoRoute(
+        parentNavigatorKey: _rootNavigationKey,
+        path: Routes.kinRequestsPage,
+        builder: (context, state) => KinRequestsPage(
+              friendInteractionProvider: _friendInteractionProvider,
+            ))
   ],
 );

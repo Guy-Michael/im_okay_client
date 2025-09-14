@@ -26,7 +26,7 @@ class _KinManagementPageState extends State<KinManagementPage> {
         icon: Icons.add,
       ),
       KinManagementButton(
-        destination: '', // TODO: Set correct route for new kin requests page
+        destination: Routes.kinRequestsPage, // TODO: Set correct route for new kin requests page
         label: _KinManagementPageConsts.newKinRequestsPageTitle,
         icon: Icons.account_box_sharp,
       ),

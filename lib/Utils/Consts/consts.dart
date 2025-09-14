@@ -69,4 +69,5 @@ class Routes {
   static const String kinManagement = '/kin-management';
   static const String myKin = '/my-kin';
   static const String addKinPage = '/add-kin';
+  static const String kinRequestsPage = '/kin-requests';
 }

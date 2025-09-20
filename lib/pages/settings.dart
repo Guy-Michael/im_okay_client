@@ -70,7 +70,7 @@ Future<void> onLogoutButtonClicked() async {
 Future<void> onDeleteUserButtonClicked() async {
   await UserAuthenticationApiService.deleteSignedInUserAndSignOut();
 
-  globalRouter.go(Routes.authRedirectPage);
+  globalRouter.go(Routes.auth.authRedirectPage);
 }
 
 class SettingsPageConsts {

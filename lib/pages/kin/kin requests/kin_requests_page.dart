@@ -42,17 +42,13 @@ class KinRequestsPageState extends State<KinRequestsPage> {
             AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
             AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
             return Center(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 20,
-                        children: [
-                  PendingKinRequest(user: user),
-                  PendingKinRequest(user: user2),
-                  PendingKinRequest(user: user3),
-                  PendingKinRequest(user: user4),
-                ]))
-                // )
-                ;
+                child:
+                    Column(crossAxisAlignment: CrossAxisAlignment.center, spacing: 20, children: [
+              PendingKinRequest(user: user),
+              PendingKinRequest(user: user2),
+              PendingKinRequest(user: user3),
+              PendingKinRequest(user: user4),
+            ]));
           })
     ]));
   }

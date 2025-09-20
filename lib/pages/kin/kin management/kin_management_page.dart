@@ -16,17 +16,18 @@ class _KinManagementPageState extends State<KinManagementPage> {
     return Column(spacing: 32, children: [
       KinPageTitle(title: _KinManagementPageConsts.pageTitle),
       KinManagementButton(
-        destination: '',
+        destination: Routes.kin.myKin,
         label: _KinManagementPageConsts.myKinPageTitle,
         icon: Icons.people_alt_outlined,
       ),
       KinManagementButton(
-        destination: Routes.addKinPage, // TODO: Set correct route for add kin page
+        destination: Routes.kin.addKinPage, // TODO: Set correct route for add kin page
         label: _KinManagementPageConsts.addKinPageTitle,
         icon: Icons.add,
       ),
       KinManagementButton(
-        destination: Routes.kinRequestsPage, // TODO: Set correct route for new kin requests page
+        destination:
+            Routes.kin.kinRequestsPage, // TODO: Set correct route for new kin requests page
         label: _KinManagementPageConsts.newKinRequestsPageTitle,
         icon: Icons.account_box_sharp,
       ),

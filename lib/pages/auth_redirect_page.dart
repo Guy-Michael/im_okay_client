@@ -36,9 +36,10 @@ Future<void> future() async {
   AppUser? appUser = await UserAuthenticationApiService.fetchUser();
   if (appUser != null) {
     logger.log('user exists!');
-    await globalRouter.replace(Routes.hub);
+    await globalRouter.replaceNamed(Routes.kin.kinManagement);
+    // await globalRouter.replace(Routes.hub);
   } else {
     logger.log('user does not exist!');
-    await globalRouter.replace(Routes.login);
+    await globalRouter.replace(Routes.auth.login);
   }
 }

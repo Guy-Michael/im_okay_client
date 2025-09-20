@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 class Strings {
   static const String appName = "I'm Okay";
   static const String loginCaption = r'התחברות';
@@ -57,17 +59,23 @@ class Gender {
 }
 
 class Routes {
-  static const String authRedirectPage = "/auth";
-  static const String reportsPage = "/report";
-  static const String registrationPage = '/register';
+  static const String home = '/home';
+  // static const String reportsPage = "/report";
   static const String settings = '/settings';
-  static const String friendRequests = "/requests";
-  static const String addFriendsPage = '/add-friends';
-  static const String hub = '/hub';
-  static const String login = '/login';
-  static const String phoneVerification = '/phone-verification';
-  static const String kinManagement = '/kin-management';
-  static const String myKin = '/my-kin';
-  static const String addKinPage = '/add-kin';
-  static const String kinRequestsPage = '/kin-requests';
+  static _KinRoutes kin = _KinRoutes();
+  static _AuthRoutes auth = _AuthRoutes();
+}
+
+class _KinRoutes {
+  String kinManagement = '/kin-management';
+  String myKin = '/my-kin';
+  String addKinPage = '/add-kin';
+  String kinRequestsPage = '/kin-requests';
+}
+
+class _AuthRoutes {
+  String authRedirectPage = "/auth";
+  String registrationPage = '/register';
+  String login = '/login';
+  String phoneVerification = '/phone-verification';
 }

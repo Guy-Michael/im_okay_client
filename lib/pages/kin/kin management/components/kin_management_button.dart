@@ -16,7 +16,7 @@ class _KinManagementButtonState extends State<KinManagementButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => context.push(widget.destination),
+      onPressed: () => context.pushNamed(widget.destination),
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(

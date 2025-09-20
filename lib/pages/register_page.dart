@@ -17,7 +17,7 @@ class RegisterPage extends StatelessWidget {
   void completeRegistration(AppUser user, String password) async {
     InAppMessageService.showToast(message: _RegisterPageConsts.successfullySignedUpMessage);
     await Future.delayed(
-        const Duration(seconds: 2), () => globalRouter.go(Routes.authRedirectPage));
+        const Duration(seconds: 2), () => globalRouter.go(Routes.auth.authRedirectPage));
   }
 
   void onCancel() {
@@ -25,7 +25,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   void navigateToLoginPage() async {
-    globalRouter.push(Routes.authRedirectPage);
+    globalRouter.push(Routes.auth.authRedirectPage);
   }
 }
 

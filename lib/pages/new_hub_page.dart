@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:im_okay/Services/API Services/Friend Interaction Service/friend_interactions_api_provider.dart';
-import 'package:im_okay/Services/location_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/pages/Kin/Kin%20Management/kin_management_page.dart';
-import 'package:im_okay/pages/add_friends_page.dart';
-import 'package:im_okay/pages/kin/kin%20requests/kin_requests_page.dart';
-import 'package:im_okay/pages/reports_page.dart';
-import 'package:im_okay/pages/settings.dart';
-import 'package:provider/provider.dart';
 
-class HubPage extends StatefulWidget {
+class NewHubPage extends StatefulWidget {
   final IKinInteractionsService friendInteractionProvider;
+  final Widget child;
 
-  const HubPage({required this.friendInteractionProvider, super.key});
+  const NewHubPage({required this.friendInteractionProvider, required this.child, super.key});
 
   @override
-  State<StatefulWidget> createState() => HubPageState();
+  State<StatefulWidget> createState() => NewHubPageState();
 }
 
-class HubPageState extends State<HubPage> {
+class NewHubPageState extends State<NewHubPage> {
   int selectedIndex = 0;
 
   @override
@@ -36,18 +31,13 @@ class HubPageState extends State<HubPage> {
           ),
           elevation: 0,
         ),
-        body: Expanded(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(16, 58, 16, 58),
-                child: _getBottomNavigationWidgets()[selectedIndex].page)),
+        body: widget.child,
         bottomNavigationBar: NavigationBar(
             selectedIndex: selectedIndex,
             onDestinationSelected: (value) {
-              setState(
-                () {
-                  selectedIndex = value;
-                },
-              );
+              setState(() => selectedIndex = value);
+              String route = _getBottomNavigationWidgets()[value].route;
+              context.pushNamed(route);
             },
             backgroundColor: const Color.fromARGB(255, 157, 100, 255),
             destinations: _getBottomNavigationWidgets()
@@ -59,23 +49,24 @@ class HubPageState extends State<HubPage> {
                 .toList()));
   }
 
-  List<({Widget page, String label, IconData icon, IconData iconSelected})>
+  List<({String route, String label, IconData icon, IconData iconSelected})>
       _getBottomNavigationWidgets() => [
             (
-              page: SettingsPage(),
+              route: Routes.settings,
+              // page: SettingsPage(),
               label: BottomNavbarConsts.settingsButtonCaption,
               icon: Icons.settings_outlined,
               iconSelected: Icons.settings
             ),
             (
-              page: ReportsPage(friendInteractionProvider: widget.friendInteractionProvider),
+              route: Routes.home,
               // page: reportsPage,
               label: BottomNavbarConsts.homeButtonCaption,
               icon: Icons.home_outlined,
               iconSelected: Icons.home
             ),
             (
-              page: KinManagementPage(),
+              route: Routes.kin.kinManagement,
               label: BottomNavbarConsts.kinManagement,
               icon: Icons.plus_one_outlined,
               iconSelected: Icons.plus_one

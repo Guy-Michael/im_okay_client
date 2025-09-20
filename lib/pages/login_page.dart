@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Services/router_service.dart';
@@ -20,20 +21,24 @@ class LoginState extends State<LoginPage> {
     // globalRouter.go("")
 
     return Scaffold(
-        body:
-            Center(child: PurpleButton(onClick: onButtonLoginClicked, caption: "Google Signin!")));
+        body: Center(
+            child: PurpleButton(
+                onClick: () => onButtonLoginClicked(context), caption: "Google Signin!")));
     // 			ElevatedButton(
     // onPressed: onButtonLoginClicked,
     // child: Text(_LoginConsts.loginButtonCaption),
     // )));
   }
 
-  Future<void> onButtonLoginClicked() async {
+  Future<void> onButtonLoginClicked(BuildContext ctx) async {
     bool success = await UserAuthenticationApiService.registerOrSignIn();
     if (success) {
+      if (!mounted) return;
       InAppMessageService.showToast(message: _LoginConsts.loginSuccessfullMessage);
-      globalRouter.replace(Routes.hub);
+
+      ctx.goNamed(Routes.kin.kinManagement);
     } else {
+      if (!mounted) return;
       InAppMessageService.showToast(message: _LoginConsts.loginFailed);
     }
   }

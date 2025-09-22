@@ -60,7 +60,6 @@ class Gender {
 
 class Routes {
   static const String home = '/home';
-  // static const String reportsPage = "/report";
   static const String settings = '/settings';
   static _KinRoutes kin = _KinRoutes();
   static _AuthRoutes auth = _AuthRoutes();

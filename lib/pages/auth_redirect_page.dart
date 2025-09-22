@@ -5,8 +5,6 @@ import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/
 import 'package:im_okay/Services/Logger/my_logger.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/pages/hub_page.dart';
-import 'package:im_okay/pages/login_page.dart';
 
 class AuthRedirectPage extends StatelessWidget {
   final IKinInteractionsService friendInteractionProvider;

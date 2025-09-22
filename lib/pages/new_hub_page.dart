@@ -14,7 +14,7 @@ class NewHubPage extends StatefulWidget {
 }
 
 class NewHubPageState extends State<NewHubPage> {
-  int selectedIndex = 0;
+  int selectedIndex = 2;
 
   @override
   void initState() {
@@ -53,14 +53,12 @@ class NewHubPageState extends State<NewHubPage> {
       _getBottomNavigationWidgets() => [
             (
               route: Routes.settings,
-              // page: SettingsPage(),
               label: BottomNavbarConsts.settingsButtonCaption,
               icon: Icons.settings_outlined,
               iconSelected: Icons.settings
             ),
             (
               route: Routes.home,
-              // page: reportsPage,
               label: BottomNavbarConsts.homeButtonCaption,
               icon: Icons.home_outlined,
               iconSelected: Icons.home

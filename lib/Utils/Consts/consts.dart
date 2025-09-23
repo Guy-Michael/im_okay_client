@@ -68,8 +68,8 @@ class Routes {
 class _KinRoutes {
   String kinManagement = '/kin-management';
   String myKin = '/my-kin';
-  String addKinPage = '/add-kin';
-  String kinRequestsPage = '/kin-requests';
+  String addKin = '/add-kin';
+  String kinRequests = '/kin-requests';
 }
 
 class _AuthRoutes {

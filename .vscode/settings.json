@@ -8,6 +8,6 @@
 		"editor.suggest.insertMode": "insert",
 		"editor.defaultFormatter": "Dart-Code.dart-code",
 		"editor.inlayHints.enabled": "offUnlessPressed",
-		"editor.rulers": [100]
+		"editor.rulers": [200]
 	}
 }

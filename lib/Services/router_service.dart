@@ -5,8 +5,9 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/home/home_page.dart';
 import 'package:im_okay/pages/kin/kin management/kin_management_page.dart';
 import 'package:im_okay/pages/auth_redirect_page.dart';
-import 'package:im_okay/pages/kin/kin%20requests/kin_requests_page.dart';
-import 'package:im_okay/pages/kin/my%20kin/add_kin_page.dart';
+import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_requests_page.dart';
+import 'package:im_okay/pages/kin/add%20kin/add_kin_page.dart';
+import 'package:im_okay/pages/kin/my%20kin/my_kin_page.dart';
 import 'package:im_okay/pages/login_page.dart';
 import 'package:im_okay/pages/new_hub_page.dart';
 import 'package:im_okay/pages/settings.dart';
@@ -46,16 +47,20 @@ final GoRouter globalRouter = GoRouter(
                 builder: (context, state) => KinManagementPage(),
                 routes: [
                   GoRoute(
-                    path: Routes.kin.addKinPage,
-                    name: Routes.kin.addKinPage,
+                      path: Routes.kin.myKin,
+                      name: Routes.kin.myKin,
+                      builder: (context, state) => MyKinPage()),
+                  GoRoute(
+                    path: Routes.kin.addKin,
+                    name: Routes.kin.addKin,
                     builder: (context, state) => AddKinPage(
                       friendInteractionProvider: _friendInteractionProvider,
                     ),
                   ),
                   GoRoute(
-                    path: Routes.kin.kinRequestsPage,
-                    name: Routes.kin.kinRequestsPage,
-                    builder: (context, state) => KinRequestsPage(
+                    path: Routes.kin.kinRequests,
+                    name: Routes.kin.kinRequests,
+                    builder: (context, state) => IncomingKinRequestsPage(
                       friendInteractionProvider: _friendInteractionProvider,
                     ),
                   ),

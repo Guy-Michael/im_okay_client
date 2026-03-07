@@ -14,6 +14,9 @@ class _KinManagementPageState extends State<KinManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Column(spacing: 32, children: [
+      Container(
+        margin: EdgeInsets.fromLTRB(0, 58, 0, 0),
+      ),
       KinPageTitle(title: _KinManagementPageConsts.pageTitle),
       KinManagementButton(
         destination: Routes.kin.myKin,

@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 
-class AddKinButton extends StatefulWidget {
+class AddKinTile extends StatefulWidget {
   final AppUser user;
 
   Future<void> Function({required AppUser user}) onAddClicked;
 
-  AddKinButton({
+  AddKinTile({
     super.key,
     required this.user,
     required this.onAddClicked,
   });
 
   @override
-  State<StatefulWidget> createState() => AddKinButtonState();
+  State<StatefulWidget> createState() => AddKinTileState();
 }
 
 class IFriendsInteractionsService {}
 
-class AddKinButtonState extends State<AddKinButton> {
+class AddKinTileState extends State<AddKinTile> {
   @override
   Widget build(BuildContext context) {
     return Container(

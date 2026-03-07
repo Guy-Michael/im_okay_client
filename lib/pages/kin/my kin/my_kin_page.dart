@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_requests_page.dart';
+import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
+import 'package:im_okay/pages/kin/my%20kin/my_kin_tile.dart';
 import 'package:im_okay/pages/kin/shared/kin_tile_base.dart';
 
 class MyKinPage extends StatefulWidget {
@@ -15,9 +15,20 @@ class MyKinPageState extends State<MyKinPage> {
   Widget build(BuildContext context) {
     Text phoneNumber = Text("0548045705");
 
-    return KinTileBase(
+    final MyKinTile tile = MyKinTile(
       name: "טל כספי",
       whereTheConfirmDenyButtonsGo: phoneNumber,
     );
+
+    List<MyKinTile> list = [tile, tile, tile, tile, tile, tile];
+
+    return KinPageBase(
+      title: _MyKinPageConsts.title,
+      list: list,
+    );
   }
+}
+
+class _MyKinPageConsts {
+  static final String title = "הקרובים שלי";
 }

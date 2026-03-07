@@ -26,7 +26,6 @@
             // "env": {
             //     "serverUrl": "10.0.0.2:5129",
             //     "isProd": "false"
-            }
         },
         {
             "name": "release",

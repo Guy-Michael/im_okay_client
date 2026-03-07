@@ -6,7 +6,7 @@ import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'dart:convert';
 
-class FriendInteractionsApiService implements IFriendInteractionsProvider {
+class KinInteractionsApiService implements IKinInteractionsService {
   @override
   Future<void> respondToFriendRequest(AppUser userToRespond, bool approveRequest) async {
     String endpoint = UsersController.responseToRequest.endpoint;
@@ -55,10 +55,10 @@ class FriendInteractionsApiService implements IFriendInteractionsProvider {
   }
 
   @override
-  Future<void> sendFriendRequest({required AppUser friend}) async {
+  Future<void> sendFriendRequest({required AppUser user}) async {
     String endpoint = UsersController.sendFriendRequest.endpoint;
 
-    var body = {'friendEmail': friend.email, "uid": "45z0GadJpRpF960AWXIMkr0jYjOR"};
+    var body = {'friendEmail': user.email, "uid": "45z0GadJpRpF960AWXIMkr0jYjOR"};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }

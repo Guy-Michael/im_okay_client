@@ -10,21 +10,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // var logger = Logger();
 
 class HttpUtils {
-  static const String _localDomain = "192.168.68.105";
-  // static const String _localDomain = "http://localhost";
-  // static const String _localDomain = "10.0.2.2";
-  // static const String _localDomain = "http://127.0.0.1";
-  static const int _localPort = 5129;
-  static const String _serverDomain = "20.51.219.132";
-  static const int _serverPort = 80;
-  static const bool _isProduction = kReleaseMode;
   static Uri composeUri({required String endpoint, Map<String, Object>? queryParams}) {
-    // String domain = _isProduction ? _serverDomain : _localDomain;
-    // int port = _isProduction ? _serverPort : _localPort;
     String url = dotenv.get('serverUrl');
-
     Uri uri = Uri.http(url, endpoint, queryParams);
-    // Uri uri = Uri.http("$domain:$port", endpoint, queryParams);
 
     return uri;
   }

@@ -1,4 +1,6 @@
-class Consts {
+// ignore_for_file: library_private_types_in_public_api
+
+class Strings {
   static const String appName = "I'm Okay";
   static const String loginCaption = r'התחברות';
   static const String registerCaption = r'הרשמה';
@@ -41,6 +43,9 @@ class Consts {
   static const String email = "אימייל";
 
   static const String searchFriendsFieldHintText = "חפשו חברים";
+
+  static const String PhoneVerificationPageButton = "אישור";
+  static const String PhoneVerificationInput = "מספר טלפון";
 }
 
 class Gender {
@@ -54,12 +59,22 @@ class Gender {
 }
 
 class Routes {
-  static const String authRedirectPage = "/auth";
-  static const String reportsPage = "report";
-  static const String registrationPage = '/register';
+  static const String home = '/home';
   static const String settings = '/settings';
-  static const String friendRequests = "/requests";
-  static const String addFriendsPage = 'add-friends';
-  static const String hub = '/hub';
-  static const String login = '/login';
+  static _KinRoutes kin = _KinRoutes();
+  static _AuthRoutes auth = _AuthRoutes();
+}
+
+class _KinRoutes {
+  String kinManagement = '/kin-management';
+  String myKin = '/my-kin';
+  String addKin = '/add-kin';
+  String kinRequests = '/kin-requests';
+}
+
+class _AuthRoutes {
+  String authRedirectPage = "/auth";
+  String registrationPage = '/register';
+  String login = '/login';
+  String phoneVerification = '/phone-verification';
 }

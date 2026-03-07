@@ -8,13 +8,13 @@ import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
-Future<List<AppUser>> future(IFriendInteractionsProvider provider) async {
+Future<List<AppUser>> future(IKinInteractionsService provider) async {
   List<AppUser> users = await provider.getAllFriends();
   return users;
 }
 
 class ReportsPage extends StatefulWidget {
-  final IFriendInteractionsProvider friendInteractionProvider;
+  final IKinInteractionsService friendInteractionProvider;
 
   const ReportsPage({required this.friendInteractionProvider, super.key});
 
@@ -110,13 +110,13 @@ String parseLastSeen(int lastSeen, String gender) {
   String result = '';
 
   if (lastSeen == 0) {
-    return Consts.notReportedYet(gender);
+    return Strings.notReportedYet(gender);
   }
 
   int delta = DateTime.now().millisecondsSinceEpoch - lastSeen;
   Duration duration = Duration(milliseconds: delta);
 
-  result = Consts.xTimeAgo(duration);
+  result = Strings.xTimeAgo(duration);
   return result;
 }
 

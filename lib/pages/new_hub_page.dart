@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:im_okay/Services/API Services/Friend Interaction Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
+
+class NewHubPage extends StatefulWidget {
+  final IKinInteractionsService friendInteractionProvider;
+  final Widget child;
+
+  const NewHubPage({required this.friendInteractionProvider, required this.child, super.key});
+
+  @override
+  State<StatefulWidget> createState() => NewHubPageState();
+}
+
+class NewHubPageState extends State<NewHubPage> {
+  int selectedIndex = 2;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.of(context).maybePop(),
+          ),
+          elevation: 0,
+        ),
+        body: widget.child,
+        bottomNavigationBar: NavigationBar(
+            selectedIndex: selectedIndex,
+            onDestinationSelected: (value) {
+              setState(() => selectedIndex = value);
+              String route = _getBottomNavigationWidgets()[value].route;
+              context.pushNamed(route);
+            },
+            backgroundColor: const Color.fromARGB(255, 157, 100, 255),
+            destinations: _getBottomNavigationWidgets()
+                .map((e) => NavigationDestination(
+                      label: e.label,
+                      icon: Icon(e.icon),
+                      selectedIcon: Icon(e.iconSelected),
+                    ))
+                .toList()));
+  }
+
+  List<({String route, String label, IconData icon, IconData iconSelected})>
+      _getBottomNavigationWidgets() => [
+            (
+              route: Routes.settings,
+              label: BottomNavbarConsts.settingsButtonCaption,
+              icon: Icons.settings_outlined,
+              iconSelected: Icons.settings
+            ),
+            (
+              route: Routes.home,
+              label: BottomNavbarConsts.homeButtonCaption,
+              icon: Icons.home_outlined,
+              iconSelected: Icons.home
+            ),
+            (
+              route: Routes.kin.kinManagement,
+              label: BottomNavbarConsts.kinManagement,
+              icon: Icons.plus_one_outlined,
+              iconSelected: Icons.plus_one
+            ),
+          ];
+}
+
+class BottomNavbarConsts {
+  static const String homeButtonCaption = "בית";
+  static const String kinManagement = "ניהול קרובים";
+  static const String requestsButtonCaption = "בקשות";
+  static const String settingsButtonCaption = "הגדרות";
+}

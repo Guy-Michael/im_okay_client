@@ -40,7 +40,7 @@ void main() async {
       await FirebaseAuth.instance.useAuthEmulator(authEmulatorUrl, authEmulatorPort);
       // await FirebaseAuth.instance.useAuthEmulator('192.168.68.105', 9099);
     } catch (e) {
-      debugPrint("Auth emulator connection failed!");
+      logger.log("Auth emulator connection failed!");
     }
   }
 

@@ -153,12 +153,11 @@ class GFListTileDirectional extends StatelessWidget {
                   ? [
                       shadow ??
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: Colors.grey.withValues(alpha: 0.5),
 
                             spreadRadius: 4,
                             blurRadius: 7,
-                            offset: const Offset(
-                                2, 4), // changes position of shadow
+                            offset: const Offset(2, 4), // changes position of shadow
                           ),
                     ]
                   : [],
@@ -213,8 +212,7 @@ class GFListTileDirectional extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         child: InkWell(
                           onTap: onFirstButtonTap,
-                          child: Text(firstButtonTitle ?? '',
-                              style: firstButtonTextStyle),
+                          child: Text(firstButtonTitle ?? '', style: firstButtonTextStyle),
                         ),
                       ),
                     if (secondButtonTitle?.isNotEmpty ?? false)

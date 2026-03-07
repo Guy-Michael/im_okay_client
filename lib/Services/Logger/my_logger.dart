@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 // import 'package:logging_to_logcat/logging_to_logcat.dart';
 
@@ -10,11 +9,8 @@ MyLogger logger = MyLogger();
 
 // Logger
 class MyLogger {
-  late Logger _logger;
-
   MyLogger() {
     Logger.root.level = Level.ALL; // defaults to Level.INFO
-    _logger = Logger('im-okay');
     // Logger.root.activateLogcat();
     // Logger.root.onRecord.listen((record) {
     //   print('${record.level.name}: ${record.time}: ${record.message}');

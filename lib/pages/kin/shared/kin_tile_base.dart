@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_requests_page.dart';
 
 class KinTileBase extends StatefulWidget {
   final String name;

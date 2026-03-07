@@ -44,8 +44,8 @@ class Strings {
 
   static const String searchFriendsFieldHintText = "חפשו חברים";
 
-  static const String PhoneVerificationPageButton = "אישור";
-  static const String PhoneVerificationInput = "מספר טלפון";
+  static const String phoneVerificationPageButton = "אישור";
+  static const String phoneVerificationInput = "מספר טלפון";
 }
 
 class Gender {

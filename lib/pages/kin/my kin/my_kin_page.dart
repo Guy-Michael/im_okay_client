@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/kin/my%20kin/my_kin_tile.dart';
-import 'package:im_okay/pages/kin/shared/kin_tile_base.dart';
 
 class MyKinPage extends StatefulWidget {
   const MyKinPage({super.key});

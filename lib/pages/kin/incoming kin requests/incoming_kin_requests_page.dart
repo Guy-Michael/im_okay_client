@@ -7,7 +7,7 @@ import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_request_tile.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
-import 'package:im_okay/pages/kin/shared/kin-button.dart';
+import 'package:im_okay/pages/kin/shared/kin_button.dart';
 
 class IncomingKinRequestsPage extends StatefulWidget {
   final IKinInteractionsService friendInteractionProvider;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyKinTile extends StatefulWidget {
   final String name;
-  final Widget whereTheConfirmDenyButtonsGo;
+  final String phoneNumber;
 
-  const MyKinTile({super.key, required this.name, required this.whereTheConfirmDenyButtonsGo});
+  const MyKinTile({super.key, required this.name, required this.phoneNumber});
 
   @override
   State<StatefulWidget> createState() => _MyKinTileState();
@@ -34,30 +34,23 @@ class _MyKinTileState extends State<MyKinTile> {
                       shape: BoxShape.circle,
                       image: DecorationImage(image: NetworkImage("https://picsum.photos/200/200"))),
                 )),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(
                     widget.name,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                  widget.whereTheConfirmDenyButtonsGo
+                  Text(
+                    widget.phoneNumber,
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  )
                 ]),
+                Spacer(),
+                Icon(
+                  Icons.more_horiz_rounded,
+                  color: Colors.green,
+                  size: 50,
+                )
               ],
             )));
-  }
-
-  ElevatedButton getPendingKinRequestButton(
-      {required Color color,
-      required Function() onPressed,
-      required String caption,
-      Color textColor = Colors.white}) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-          backgroundColor: color, minimumSize: Size(112, 35), maximumSize: Size(224, 70)),
-      child: Text(
-        caption,
-        style: TextStyle(color: textColor, fontSize: 18),
-      ),
-    );
   }
 }

@@ -12,11 +12,11 @@ class MyKinPage extends StatefulWidget {
 class MyKinPageState extends State<MyKinPage> {
   @override
   Widget build(BuildContext context) {
-    Text phoneNumber = Text("0548045705");
+    String phoneNumber = "0548045705";
 
     final MyKinTile tile = MyKinTile(
       name: "טל כספי",
-      whereTheConfirmDenyButtonsGo: phoneNumber,
+      phoneNumber: phoneNumber,
     );
 
     List<MyKinTile> list = [tile, tile, tile, tile, tile, tile];

@@ -28,46 +28,34 @@ class IncomingKinRequestsPageState extends State<IncomingKinRequestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-      KinPageTitle(
-        title: KinRequestConsts.title,
-      ),
-      StreamBuilder<List<AppUser>>(
-          initialData: const [],
-          stream: StreamUtils.initStream(
-              func: widget.friendInteractionProvider.getIncomingPendingRequests),
-          builder: (context, snapshot) {
-            AppUser user = AppUser(firstName: "טל", lastName: "כספי");
-            AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
-            AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
-            AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
-            List<AppUser> users = [user, user2, user3, user4];
+    AppUser user = AppUser(firstName: "טל", lastName: "כספי");
+    AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
+    AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
+    AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
+    List<AppUser> users = [user, user2, user3, user4];
 
-            return KinPageBase(
-                title: KinRequestConsts.title,
-                list: users
-                    .map<IncomingKinRequestTile>((user) => IncomingKinRequestTile(
-                          name: user.fullName,
-                          whereTheConfirmDenyButtonsGo: Row(
-                            spacing: 16,
-                            children: [
-                              KinButton(
-                                type: KinButtonType.positiveAction,
-                                caption: KinRequestConsts.approveButtonCaption,
-                                onPressed: () {},
-                              ),
-                              KinButton(
-                                type: KinButtonType.negativeAction,
-                                caption: KinRequestConsts.denyButtonCaption,
-                                onPressed: () {},
-                              ),
-                            ],
-                          ),
-                        ))
-                    .toList());
-          })
-    ]));
+    return KinPageBase(
+        title: KinRequestConsts.title,
+        list: users
+            .map<IncomingKinRequestTile>((user) => IncomingKinRequestTile(
+                  name: user.fullName,
+                  whereTheConfirmDenyButtonsGo: Row(
+                    spacing: 16,
+                    children: [
+                      KinButton(
+                        type: KinButtonType.positiveAction,
+                        caption: KinRequestConsts.approveButtonCaption,
+                        onPressed: () {},
+                      ),
+                      KinButton(
+                        type: KinButtonType.negativeAction,
+                        caption: KinRequestConsts.denyButtonCaption,
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ))
+            .toList());
   }
 }
 

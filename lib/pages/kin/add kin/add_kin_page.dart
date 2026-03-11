@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
-import 'package:im_okay/pages/kin/add%20kin/components/add_kin_button.dart';
+import 'package:im_okay/pages/kin/add%20kin/components/add_kin_tile.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 
 class AddKinPage extends StatefulWidget {

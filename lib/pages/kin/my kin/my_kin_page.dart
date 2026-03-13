@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_requests_page.dart';
-import 'package:im_okay/pages/kin/shared/kin_tile_base.dart';
+import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
+import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
+import 'package:im_okay/pages/kin/my%20kin/my_kin_tile.dart';
 
 class MyKinPage extends StatefulWidget {
   const MyKinPage({super.key});
@@ -13,11 +15,36 @@ class MyKinPage extends StatefulWidget {
 class MyKinPageState extends State<MyKinPage> {
   @override
   Widget build(BuildContext context) {
-    Text phoneNumber = Text("0548045705");
+    String phoneNumber = "0548045705";
 
-    return KinTileBase(
+    final MyKinTile tile = MyKinTile(
       name: "טל כספי",
-      whereTheConfirmDenyButtonsGo: phoneNumber,
+      phoneNumber: phoneNumber,
+    );
+
+    List<MyKinTile> list = [tile, tile, tile, tile, tile, tile];
+    // List<MyKinTile> list = [];
+
+    if (list.isEmpty) {
+      return EmptyKinPage(
+        title: _MyKinPageConsts.title,
+        subtitle: _MyKinPageConsts.emptyPageSubtitle,
+        helpText: _MyKinPageConsts.emptyPageHelpText,
+        actionText: _MyKinPageConsts.emptyPageActionCaption,
+        //TODO: using Routes.kin.addKin produces "Route not found" error
+        action: () => globalRouter.pushReplacement(Routes.kin.addKin),
+      );
+    }
+    return KinPageBase(
+      title: _MyKinPageConsts.title,
+      list: list,
     );
   }
+}
+
+class _MyKinPageConsts {
+  static final String title = "הקרובים שלי";
+  static final String emptyPageSubtitle = "כאן יופיעו הקרובים שלך";
+  static final String emptyPageHelpText = "הוסיפו קרובים כדי להתעדכן בשלומם בעת אזעקה";
+  static final String emptyPageActionCaption = "הוספת קרובים";
 }

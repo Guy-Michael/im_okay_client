@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-class KinTileBase extends StatefulWidget {
+class IncomingKinRequestTile extends StatefulWidget {
   final String name;
   final Widget whereTheConfirmDenyButtonsGo;
 
-  const KinTileBase({super.key, required this.name, required this.whereTheConfirmDenyButtonsGo});
+  const IncomingKinRequestTile(
+      {super.key, required this.name, required this.whereTheConfirmDenyButtonsGo});
 
   @override
-  State<StatefulWidget> createState() => _KinTileBaseState();
+  State<StatefulWidget> createState() => _IncomingKinRequestTilState();
 }
 
-class _KinTileBaseState extends State<KinTileBase> {
+class _IncomingKinRequestTilState extends State<IncomingKinRequestTile> {
   @override
   Widget build(BuildContext context) {
     return Center(

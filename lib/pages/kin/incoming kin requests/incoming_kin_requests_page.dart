@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
+import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
+import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_request_tile.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
-import 'package:im_okay/pages/kin/shared/kin-button.dart';
-import 'package:im_okay/pages/kin/shared/kin_tile_base.dart';
+import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
+import 'package:im_okay/pages/kin/shared/kin_button.dart';
 
 class IncomingKinRequestsPage extends StatefulWidget {
   final IKinInteractionsService friendInteractionProvider;
@@ -27,54 +29,52 @@ class IncomingKinRequestsPageState extends State<IncomingKinRequestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-      KinPageTitle(
-        title: KinRequestConsts.title,
-      ),
-      StreamBuilder<List<AppUser>>(
-          initialData: const [],
-          stream: StreamUtils.initStream(
-              func: widget.friendInteractionProvider.getIncomingPendingRequests),
-          builder: (context, snapshot) {
-            AppUser user = AppUser(firstName: "טל", lastName: "כספי");
-            AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
-            AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
-            AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
-            List<AppUser> users = [user, user2, user3, user4];
+    AppUser user = AppUser(firstName: "טל", lastName: "כספי");
+    AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
+    AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
+    AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
+    List<AppUser> users = [user, user2, user3, user4];
+    // List<AppUser> users = [];
 
-            return Center(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 20,
-                    children: users.map((user) {
-                      return KinTileBase(
-                          name: user.fullName,
-                          whereTheConfirmDenyButtonsGo: Row(
-                            spacing: 16,
-                            children: [
-                              KinButton(
-                                type: KinButtonType.positiveAction,
-                                caption: KinRequestConsts.approveButtonCaption,
-                                onPressed: () {},
-                              ),
-                              KinButton(
-                                type: KinButtonType.negativeAction,
-                                caption: KinRequestConsts.denyButtonCaption,
-                                onPressed: () {},
-                              ),
-                            ],
-                          ));
-                    }).toList()));
-          })
-    ]));
+    if (users.isEmpty) {
+      return EmptyKinPage(
+        helpText: _KinRequestConsts.emptyPageHelpText,
+        subtitle: _KinRequestConsts.emptyPageSubtitle,
+        title: _KinRequestConsts.title,
+      );
+    }
+
+    return KinPageBase(
+        title: _KinRequestConsts.title,
+        list: users
+            .map<IncomingKinRequestTile>((user) => IncomingKinRequestTile(
+                  name: user.fullName,
+                  whereTheConfirmDenyButtonsGo: Row(
+                    spacing: 16,
+                    children: [
+                      KinButton(
+                        type: KinButtonType.positiveAction,
+                        caption: _KinRequestConsts.approveButtonCaption,
+                        onPressed: () {},
+                      ),
+                      KinButton(
+                        type: KinButtonType.negativeAction,
+                        caption: _KinRequestConsts.denyButtonCaption,
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ))
+            .toList());
   }
 }
 
-class KinRequestConsts {
+class _KinRequestConsts {
   static const String title = "בקשות חדשות";
   static const String approveButtonCaption = "אישור";
   static const String denyButtonCaption = "ביטול";
   static const String noPendingRequestsCaption = "אין בקשות ממתינות :)";
+  static final String emptyPageSubtitle = "אין כרגע בקשות חדשות";
+  static final String emptyPageHelpText = "כאשר יגיעו בקשות חדשות, הן יופיעו כאן";
   static String alertZoneCaption(String alertZone) => "אזור ההתראה שלך: $alertZone";
 }

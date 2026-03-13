@@ -14,6 +14,9 @@ class _KinManagementPageState extends State<KinManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Column(spacing: 32, children: [
+      Container(
+        margin: EdgeInsets.fromLTRB(0, 58, 0, 0),
+      ),
       KinPageTitle(title: _KinManagementPageConsts.pageTitle),
       KinManagementButton(
         destination: Routes.kin.myKin,
@@ -21,12 +24,12 @@ class _KinManagementPageState extends State<KinManagementPage> {
         icon: Icons.people_alt_outlined,
       ),
       KinManagementButton(
-        destination: Routes.kin.addKin, // TODO: Set correct route for add kin page
+        destination: Routes.kin.addKin,
         label: _KinManagementPageConsts.addKinPageTitle,
         icon: Icons.add,
       ),
       KinManagementButton(
-        destination: Routes.kin.kinRequests, // TODO: Set correct route for new kin requests page
+        destination: Routes.kin.kinRequests,
         label: _KinManagementPageConsts.newKinRequestsPageTitle,
         icon: Icons.account_box_sharp,
       ),

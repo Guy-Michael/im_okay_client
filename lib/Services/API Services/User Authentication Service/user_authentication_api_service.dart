@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
-import 'package:im_okay/main.dart';
 
 class UserAuthenticationApiService {
   static final GoogleSignIn googleSignIn = GoogleSignIn(

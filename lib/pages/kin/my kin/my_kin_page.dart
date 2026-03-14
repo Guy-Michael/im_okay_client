@@ -30,9 +30,7 @@ class MyKinPageState extends State<MyKinPage> {
         title: _MyKinPageConsts.title,
         subtitle: _MyKinPageConsts.emptyPageSubtitle,
         helpText: _MyKinPageConsts.emptyPageHelpText,
-        actionText: _MyKinPageConsts.emptyPageActionCaption,
-        //TODO: using Routes.kin.addKin produces "Route not found" error
-        action: () => globalRouter.pushReplacement(Routes.kin.addKin),
+        showAddKinButton: true,
       );
     }
     return KinPageBase(

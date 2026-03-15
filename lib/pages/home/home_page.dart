@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Services/router_service.dart';
-import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/pages/home/components/home_body_no_alerts.dart';
 import 'package:im_okay/pages/home/my_status.dart';
-import 'package:im_okay/pages/shared_components/go_to_add_kin_page_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,28 +12,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-      MyStatus(),
-      Expanded(
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(top: 28, left: 16, right: 16, bottom: 28),
-          child: Column(
-            spacing: 32,
-            children: [
-              noAlertTitle(),
-              helpText(),
-              Image(image: AssetImage("Assets/Main/main_page_no_alarms.png")),
-            ],
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-        child: GoToAddKinPageButton(),
-      ),
-    ]));
+    return Scaffold(body: Column(children: [MyStatus(), HomeBodyNoAlerts()]));
   }
 }
 

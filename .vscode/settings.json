@@ -7,7 +7,8 @@
 		"editor.formatOnSave": true,
 		"editor.suggest.insertMode": "insert",
 		"editor.defaultFormatter": "Dart-Code.dart-code",
-		"editor.inlayHints.enabled": "offUnlessPressed",
+		// "editor.inlayHints.enabled": "offUnlessPressed",
+		"editor.snippetSuggestions": "top",
 		"editor.rulers": [200]
 	}
 }

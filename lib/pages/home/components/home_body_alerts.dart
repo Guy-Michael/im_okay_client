@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/pages/home/components/home_kin_tile.dart';
+import 'package:im_okay/pages/home/components/home_kin_update_tile.dart';
 import 'package:im_okay/pages/home/components/kin_update_toggle.dart';
 
 class HomeBodyWithAlerts extends StatefulWidget {
@@ -17,7 +17,7 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
     return Column(
       children: [
         KinUpdateToggle(),
-        HomeKinTile(
+        HomeKinUpdateTile(
           user: AppUser(firstName: "Guy", lastName: "Michael"),
         )
       ],

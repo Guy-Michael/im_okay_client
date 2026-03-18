@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 
-class HomeKinTile extends StatefulWidget {
+class HomeKinUpdateTile extends StatefulWidget {
   final AppUser user;
 
-  const HomeKinTile({super.key, required this.user});
+  const HomeKinUpdateTile({super.key, required this.user});
 
   @override
-  State<StatefulWidget> createState() => _HomeKinTileState();
+  State<StatefulWidget> createState() => _HomeKinUpdateTileState();
 }
 
-class _HomeKinTileState extends State<HomeKinTile> {
+class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
   @override
   Widget build(BuildContext context) {
     return Center(

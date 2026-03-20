@@ -47,6 +47,11 @@ class AppUser extends Equatable {
     return json.containsKey(key) && json[key] != null ? json[key] : '';
   }
 
+  Duration durationSinceLastAlert() {
+    DateTime lastAlertDate = DateTime.fromMillisecondsSinceEpoch(lastAlertTime * 1000);
+    return DateTime.now().difference(lastAlertDate);
+  }
+
   @override
   List<Object?> get props =>
       [firstName, lastName, email, gender, lastSeen, lastAlertTime, imageUrl];

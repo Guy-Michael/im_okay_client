@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/pages/home/components/home_body_alerts.dart';
-import 'package:im_okay/pages/home/components/home_body_no_alerts.dart';
+import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 import 'package:im_okay/pages/home/my_status.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Utils/string_utils.dart';
 
 class HomeKinUpdateTile extends StatefulWidget {
   final AppUser user;
@@ -40,7 +41,8 @@ class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   Text(
-                    _HomeKinTileConsts.awaitingResponse,
+                    interpolateString(_HomeKinTileConsts.awaitingResponse,
+                        [widget.user.durationSinceLastAlert().inMinutes]),
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),
@@ -56,5 +58,5 @@ class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
 }
 
 class _HomeKinTileConsts {
-  static const String awaitingResponse = "מחכים לעדכון..";
+  static const String awaitingResponse = "אזעקה לפני {0} דקות";
 }

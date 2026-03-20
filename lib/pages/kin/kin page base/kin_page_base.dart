@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
+import 'package:im_okay/pages/shared_components/user_tile_column.dart';
 // import 'package:im_okay/pages/kin/shared/kin_page_title.dart';
 
 class KinPageBase extends StatefulWidget {
@@ -38,12 +39,9 @@ class KinPageBaseState extends State<KinPageBase> {
       Divider(
         thickness: 1,
       ),
-      Expanded(
-          child: SingleChildScrollView(
-              child: Column(
-        spacing: 16,
-        children: widget.list,
-      )))
+      UserTileColumn(
+        tiles: widget.list,
+      )
     ];
 
     return Scaffold(

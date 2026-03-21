@@ -18,7 +18,7 @@ class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
         child: Container(
             height: 130,
             margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(25),
@@ -33,7 +33,7 @@ class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: NetworkImage("https://picsum.photos/200/200"))),
+                      image: DecorationImage(image: NetworkImage("https://picsum.photos//200"))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(

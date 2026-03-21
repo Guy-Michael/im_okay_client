@@ -12,6 +12,9 @@ class AppUser extends Equatable {
 
   String get fullName => "$firstName $lastName";
   bool get isFemale => gender == Gender.female;
+  bool get hasReportedSafeDuringAlert {
+    return lastSeen > lastAlertTime;
+  }
 
   AppUser(
       {this.email = '',
@@ -50,6 +53,11 @@ class AppUser extends Equatable {
   Duration durationSinceLastAlert() {
     DateTime lastAlertDate = DateTime.fromMillisecondsSinceEpoch(lastAlertTime * 1000);
     return DateTime.now().difference(lastAlertDate);
+  }
+
+  Duration durationSinceLastSeen() {
+    DateTime lastSeenDate = DateTime.fromMillisecondsSinceEpoch(lastSeen * 1000);
+    return DateTime.now().difference(lastSeenDate);
   }
 
   @override

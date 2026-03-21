@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Utils/string_utils.dart';
 
-class HomeKinUpdateTile extends StatefulWidget {
+class HomeKinUpdateTileReported extends StatefulWidget {
   final AppUser user;
 
-  const HomeKinUpdateTile({super.key, required this.user});
+  const HomeKinUpdateTileReported({super.key, required this.user});
 
   @override
-  State<StatefulWidget> createState() => _HomeKinUpdateTileState();
+  State<StatefulWidget> createState() => _HomeKinUpdateTileReportedState();
 }
 
-class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
+class _HomeKinUpdateTileReportedState extends State<HomeKinUpdateTileReported> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -35,14 +35,21 @@ class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
                       shape: BoxShape.circle,
                       image: DecorationImage(image: NetworkImage("https://picsum.photos//200"))),
                 )),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 8, children: [
                   Text(
                     widget.user.fullName,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
+                  Row(
+                    spacing: 4,
+                    children: [
+                      Icon(_HomeKinTileConsts.imOkayIcon),
+                      Text(_HomeKinTileConsts.imOkay),
+                    ],
+                  ),
                   Text(
                     interpolateString(_HomeKinTileConsts.awaitingResponse,
-                        [widget.user.durationSinceLastAlert().inMinutes]),
+                        [widget.user.durationSinceLastSeen().inMinutes]),
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),
@@ -58,5 +65,7 @@ class _HomeKinUpdateTileState extends State<HomeKinUpdateTile> {
 }
 
 class _HomeKinTileConsts {
-  static const String awaitingResponse = "אזעקה לפני {0} דקות";
+  static const String imOkay = "אני בסדר";
+  static const IconData imOkayIcon = Icons.check_circle_outline_outlined;
+  static const String awaitingResponse = "לפני {0} דקות";
 }

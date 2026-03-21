@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
+import 'package:im_okay/pages/home/home_page.dart';
 
 class KinUpdateToggle extends StatefulWidget {
   List<bool> isSelected = [false, false];
-  KinUpdateToggle({super.key});
+  void Function(AlertsHomePageToggle toggle) onToggle;
+  KinUpdateToggle({super.key, required this.onToggle});
 
   @override
   State<KinUpdateToggle> createState() => _KinUpdateToggleState();
@@ -24,6 +27,7 @@ class _KinUpdateToggleState extends State<KinUpdateToggle> {
             }
           }
         });
+        widget.onToggle(getCurrentMode());
       },
       children: [
         Container(
@@ -35,6 +39,14 @@ class _KinUpdateToggleState extends State<KinUpdateToggle> {
         ),
       ],
     );
+  }
+
+  AlertsHomePageToggle getCurrentMode() {
+    if (widget.isSelected[0]) {
+      return AlertsHomePageToggle.kinNotReported;
+    } else {
+      return AlertsHomePageToggle.kinReported;
+    }
   }
 }
 

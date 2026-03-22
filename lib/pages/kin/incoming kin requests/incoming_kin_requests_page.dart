@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
-import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_request_tile.dart';
-import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/kin/shared/kin_button.dart';
 

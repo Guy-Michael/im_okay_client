@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
-import 'package:im_okay/pages/home/home_page.dart';
 
 class KinUpdateToggle extends StatefulWidget {
   List<bool> isSelected = [false, false];

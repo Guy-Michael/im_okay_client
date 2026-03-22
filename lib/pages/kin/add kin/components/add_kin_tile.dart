@@ -58,7 +58,7 @@ class AddKinTileState extends State<AddKinTile> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal, minimumSize: Size(112, 35)),
                   child: Text(
-                    _AddKinTileConsts.AddButtonCaption,
+                    _AddKinTileConsts.addButtonCaption,
                     style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "Inter"),
                   ),
                 )
@@ -68,5 +68,5 @@ class AddKinTileState extends State<AddKinTile> {
 }
 
 class _AddKinTileConsts {
-  static const String AddButtonCaption = "הוספה";
+  static const String addButtonCaption = "הוספה";
 }

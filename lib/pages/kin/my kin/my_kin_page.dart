@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Services/router_service.dart';
-import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/kin/my%20kin/my_kin_tile.dart';

@@ -43,7 +43,10 @@ class _HomeKinUpdateTileReportedState extends State<HomeKinUpdateTileReported> {
                   Row(
                     spacing: 4,
                     children: [
-                      Icon(_HomeKinTileConsts.imOkayIcon),
+                      Icon(
+                        _HomeKinTileConsts.imOkayIcon,
+                        color: Colors.green,
+                      ),
                       Text(_HomeKinTileConsts.imOkay),
                     ],
                   ),
@@ -53,12 +56,6 @@ class _HomeKinUpdateTileReportedState extends State<HomeKinUpdateTileReported> {
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),
-                Spacer(),
-                Icon(
-                  Icons.notifications_on_outlined,
-                  color: Colors.green,
-                  size: 50,
-                )
               ],
             )));
   }

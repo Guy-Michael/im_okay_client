@@ -20,7 +20,8 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
   @override
   Widget build(BuildContext context) {
     List<AppUser> users = [
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940),
+      AppUser(
+          firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940, lastSeen: 1774095940),
       AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940),
       AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940)
     ];

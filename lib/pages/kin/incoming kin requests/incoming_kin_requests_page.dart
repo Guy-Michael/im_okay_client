@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_request_tile.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
@@ -27,43 +28,43 @@ class IncomingKinRequestsPageState extends State<IncomingKinRequestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppUser user = AppUser(firstName: "טל", lastName: "כספי");
-    AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
-    AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
-    AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
-    List<AppUser> users = [user, user2, user3, user4];
-    // List<AppUser> users = [];
+    return StreamBuilder(
+      stream: StreamUtils.initStream(
+          func: widget.friendInteractionProvider.getIncomingPendingRequests,
+          duration: Duration(seconds: 5)),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || (snapshot.hasData && snapshot.data!.isEmpty)) {
+          return EmptyKinPage(
+            helpText: _KinRequestConsts.emptyPageHelpText,
+            subtitle: _KinRequestConsts.emptyPageSubtitle,
+            title: _KinRequestConsts.title,
+          );
+        }
 
-    if (users.isEmpty) {
-      return EmptyKinPage(
-        helpText: _KinRequestConsts.emptyPageHelpText,
-        subtitle: _KinRequestConsts.emptyPageSubtitle,
-        title: _KinRequestConsts.title,
-      );
-    }
-
-    return KinPageBase(
-        title: _KinRequestConsts.title,
-        list: users
-            .map<IncomingKinRequestTile>((user) => IncomingKinRequestTile(
-                  name: user.fullName,
-                  whereTheConfirmDenyButtonsGo: Row(
-                    spacing: 16,
-                    children: [
-                      KinButton(
-                        type: KinButtonType.positiveAction,
-                        caption: _KinRequestConsts.approveButtonCaption,
-                        onPressed: () {},
+        return KinPageBase(
+            title: _KinRequestConsts.title,
+            list: snapshot.data!
+                .map<IncomingKinRequestTile>((user) => IncomingKinRequestTile(
+                      name: user.fullName,
+                      whereTheConfirmDenyButtonsGo: Row(
+                        spacing: 16,
+                        children: [
+                          KinButton(
+                            type: KinButtonType.positiveAction,
+                            caption: _KinRequestConsts.approveButtonCaption,
+                            onPressed: () {},
+                          ),
+                          KinButton(
+                            type: KinButtonType.negativeAction,
+                            caption: _KinRequestConsts.denyButtonCaption,
+                            onPressed: () {},
+                          ),
+                        ],
                       ),
-                      KinButton(
-                        type: KinButtonType.negativeAction,
-                        caption: _KinRequestConsts.denyButtonCaption,
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ))
-            .toList());
+                    ))
+                .toList());
+      },
+    );
   }
 }
 

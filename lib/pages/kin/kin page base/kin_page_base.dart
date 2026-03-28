@@ -9,13 +9,15 @@ class KinPageBase extends StatefulWidget {
   bool displaySearchBar;
   String? searchBarHint;
   String? kinListHint;
+  Future<void> Function(String query)? onSubmitSearch;
 
   KinPageBase(
       {required this.title,
       required this.list,
-      this.displaySearchBar = true,
+      this.displaySearchBar = false,
       this.searchBarHint,
       this.kinListHint,
+      this.onSubmitSearch,
       super.key});
 
   @override
@@ -30,11 +32,10 @@ class KinPageBaseState extends State<KinPageBase> {
         title: widget.title,
       ),
       if (widget.displaySearchBar)
-        SearchAnchor.bar(
-          suggestionsBuilder: (context, controller) {
-            return [];
+        SearchBar(
+          onSubmitted: (value) async {
+            await widget.onSubmitSearch!(value);
           },
-          barHintText: widget.searchBarHint,
         ),
       Divider(
         thickness: 1,

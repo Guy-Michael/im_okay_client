@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
 import 'package:im_okay/pages/kin/add%20kin/components/add_kin_tile.dart';
@@ -6,8 +7,8 @@ import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 
 class AddKinPage extends StatefulWidget {
   final IKinInteractionsService friendInteractionProvider;
-
-  const AddKinPage({super.key, required this.friendInteractionProvider});
+  List<AppUser> searchResults = [];
+  AddKinPage({super.key, required this.friendInteractionProvider});
 
   @override
   State<StatefulWidget> createState() => AddKinPageState();
@@ -16,20 +17,31 @@ class AddKinPage extends StatefulWidget {
 class AddKinPageState extends State<AddKinPage> {
   @override
   Widget build(BuildContext context) {
-    AppUser user = AppUser(firstName: "טל", lastName: "כספי");
-    AppUser user2 = AppUser(firstName: "נועם", lastName: "נחום");
-    AppUser user3 = AppUser(firstName: "בן", lastName: "קאושנסקי");
-    AppUser user4 = AppUser(firstName: "זיו", lastName: "קידר");
-    List<AppUser> users = [user, user2, user3, user4, user, user];
     return KinPageBase(
       title: AddKinPageConsts.pageTitle,
-      list: users
+      displaySearchBar: true,
+      onSubmitSearch: getKinSuggestions,
+      list: widget.searchResults
           .map<AddKinTile>((user) => AddKinTile(
                 user: user,
                 onAddClicked: (widget.friendInteractionProvider.sendFriendRequest),
               ))
           .toList(),
     );
+  }
+
+  Future<void> getKinSuggestions(String query) async {
+    if (query.isEmpty) {
+      return;
+    }
+
+    List<AppUser> list = (await widget.friendInteractionProvider.queryFriends(query))
+        .where((response) => response.relationship != FriendQueryType.friendsWith)
+        .map<AppUser>((response) => response.user)
+        .toList();
+    setState(() {
+      widget.searchResults = list;
+    });
   }
 }
 

@@ -58,7 +58,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
   Future<void> sendFriendRequest({required AppUser user}) async {
     String endpoint = UsersController.sendFriendRequest.endpoint;
 
-    var body = {'friendEmail': user.email, "uid": "45z0GadJpRpF960AWXIMkr0jYjOR"};
+    var body = {'uid': user.uid};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }

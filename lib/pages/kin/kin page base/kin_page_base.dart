@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
+import 'package:im_okay/pages/shared_components/user_tile_column.dart';
 // import 'package:im_okay/pages/kin/shared/kin_page_title.dart';
 
 class KinPageBase extends StatefulWidget {
@@ -8,13 +9,15 @@ class KinPageBase extends StatefulWidget {
   bool displaySearchBar;
   String? searchBarHint;
   String? kinListHint;
+  Future<void> Function(String query)? onSubmitSearch;
 
   KinPageBase(
       {required this.title,
       required this.list,
-      this.displaySearchBar = true,
+      this.displaySearchBar = false,
       this.searchBarHint,
       this.kinListHint,
+      this.onSubmitSearch,
       super.key});
 
   @override
@@ -29,21 +32,17 @@ class KinPageBaseState extends State<KinPageBase> {
         title: widget.title,
       ),
       if (widget.displaySearchBar)
-        SearchAnchor.bar(
-          suggestionsBuilder: (context, controller) {
-            return [];
+        SearchBar(
+          onSubmitted: (value) async {
+            await widget.onSubmitSearch!(value);
           },
-          barHintText: widget.searchBarHint,
         ),
       Divider(
         thickness: 1,
       ),
-      Expanded(
-          child: SingleChildScrollView(
-              child: Column(
-        spacing: 16,
-        children: widget.list,
-      )))
+      UserTileColumn(
+        tiles: widget.list,
+      )
     ];
 
     return Scaffold(

@@ -1,31 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Utils/string_utils.dart';
 
-class AddKinTile extends StatefulWidget {
+class HomeKinUpdateTileNotReported extends StatefulWidget {
   final AppUser user;
 
-  Future<void> Function({required AppUser user}) onAddClicked;
-
-  AddKinTile({
-    super.key,
-    required this.user,
-    required this.onAddClicked,
-  });
+  const HomeKinUpdateTileNotReported({super.key, required this.user});
 
   @override
-  State<StatefulWidget> createState() => AddKinTileState();
+  State<StatefulWidget> createState() => _HomeKinUpdateTileNotReportedState();
 }
 
-class IFriendsInteractionsService {}
-
-class AddKinTileState extends State<AddKinTile> {
+class _HomeKinUpdateTileNotReportedState extends State<HomeKinUpdateTileNotReported> {
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Container(
             height: 130,
             margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(25),
@@ -40,7 +33,7 @@ class AddKinTileState extends State<AddKinTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: NetworkImage("https://picsum.photos/200/200"))),
+                      image: DecorationImage(image: NetworkImage("https://picsum.photos//200"))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(
@@ -48,25 +41,22 @@ class AddKinTileState extends State<AddKinTile> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   Text(
-                    "0548045705",
+                    interpolateString(_HomeKinTileConsts.awaitingResponse,
+                        [widget.user.durationSinceLastAlert().inMinutes]),
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),
                 Spacer(),
-                ElevatedButton(
-                  onPressed: () => widget.onAddClicked(user: widget.user),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal, minimumSize: Size(112, 35)),
-                  child: Text(
-                    _AddKinTileConsts.addButtonCaption,
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "Inter"),
-                  ),
+                Icon(
+                  Icons.notifications_on_outlined,
+                  color: Colors.green,
+                  size: 50,
                 )
               ],
             )));
   }
 }
 
-class _AddKinTileConsts {
-  static const String addButtonCaption = "הוספה";
+class _HomeKinTileConsts {
+  static const String awaitingResponse = "אזעקה לפני {0} דקות";
 }

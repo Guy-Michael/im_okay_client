@@ -1,5 +1,6 @@
 {
 	"editor.mouseWheelZoom": true,
+	"editor.snippetSuggestions": "none",
 	"[dart]": {
 		"editor.tabSize": 2,
 		"editor.insertSpaces": false,
@@ -8,6 +9,7 @@
 		"editor.suggest.insertMode": "insert",
 		"editor.defaultFormatter": "Dart-Code.dart-code",
 		"editor.inlayHints.enabled": "offUnlessPressed",
+		"editor.snippetSuggestions": "inline",
 		"editor.rulers": [200]
 	}
 }

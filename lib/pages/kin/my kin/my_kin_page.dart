@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Services/router_service.dart';
-import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/kin/my%20kin/my_kin_tile.dart';
@@ -30,9 +28,7 @@ class MyKinPageState extends State<MyKinPage> {
         title: _MyKinPageConsts.title,
         subtitle: _MyKinPageConsts.emptyPageSubtitle,
         helpText: _MyKinPageConsts.emptyPageHelpText,
-        actionText: _MyKinPageConsts.emptyPageActionCaption,
-        //TODO: using Routes.kin.addKin produces "Route not found" error
-        action: () => globalRouter.pushReplacement(Routes.kin.addKin),
+        showAddKinButton: true,
       );
     }
     return KinPageBase(

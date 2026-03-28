@@ -24,13 +24,6 @@ class NewHubPageState extends State<NewHubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
-            onPressed: () => Navigator.of(context).maybePop(),
-          ),
-          elevation: 0,
-        ),
         body: widget.child,
         bottomNavigationBar: NavigationBar(
             selectedIndex: selectedIndex,
@@ -39,7 +32,6 @@ class NewHubPageState extends State<NewHubPage> {
               String route = _getBottomNavigationWidgets()[value].route;
               context.pushNamed(route);
             },
-            backgroundColor: const Color.fromARGB(255, 157, 100, 255),
             destinations: _getBottomNavigationWidgets()
                 .map((e) => NavigationDestination(
                       label: e.label,

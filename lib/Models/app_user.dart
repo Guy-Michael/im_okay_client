@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 
 class AppUser extends Equatable {
+  String uid;
   String email;
   String firstName;
   String lastName;
@@ -12,9 +13,13 @@ class AppUser extends Equatable {
 
   String get fullName => "$firstName $lastName";
   bool get isFemale => gender == Gender.female;
+  bool get hasReportedSafeDuringAlert {
+    return lastSeen > lastAlertTime;
+  }
 
   AppUser(
-      {this.email = '',
+      {this.uid = '',
+      this.email = '',
       this.firstName = '',
       this.lastName = '',
       this.lastSeen = 0,
@@ -23,7 +28,8 @@ class AppUser extends Equatable {
       this.gender = ''});
 
   AppUser.fromJson(Map<String, dynamic> json)
-      : email = getValueOrDefault(json, 'email'),
+      : uid = getValueOrDefault(json, 'uid'),
+        email = getValueOrDefault(json, 'email'),
         firstName = getValueOrDefault(json, 'firstName'),
         lastName = getValueOrDefault(json, 'lastName'),
         lastSeen = getValueOrDefault(json, 'lastSeen'),
@@ -33,6 +39,7 @@ class AppUser extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
+      'uid': uid,
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
@@ -47,7 +54,17 @@ class AppUser extends Equatable {
     return json.containsKey(key) && json[key] != null ? json[key] : '';
   }
 
+  Duration durationSinceLastAlert() {
+    DateTime lastAlertDate = DateTime.fromMillisecondsSinceEpoch(lastAlertTime * 1000);
+    return DateTime.now().difference(lastAlertDate);
+  }
+
+  Duration durationSinceLastSeen() {
+    DateTime lastSeenDate = DateTime.fromMillisecondsSinceEpoch(lastSeen * 1000);
+    return DateTime.now().difference(lastSeenDate);
+  }
+
   @override
   List<Object?> get props =>
-      [firstName, lastName, email, gender, lastSeen, lastAlertTime, imageUrl];
+      [uid, firstName, lastName, email, gender, lastSeen, lastAlertTime, imageUrl];
 }

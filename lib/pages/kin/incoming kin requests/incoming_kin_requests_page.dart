@@ -19,19 +19,28 @@ class IncomingKinRequestsPage extends StatefulWidget {
 }
 
 class IncomingKinRequestsPageState extends State<IncomingKinRequestsPage> {
-  late StreamController<List<AppUser>> friendRequestStreamController;
+  late StreamController<List<AppUser>>? friendRequestStreamController;
 
   @override
   void initState() {
     super.initState();
+    friendRequestStreamController = StreamUtils.initStreamController(
+        func: widget.friendInteractionProvider.getIncomingPendingRequests,
+        duration: Duration(seconds: 5));
+  }
+
+  @override
+  void dispose() {
+    friendRequestStreamController?.close();
+    friendRequestStreamController = null;
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: StreamUtils.initStream(
-          func: widget.friendInteractionProvider.getIncomingPendingRequests,
-          duration: Duration(seconds: 5)),
+      stream: friendRequestStreamController?.stream,
       builder: (context, snapshot) {
         if (!snapshot.hasData || (snapshot.hasData && snapshot.data!.isEmpty)) {
           return EmptyKinPage(

@@ -30,7 +30,7 @@ class NewHubPageState extends State<NewHubPage> {
             onDestinationSelected: (value) {
               setState(() => selectedIndex = value);
               String route = _getBottomNavigationWidgets()[value].route;
-              context.pushNamed(route);
+              context.replaceNamed(route);
             },
             destinations: _getBottomNavigationWidgets()
                 .map((e) => NavigationDestination(

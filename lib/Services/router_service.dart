@@ -13,7 +13,7 @@ import 'package:im_okay/pages/new_hub_page.dart';
 import 'package:im_okay/pages/settings.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
-final _friendInteractionProvider = KinInteractionsApiService();
+final _kinInteractionService = KinInteractionsApiService();
 
 final GoRouter globalRouter = GoRouter(
   initialLocation: Routes.auth.authRedirectPage,
@@ -23,7 +23,7 @@ final GoRouter globalRouter = GoRouter(
       parentNavigatorKey: _rootNavigationKey,
       path: Routes.auth.authRedirectPage,
       builder: (context, state) =>
-          AuthRedirectPage(friendInteractionProvider: _friendInteractionProvider),
+          AuthRedirectPage(friendInteractionProvider: _kinInteractionService),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
@@ -33,7 +33,7 @@ final GoRouter globalRouter = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return NewHubPage(
-          friendInteractionProvider: _friendInteractionProvider,
+          friendInteractionProvider: _kinInteractionService,
           child: navigationShell,
         );
       },
@@ -49,19 +49,21 @@ final GoRouter globalRouter = GoRouter(
                   GoRoute(
                       path: Routes.kin.myKin,
                       name: Routes.kin.myKin,
-                      builder: (context, state) => MyKinPage()),
+                      builder: (context, state) => MyKinPage(
+                            kinInteractionsService: _kinInteractionService,
+                          )),
                   GoRoute(
                     path: Routes.kin.addKin,
                     name: Routes.kin.addKin,
                     builder: (context, state) => AddKinPage(
-                      friendInteractionProvider: _friendInteractionProvider,
+                      friendInteractionProvider: _kinInteractionService,
                     ),
                   ),
                   GoRoute(
                     path: Routes.kin.kinRequests,
                     name: Routes.kin.kinRequests,
                     builder: (context, state) => IncomingKinRequestsPage(
-                      friendInteractionProvider: _friendInteractionProvider,
+                      friendInteractionProvider: _kinInteractionService,
                     ),
                   ),
                 ]),

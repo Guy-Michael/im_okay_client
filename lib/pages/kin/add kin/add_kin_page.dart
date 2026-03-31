@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
-import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Models/search_query_response.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
 import 'package:im_okay/pages/kin/add%20kin/components/add_kin_tile.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 
 class AddKinPage extends StatefulWidget {
   final IKinInteractionsService friendInteractionProvider;
-  List<AppUser> searchResults = [];
+  List<SearchQueryResponse> searchResults = [];
   AddKinPage({super.key, required this.friendInteractionProvider});
 
   @override
@@ -22,9 +22,10 @@ class AddKinPageState extends State<AddKinPage> {
       displaySearchBar: true,
       onSubmitSearch: getKinSuggestions,
       list: widget.searchResults
-          .map<AddKinTile>((user) => AddKinTile(
-                user: user,
+          .map<AddKinTile>((queryResponse) => AddKinTile(
+                queryResponse: queryResponse,
                 onAddClicked: (widget.friendInteractionProvider.sendFriendRequest),
+                onCancelClicked: (widget.friendInteractionProvider.cancelFriendRequest),
               ))
           .toList(),
     );
@@ -35,9 +36,8 @@ class AddKinPageState extends State<AddKinPage> {
       return;
     }
 
-    List<AppUser> list = (await widget.friendInteractionProvider.queryFriends(query))
+    List<SearchQueryResponse> list = (await widget.friendInteractionProvider.queryFriends(query))
         .where((response) => response.relationship != FriendQueryType.friendsWith)
-        .map<AppUser>((response) => response.user)
         .toList();
     setState(() {
       widget.searchResults = list;

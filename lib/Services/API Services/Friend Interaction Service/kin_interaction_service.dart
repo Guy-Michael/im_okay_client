@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/search_query_response.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'dart:convert';
 
 class KinInteractionsApiService implements IKinInteractionsService {
   @override
-  Future<void> respondToFriendRequest(AppUser userToRespond, bool approveRequest) async {
+  Future<void> respondToKinRequest(AppUser userToRespond, bool approveRequest) async {
     String endpoint = UsersController.responseToRequest.endpoint;
-    var body = {'friendEmail': userToRespond.email, 'isApproved': approveRequest};
+    var body = {'uid': userToRespond.uid, 'isApproved': approveRequest};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }
@@ -71,10 +71,10 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<void> cancelFriendRequest({required AppUser friend}) async {
+  Future<void> cancelFriendRequest({required AppUser user}) async {
     String endpoint = UsersController.cancelFriendRequest.endpoint;
 
-    var body = {'friendEmail': friend.email};
+    var body = {'friendEmail': user.email};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
   }

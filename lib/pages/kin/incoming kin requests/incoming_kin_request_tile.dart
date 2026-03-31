@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/pages/kin/shared/kin_button.dart';
 
 class IncomingKinRequestTile extends StatefulWidget {
-  final String name;
-  final Widget whereTheConfirmDenyButtonsGo;
+  AppUser user;
+  Future<void> Function() onConfirm;
+  Future<void> Function() onDeny;
 
-  const IncomingKinRequestTile(
-      {super.key, required this.name, required this.whereTheConfirmDenyButtonsGo});
+  IncomingKinRequestTile(
+      {super.key, required this.user, required this.onConfirm, required this.onDeny});
 
   @override
   State<StatefulWidget> createState() => _IncomingKinRequestTilState();
@@ -33,14 +36,28 @@ class _IncomingKinRequestTilState extends State<IncomingKinRequestTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: NetworkImage("https://picsum.photos/200/200"))),
+                      image: DecorationImage(image: NetworkImage(widget.user.imageUrl))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(
-                    widget.name,
+                    widget.user.fullName,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                  widget.whereTheConfirmDenyButtonsGo
+                  Row(
+                    spacing: 16,
+                    children: [
+                      KinButton(
+                        type: KinButtonType.positiveAction,
+                        caption: _IncomingKinRequestTileConsts.approveButtonCaption,
+                        onPressed: widget.onConfirm,
+                      ),
+                      KinButton(
+                        type: KinButtonType.negativeAction,
+                        caption: _IncomingKinRequestTileConsts.denyButtonCaption,
+                        onPressed: widget.onDeny,
+                      ),
+                    ],
+                  )
                 ]),
               ],
             )));
@@ -61,4 +78,9 @@ class _IncomingKinRequestTilState extends State<IncomingKinRequestTile> {
       ),
     );
   }
+}
+
+class _IncomingKinRequestTileConsts {
+  static const String approveButtonCaption = "אישור";
+  static const String denyButtonCaption = "ביטול";
 }

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Models/search_query_response.dart';
 
 class AddKinTile extends StatefulWidget {
-  final AppUser user;
+  final SearchQueryResponse queryResponse;
 
   Future<void> Function({required AppUser user}) onAddClicked;
+  Future<void> Function({required AppUser user}) onCancelClicked;
 
-  AddKinTile({
-    super.key,
-    required this.user,
-    required this.onAddClicked,
-  });
+  AddKinTile(
+      {super.key,
+      required this.queryResponse,
+      required this.onAddClicked,
+      required this.onCancelClicked});
 
   @override
   State<StatefulWidget> createState() => AddKinTileState();
@@ -31,7 +34,7 @@ class AddKinTileState extends State<AddKinTile> {
               borderRadius: BorderRadius.circular(25),
             ),
             child: Row(
-              spacing: 12,
+              spacing: 10,
               children: [
                 Center(
                     child: Container(
@@ -40,33 +43,59 @@ class AddKinTileState extends State<AddKinTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: NetworkImage("https://picsum.photos/200/200"))),
+                      image:
+                          DecorationImage(image: NetworkImage(widget.queryResponse.user.imageUrl))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(
-                    widget.user.fullName,
+                    widget.queryResponse.user.fullName,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   Text(
-                    "0548045705",
+                    widget.queryResponse.user.phoneNumber,
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),
                 Spacer(),
-                ElevatedButton(
-                  onPressed: () => widget.onAddClicked(user: widget.user),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal, minimumSize: Size(112, 35)),
-                  child: Text(
-                    _AddKinTileConsts.addButtonCaption,
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "Inter"),
-                  ),
-                )
+                _getActionButton(widget.queryResponse.relationship)
               ],
             )));
+  }
+
+  ElevatedButton _getActionButton(FriendQueryType type) {
+    switch (type) {
+      case FriendQueryType.noRelationship:
+        {
+          return ElevatedButton(
+            onPressed: () => widget.onAddClicked(user: widget.queryResponse.user),
+            style:
+                ElevatedButton.styleFrom(backgroundColor: Colors.teal, minimumSize: Size(112, 35)),
+            child: Text(
+              _AddKinTileConsts.addButtonCaption,
+              style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "Inter"),
+            ),
+          );
+        }
+      case FriendQueryType.friendshipRequested:
+        {
+          return ElevatedButton(
+            onPressed: () => widget.onCancelClicked(user: widget.queryResponse.user),
+            style:
+                ElevatedButton.styleFrom(backgroundColor: Colors.grey, minimumSize: Size(112, 35)),
+            child: Text(
+              _AddKinTileConsts.cancelButtonCaption,
+              style:
+                  TextStyle(color: Colors.black.withAlpha(100), fontSize: 16, fontFamily: "Inter"),
+            ),
+          );
+        }
+      default:
+        throw Exception("Case not implemented!");
+    }
   }
 }
 
 class _AddKinTileConsts {
   static const String addButtonCaption = "הוספה";
+  static const String cancelButtonCaption = "ביטול";
 }

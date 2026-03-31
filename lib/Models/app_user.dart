@@ -8,6 +8,7 @@ class AppUser extends Equatable {
   String lastName;
   String imageUrl;
   String gender;
+  String phoneNumber;
   int lastSeen;
   int lastAlertTime;
 
@@ -22,6 +23,7 @@ class AppUser extends Equatable {
       this.email = '',
       this.firstName = '',
       this.lastName = '',
+      this.phoneNumber = 'NOT IMPLEMENTED',
       this.lastSeen = 0,
       this.lastAlertTime = 0,
       this.imageUrl = '',
@@ -32,6 +34,7 @@ class AppUser extends Equatable {
         email = getValueOrDefault(json, 'email'),
         firstName = getValueOrDefault(json, 'firstName'),
         lastName = getValueOrDefault(json, 'lastName'),
+        phoneNumber = getValueOrDefault(json, 'phoneNumber', defaultValue: 'NOT IMPLEMENTED'),
         lastSeen = getValueOrDefault(json, 'lastSeen'),
         lastAlertTime = getValueOrDefault(json, 'lastAlertTime'),
         imageUrl = getValueOrDefault(json, 'imageUrl'),
@@ -44,14 +47,15 @@ class AppUser extends Equatable {
       'firstName': firstName,
       'lastName': lastName,
       'lastSeen': lastSeen,
+      'phoneNumber': phoneNumber,
       'lastAlertTime': lastAlertTime,
       'imageUrl': imageUrl,
       'gender': gender
     };
   }
 
-  static dynamic getValueOrDefault(Map<String, dynamic> json, key) {
-    return json.containsKey(key) && json[key] != null ? json[key] : '';
+  static dynamic getValueOrDefault(Map<String, dynamic> json, key, {String defaultValue = ''}) {
+    return json.containsKey(key) && json[key] != null ? json[key] : defaultValue;
   }
 
   Duration durationSinceLastAlert() {
@@ -66,5 +70,5 @@ class AppUser extends Equatable {
 
   @override
   List<Object?> get props =>
-      [uid, firstName, lastName, email, gender, lastSeen, lastAlertTime, imageUrl];
+      [uid, firstName, lastName, email, gender, lastSeen, lastAlertTime, imageUrl, phoneNumber];
 }

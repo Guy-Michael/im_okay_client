@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/friend_interactions_api_service.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/kin_interaction_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/home/home_page.dart';
 import 'package:im_okay/pages/kin/kin management/kin_management_page.dart';

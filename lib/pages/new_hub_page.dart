@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Services/API Services/Friend Interaction Service/friend_interactions_api_provider.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 
 class NewHubPage extends StatefulWidget {

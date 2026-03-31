@@ -24,8 +24,11 @@ class MyKinPageState extends State<MyKinPage> {
 
     return StreamBuilder<List<AppUser>>(
         stream: streamController.stream,
-        initialData: [],
         builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+
           if (snapshot.data!.isEmpty) {
             return EmptyKinPage(
               title: _MyKinPageConsts.title,

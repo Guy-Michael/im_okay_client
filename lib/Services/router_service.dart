@@ -80,7 +80,10 @@ final GoRouter globalRouter = GoRouter(
           ],
         ),
         StatefulShellBranch(routes: [
-          GoRoute(path: Routes.home, name: Routes.home, builder: (context, state) => HomePage())
+          GoRoute(
+              path: Routes.home,
+              name: Routes.home,
+              builder: (context, state) => HomePage(kinInteractionService: _kinInteractionService))
         ])
       ],
     ),

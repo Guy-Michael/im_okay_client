@@ -1,47 +1,72 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
+import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 import 'package:im_okay/pages/home/components/without_alerts/home_body_no_alerts.dart';
 import 'package:im_okay/pages/home/my_status.dart';
 
 class HomePage extends StatefulWidget {
+  IKinInteractionsService kinInteractionService;
   late AlertsHomePageToggle toggle = AlertsHomePageToggle.kinNotReported;
-  HomePage({super.key});
+  HomePage({super.key, required this.kinInteractionService});
 
   @override
   State<StatefulWidget> createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
+  late StreamController<List<AppUser>>? controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = StreamUtils.initStreamController(
+        func: widget.kinInteractionService.getAllKin, duration: Duration(seconds: 10));
+  }
+
+  @override
+  void dispose() {
+    controller?.close();
+    controller = null;
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //TODO: Logic here is wrong.
-    // I think the flow should be:
-    // a Stream builder \ Provider that gets all kin.
-    // On the home page widget, we will divide into 3 groups:
-    // 1. Have no alerts
-    // 2. have alerts and not reported
-    // 3. have alerts and have reported
-    // If 2 or 3 are not empty, go to home body with alerts
-    // If only 1 is not empty, go to home body without alerts
-    List<AppUser> users = simulateAListOfUsersWithAndWithoutAlerts();
-    Widget body = areAlertsActive(users) ? HomeBodyWithAlerts() : HomeBodyNoAlerts();
-    return Scaffold(body: Column(children: [MyStatus(), body]));
-  }
+    return StreamBuilder(
+        stream: controller!.stream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-  List<AppUser> simulateAListOfUsersWithAndWithoutAlerts() {
-    List<AppUser> users = [
-      AppUser(
-          firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035000, lastSeen: 1777097000),
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035800),
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774034940)
-    ];
+          List<AppUser> usersWithAlertsInTheLast30Minutes = snapshot.data!.where((user) {
+            Duration durationSinceLastAlert = user.durationSinceLastAlert();
+            return durationSinceLastAlert < Duration(minutes: 30);
+          }).toList();
 
-    return users;
-  }
+          if (usersWithAlertsInTheLast30Minutes.isEmpty) {
+            return HomeBodyNoAlerts();
+          }
 
-  bool areAlertsActive(List<AppUser> users) {
-    return users.where((user) => !user.hasReportedSafeDuringAlert).isNotEmpty;
+          List<AppUser> safeKin = usersWithAlertsInTheLast30Minutes
+              .where((user) => user.durationSinceLastSeen() < user.durationSinceLastAlert())
+              .toList();
+
+          List<AppUser> kinNotReportedYet = usersWithAlertsInTheLast30Minutes
+              .where((user) => user.durationSinceLastSeen() >= user.durationSinceLastAlert())
+              .toList();
+
+          return Scaffold(
+              body: Column(children: [
+            MyStatus(),
+            HomeBodyWithAlerts(kinReported: safeKin, kinNotYetReported: kinNotReportedYet)
+          ]));
+        });
   }
 }
 

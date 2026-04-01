@@ -9,8 +9,9 @@ enum AlertsHomePageToggle { kinReported, kinNotReported }
 
 class HomeBodyWithAlerts extends StatefulWidget {
   AlertsHomePageToggle toggle = AlertsHomePageToggle.kinNotReported;
-
-  HomeBodyWithAlerts({super.key});
+  List<AppUser> kinNotYetReported;
+  List<AppUser> kinReported;
+  HomeBodyWithAlerts({super.key, required this.kinNotYetReported, required this.kinReported});
 
   @override
   State<StatefulWidget> createState() => HomeBodyWithAlertsState();
@@ -19,14 +20,7 @@ class HomeBodyWithAlerts extends StatefulWidget {
 class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
   @override
   Widget build(BuildContext context) {
-    List<AppUser> users = [
-      AppUser(
-          firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940, lastSeen: 1774095940),
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940),
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940)
-    ];
-
-    List<Widget> userTiles = getTileList(users, widget.toggle);
+    List<Widget> userTiles = getTileList(widget.toggle);
 
     return Column(
       children: [
@@ -38,12 +32,19 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
     );
   }
 
-  List<Widget> getTileList(List<AppUser> users, AlertsHomePageToggle toggle) {
+  List<Widget> getTileList(AlertsHomePageToggle toggle) {
     Iterable<Widget> list;
-    if (toggle == AlertsHomePageToggle.kinNotReported) {
-      list = users.map((user) => HomeKinUpdateTileNotReported(user: user));
-    } else {
-      list = users.map((user) => HomeKinUpdateTileReported(user: user));
+    switch (toggle) {
+      case AlertsHomePageToggle.kinNotReported:
+        {
+          list = widget.kinNotYetReported.map((user) => HomeKinUpdateTileNotReported(user: user));
+          break;
+        }
+      case AlertsHomePageToggle.kinReported:
+        {
+          list = widget.kinReported.map((user) => HomeKinUpdateTileReported(user: user));
+          break;
+        }
     }
 
     return list.toList();
@@ -52,6 +53,5 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
   void onToggle(AlertsHomePageToggle toggle) {
     logger.log("Got mode $toggle");
     setState(() => widget.toggle = toggle);
-    // widget.toggle = toggle;
   }
 }

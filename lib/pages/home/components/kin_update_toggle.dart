@@ -16,6 +16,7 @@ class _KinUpdateToggleState extends State<KinUpdateToggle> {
     return ToggleButtons(
       borderRadius: BorderRadius.circular(50),
       isSelected: widget.isSelected,
+      selectedColor: Colors.green,
       onPressed: (int newIndex) {
         setState(() {
           for (int index = 0; index < widget.isSelected.length; index++) {

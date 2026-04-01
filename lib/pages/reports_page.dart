@@ -9,7 +9,7 @@ import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
 Future<List<AppUser>> future(IKinInteractionsService provider) async {
-  List<AppUser> users = await provider.getAllFriends();
+  List<AppUser> users = await provider.getAllKin();
   return users;
 }
 
@@ -33,7 +33,7 @@ class ReportsPageState extends State<ReportsPage> {
     activeUserStreamController = StreamController<AppUser?>();
 
     friendStreamController
-        ?.addStream(StreamUtils.initStream(func: widget.friendInteractionProvider.getAllFriends));
+        ?.addStream(StreamUtils.initStream(func: widget.friendInteractionProvider.getAllKin));
 
     activeUserStreamController
         ?.addStream(StreamUtils.initStream(func: UserAuthenticationApiService.fetchUser));

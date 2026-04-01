@@ -33,7 +33,7 @@ final GoRouter globalRouter = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return NewHubPage(
-          friendInteractionProvider: _kinInteractionService,
+          kinInteractionProvider: _kinInteractionService,
           child: navigationShell,
         );
       },

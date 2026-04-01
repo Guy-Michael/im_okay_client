@@ -46,7 +46,7 @@ class MyStatusState extends State<MyStatus> {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Color.fromARGB(255, 128, 0, 0),
-            fontSize: 20,
+            fontSize: 19,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w600,
           ),
@@ -68,5 +68,5 @@ class _MyStatusConsts {
   static const String topComponentTitleAlertTriggered = "הופעלה אזעקה?";
   static const String topComponentTitleNoStatus = "ללא סטאטוס";
   static const String topComponentTitleImOkay = "אני בסדר";
-  static const String topComponentButtonCaption = "עדכן סטאטוס";
+  static const String topComponentButtonCaption = "עדכון סטאטוס";
 }

@@ -20,7 +20,7 @@ class MyKinPageState extends State<MyKinPage> {
   @override
   Widget build(BuildContext context) {
     StreamController<List<AppUser>> streamController = StreamUtils.initStreamController(
-        duration: Duration(seconds: 10), func: widget.kinInteractionsService.getAllFriends);
+        duration: Duration(seconds: 10), func: widget.kinInteractionsService.getAllKin);
 
     return StreamBuilder<List<AppUser>>(
         stream: streamController.stream,

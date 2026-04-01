@@ -41,7 +41,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<List<AppUser>> getAllFriends() async {
+  Future<List<AppUser>> getAllKin() async {
     String endpoint = UsersController.getFriendList.endpoint;
 
     String responseBody = await HttpUtils.get(endpoint: endpoint);

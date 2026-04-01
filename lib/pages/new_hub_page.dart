@@ -4,10 +4,10 @@ import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/i
 import 'package:im_okay/Utils/Consts/consts.dart';
 
 class NewHubPage extends StatefulWidget {
-  final IKinInteractionsService friendInteractionProvider;
+  final IKinInteractionsService kinInteractionProvider;
   final Widget child;
 
-  const NewHubPage({required this.friendInteractionProvider, required this.child, super.key});
+  const NewHubPage({required this.kinInteractionProvider, required this.child, super.key});
 
   @override
   State<StatefulWidget> createState() => NewHubPageState();

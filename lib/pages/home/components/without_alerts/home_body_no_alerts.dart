@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/pages/home/my_status.dart';
 import 'package:im_okay/pages/shared_components/go_to_add_kin_page_button.dart';
 
 class HomeBodyNoAlerts extends StatefulWidget {
@@ -12,6 +13,7 @@ class HomeBodyNoAlertsState extends State<HomeBodyNoAlerts> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      MyStatus(),
       Container(
         width: double.infinity,
         padding: const EdgeInsets.only(top: 28, left: 16, right: 16, bottom: 28),

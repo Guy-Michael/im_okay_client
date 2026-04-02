@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 
 enum HomePageCaptionMode { allAccounted, awaitingForUpdates }
 
 class AllKinAccountedForCaption extends StatefulWidget {
-  HomePageCaptionMode mode;
-  AllKinAccountedForCaption({super.key, required this.mode});
+  AlertsHomePageToggle toggle;
+  AllKinAccountedForCaption({super.key, required this.toggle});
 
   @override
   State<StatefulWidget> createState() => _AllKinAccountedForCaptionState();
@@ -13,11 +14,11 @@ class AllKinAccountedForCaption extends StatefulWidget {
 class _AllKinAccountedForCaptionState extends State<AllKinAccountedForCaption> {
   @override
   Widget build(BuildContext context) {
-    String caption = widget.mode == HomePageCaptionMode.allAccounted
+    String caption = widget.toggle == AlertsHomePageToggle.kinNotReported
         ? _AllKinAccountedForCaptionConsts.allAccounted
         : _AllKinAccountedForCaptionConsts.awaitingUpdates;
 
-    IconData icon = widget.mode == HomePageCaptionMode.allAccounted
+    IconData icon = widget.toggle == AlertsHomePageToggle.kinNotReported
         ? _AllKinAccountedForCaptionConsts.allAccountedIcon
         : _AllKinAccountedForCaptionConsts.waitingForUpdateIcon;
 

@@ -6,7 +6,7 @@ import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/i
 import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 import 'package:im_okay/pages/home/components/without_alerts/home_body_no_alerts.dart';
-import 'package:im_okay/pages/home/my_status.dart';
+import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 
 class HomePage extends StatefulWidget {
   IKinInteractionsService kinInteractionService;

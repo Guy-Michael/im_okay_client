@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/pages/home/my_status.dart';
+import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 import 'package:im_okay/pages/shared_components/go_to_add_kin_page_button.dart';
 
 class HomeBodyNoAlerts extends StatefulWidget {

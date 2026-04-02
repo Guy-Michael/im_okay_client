@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/Logger/my_logger.dart';
 import 'package:im_okay/pages/home/components/kin_update_toggle.dart';
-import 'package:im_okay/pages/home/components/with_alerts/all_kin_accounted_for_caption.dart';
+import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts_empty_caption.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_kin_update_tile_not_reported.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_kin_update_tile_reported.dart';
 
@@ -31,7 +31,7 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
         Container(
             margin: EdgeInsets.only(top: 12),
             child: userTiles.isEmpty
-                ? AllKinAccountedForCaption(toggle: widget.toggle)
+                ? HomeBodyAlertsEmptyCaption(toggle: widget.toggle)
                 : Column(spacing: 16, children: userTiles))
       ],
     );

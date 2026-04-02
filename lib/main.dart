@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/API%20Services/Alerts%20Service/alerts_service.dart';
@@ -71,7 +72,8 @@ void main() async {
   //   },
   // );
 
-  runApp(MaterialApp.router(
+  runApp(ProviderScope(
+      child: MaterialApp.router(
     debugShowCheckedModeBanner: false,
     locale: const Locale('he', 'IL'),
     supportedLocales: const [Locale('he', 'IL')],
@@ -81,7 +83,7 @@ void main() async {
       GlobalCupertinoLocalizations.delegate,
     ],
     routerConfig: globalRouter,
-  ));
+  )));
 }
 
 @pragma('vm:entry-point')

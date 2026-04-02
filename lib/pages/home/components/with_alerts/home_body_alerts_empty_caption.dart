@@ -3,15 +3,15 @@ import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart'
 
 enum HomePageCaptionMode { allAccounted, awaitingForUpdates }
 
-class AllKinAccountedForCaption extends StatefulWidget {
+class HomeBodyAlertsEmptyCaption extends StatefulWidget {
   AlertsHomePageToggle toggle;
-  AllKinAccountedForCaption({super.key, required this.toggle});
+  HomeBodyAlertsEmptyCaption({super.key, required this.toggle});
 
   @override
-  State<StatefulWidget> createState() => _AllKinAccountedForCaptionState();
+  State<StatefulWidget> createState() => _HomeBodyAlertsEmptyCaptionState();
 }
 
-class _AllKinAccountedForCaptionState extends State<AllKinAccountedForCaption> {
+class _HomeBodyAlertsEmptyCaptionState extends State<HomeBodyAlertsEmptyCaption> {
   @override
   Widget build(BuildContext context) {
     String caption = widget.toggle == AlertsHomePageToggle.kinNotReported

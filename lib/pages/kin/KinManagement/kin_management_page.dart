@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/pages/kin/kin%20management/components/kin_management_button.dart';
-import 'package:im_okay/pages/kin/kin%20management/components/kin_page_title.dart';
+import 'package:im_okay/pages/kin/KinManagement/components/kin_management_button.dart';
+import 'package:im_okay/pages/kin/KinManagement/components/kin_page_title.dart';
 
 class KinManagementPage extends StatefulWidget {
   const KinManagementPage({super.key});

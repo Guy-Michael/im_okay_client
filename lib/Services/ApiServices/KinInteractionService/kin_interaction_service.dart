@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/search_query_response.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
+import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'dart:convert';
@@ -41,7 +41,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<List<AppUser>> getAllFriends() async {
+  Future<List<AppUser>> getAllKin() async {
     String endpoint = UsersController.getFriendList.endpoint;
 
     String responseBody = await HttpUtils.get(endpoint: endpoint);

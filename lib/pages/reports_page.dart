@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
-import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
 Future<List<AppUser>> future(IKinInteractionsService provider) async {
-  List<AppUser> users = await provider.getAllFriends();
+  List<AppUser> users = await provider.getAllKin();
   return users;
 }
 
@@ -25,18 +26,21 @@ class ReportsPage extends StatefulWidget {
 class ReportsPageState extends State<ReportsPage> {
   late StreamController<List<AppUser>>? friendStreamController;
   late StreamController<AppUser?>? activeUserStreamController;
+  late IAuthenticationService _authService;
 
   @override
   void initState() {
     super.initState();
+
+    _authService = serviceInjector.get<IAuthenticationService>();
+
     friendStreamController = StreamController<List<AppUser>>();
     activeUserStreamController = StreamController<AppUser?>();
 
     friendStreamController
-        ?.addStream(StreamUtils.initStream(func: widget.friendInteractionProvider.getAllFriends));
+        ?.addStream(StreamUtils.initStream(func: widget.friendInteractionProvider.getAllKin));
 
-    activeUserStreamController
-        ?.addStream(StreamUtils.initStream(func: UserAuthenticationApiService.fetchUser));
+    activeUserStreamController?.addStream(StreamUtils.initStream(func: _authService.fetchUser));
   }
 
   @override

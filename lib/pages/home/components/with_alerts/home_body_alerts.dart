@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/Logger/my_logger.dart';
 import 'package:im_okay/pages/home/components/kin_update_toggle.dart';
+import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts_empty_caption.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_kin_update_tile_not_reported.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_kin_update_tile_reported.dart';
 
@@ -9,8 +10,9 @@ enum AlertsHomePageToggle { kinReported, kinNotReported }
 
 class HomeBodyWithAlerts extends StatefulWidget {
   AlertsHomePageToggle toggle = AlertsHomePageToggle.kinNotReported;
-
-  HomeBodyWithAlerts({super.key});
+  List<AppUser> kinNotYetReported;
+  List<AppUser> kinReported;
+  HomeBodyWithAlerts({super.key, required this.kinNotYetReported, required this.kinReported});
 
   @override
   State<StatefulWidget> createState() => HomeBodyWithAlertsState();
@@ -19,31 +21,35 @@ class HomeBodyWithAlerts extends StatefulWidget {
 class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
   @override
   Widget build(BuildContext context) {
-    List<AppUser> users = [
-      AppUser(
-          firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940, lastSeen: 1774095940),
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940),
-      AppUser(firstName: "Guy", lastName: "Michael", lastAlertTime: 1774035940)
-    ];
-
-    List<Widget> userTiles = getTileList(users, widget.toggle);
+    List<Widget> userTiles = getTileList(widget.toggle);
 
     return Column(
       children: [
         KinUpdateToggle(
           onToggle: onToggle,
         ),
-        Container(margin: EdgeInsets.only(top: 12), child: Column(spacing: 16, children: userTiles))
+        Container(
+            margin: EdgeInsets.only(top: 12),
+            child: userTiles.isEmpty
+                ? HomeBodyAlertsEmptyCaption(toggle: widget.toggle)
+                : Column(spacing: 16, children: userTiles))
       ],
     );
   }
 
-  List<Widget> getTileList(List<AppUser> users, AlertsHomePageToggle toggle) {
+  List<Widget> getTileList(AlertsHomePageToggle toggle) {
     Iterable<Widget> list;
-    if (toggle == AlertsHomePageToggle.kinNotReported) {
-      list = users.map((user) => HomeKinUpdateTileNotReported(user: user));
-    } else {
-      list = users.map((user) => HomeKinUpdateTileReported(user: user));
+    switch (toggle) {
+      case AlertsHomePageToggle.kinNotReported:
+        {
+          list = widget.kinNotYetReported.map((user) => HomeKinUpdateTileNotReported(user: user));
+          break;
+        }
+      case AlertsHomePageToggle.kinReported:
+        {
+          list = widget.kinReported.map((user) => HomeKinUpdateTileReported(user: user));
+          break;
+        }
     }
 
     return list.toList();
@@ -52,6 +58,5 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
   void onToggle(AlertsHomePageToggle toggle) {
     logger.log("Got mode $toggle");
     setState(() => widget.toggle = toggle);
-    // widget.toggle = toggle;
   }
 }

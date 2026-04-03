@@ -18,6 +18,10 @@ class AppUser extends Equatable {
     return lastSeen > lastAlertTime;
   }
 
+  bool get isOk {
+    return durationSinceLastAlert() > durationSinceLastSeen();
+  }
+
   AppUser(
       {this.uid = '',
       this.email = '',

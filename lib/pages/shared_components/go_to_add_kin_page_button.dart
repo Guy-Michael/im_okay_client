@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Styles/text_styles.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 
 class GoToAddKinPageButton extends StatefulWidget {
@@ -16,12 +17,7 @@ class GoToAddKinPageButtonState extends State<GoToAddKinPageButton> {
         label: Text(
           _GoToAddAddKinPageButtonConsts.buttonCaption,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: const Color(0xFF203648),
-            fontSize: 20,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyles.subHeader,
         ),
         onPressed: () => globalRouter.pushReplacement(Routes.kin.addKin),
         icon: Icon(Icons.add_circle, color: Colors.teal),

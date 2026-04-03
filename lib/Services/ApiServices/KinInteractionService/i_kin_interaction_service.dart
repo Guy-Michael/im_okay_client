@@ -8,7 +8,7 @@ abstract class IKinInteractionsService {
 
   Future<List<SearchQueryResponse>> queryFriends(String searchQuery);
 
-  Future<List<AppUser>> getAllFriends();
+  Future<List<AppUser>> getAllKin();
 
   Future<void> sendFriendRequest({required AppUser user});
 

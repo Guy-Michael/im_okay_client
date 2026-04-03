@@ -16,6 +16,7 @@ class _KinUpdateToggleState extends State<KinUpdateToggle> {
     return ToggleButtons(
       borderRadius: BorderRadius.circular(50),
       isSelected: widget.isSelected,
+      selectedColor: Colors.green,
       onPressed: (int newIndex) {
         setState(() {
           for (int index = 0; index < widget.isSelected.length; index++) {
@@ -29,13 +30,18 @@ class _KinUpdateToggleState extends State<KinUpdateToggle> {
         widget.onToggle(getCurrentMode());
       },
       children: [
-        Container(
-            padding: EdgeInsets.only(left: 23, right: 23),
-            child: Text(_KinUpdateToggleConsts.notUpdatedYetToggleCaption)),
-        Container(
-          padding: EdgeInsets.only(left: 23, right: 23),
-          child: Text(_KinUpdateToggleConsts.alreadyUpdatedToggleCaption),
-        ),
+        Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Row(spacing: 10, children: [
+              Icon(Icons.hourglass_top),
+              Text(_KinUpdateToggleConsts.notUpdatedYetToggleCaption),
+            ])),
+        Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Row(spacing: 10, children: [
+              Icon(Icons.co_present_outlined),
+              Text(_KinUpdateToggleConsts.notUpdatedYetToggleCaption),
+            ])),
       ],
     );
   }

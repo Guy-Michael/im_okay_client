@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Models/app_user.dart';
 
 class MyKinTile extends StatefulWidget {
-  final String name;
-  final String phoneNumber;
+  final AppUser user;
 
-  const MyKinTile({super.key, required this.name, required this.phoneNumber});
+  const MyKinTile({super.key, required this.user});
 
   @override
   State<StatefulWidget> createState() => _MyKinTileState();
@@ -32,15 +32,15 @@ class _MyKinTileState extends State<MyKinTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: NetworkImage("https://picsum.photos/200/200"))),
+                      image: DecorationImage(image: NetworkImage(widget.user.imageUrl))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(
-                    widget.name,
+                    widget.user.fullName,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   Text(
-                    widget.phoneNumber,
+                    widget.user.phoneNumber,
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),

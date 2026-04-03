@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/alert_area.dart';
-import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Services/ApiServices/AuthenticationService/authentication_service.dart';
+import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/location_service.dart' as location_service;
 import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
 
@@ -16,9 +18,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
+  late IAuthenticationService _authService;
+
   @override
   void initState() {
     super.initState();
+
+    _authService = serviceInjector.get<IAuthenticationService>();
   }
 
   Future<String> future() async {
@@ -58,16 +64,16 @@ class SettingsPageState extends State<SettingsPage> {
                           caption: SettingsPageConsts.deleteAccountButtonCaption),
                     ]))));
   }
-}
 
-Future<void> onLogoutButtonClicked() async {
-  await UserAuthenticationApiService.signOut();
-}
+  Future<void> onLogoutButtonClicked() async {
+    await _authService.signOut();
+  }
 
-Future<void> onDeleteUserButtonClicked() async {
-  await UserAuthenticationApiService.deleteSignedInUserAndSignOut();
+  Future<void> onDeleteUserButtonClicked() async {
+    await _authService.deleteSignedInUserAndSignOut();
 
-  globalRouter.go(Routes.auth.authRedirectPage);
+    globalRouter.go(Routes.auth.authRedirectPage);
+  }
 }
 
 class SettingsPageConsts {

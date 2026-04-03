@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Styles/text_styles.dart';
+import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 
 enum HomePageCaptionMode { allAccounted, awaitingForUpdates }
 
-class AllKinAccountedForCaption extends StatefulWidget {
-  HomePageCaptionMode mode;
-  AllKinAccountedForCaption({super.key, required this.mode});
+class HomeBodyAlertsEmptyCaption extends StatefulWidget {
+  AlertsHomePageToggle toggle;
+  HomeBodyAlertsEmptyCaption({super.key, required this.toggle});
 
   @override
-  State<StatefulWidget> createState() => _AllKinAccountedForCaptionState();
+  State<StatefulWidget> createState() => _HomeBodyAlertsEmptyCaptionState();
 }
 
-class _AllKinAccountedForCaptionState extends State<AllKinAccountedForCaption> {
+class _HomeBodyAlertsEmptyCaptionState extends State<HomeBodyAlertsEmptyCaption> {
   @override
   Widget build(BuildContext context) {
-    String caption = widget.mode == HomePageCaptionMode.allAccounted
+    String caption = widget.toggle == AlertsHomePageToggle.kinNotReported
         ? _AllKinAccountedForCaptionConsts.allAccounted
         : _AllKinAccountedForCaptionConsts.awaitingUpdates;
 
-    IconData icon = widget.mode == HomePageCaptionMode.allAccounted
+    IconData icon = widget.toggle == AlertsHomePageToggle.kinNotReported
         ? _AllKinAccountedForCaptionConsts.allAccountedIcon
         : _AllKinAccountedForCaptionConsts.waitingForUpdateIcon;
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -34,12 +36,7 @@ class _AllKinAccountedForCaptionState extends State<AllKinAccountedForCaption> {
             child: Text(
               caption,
               textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyles.subHeader,
             ),
           ),
           Icon(icon),

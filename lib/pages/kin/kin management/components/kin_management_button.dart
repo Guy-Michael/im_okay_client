@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:im_okay/Styles/text_styles.dart';
 
 class KinManagementButton extends StatefulWidget {
   final String destination;
@@ -41,12 +42,7 @@ class _KinManagementButtonState extends State<KinManagementButton> {
                 Text(
                   widget.label,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyles.subHeader,
                 ),
                 Expanded(
                   child: Container(),

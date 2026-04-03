@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Styles/text_styles.dart';
 import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 import 'package:im_okay/pages/shared_components/go_to_add_kin_page_button.dart';
 
@@ -38,12 +39,7 @@ Widget noAlertTitle() {
   return Text(
     _HomeBodyNoAlertsConsts.noAletsTitle,
     textAlign: TextAlign.center,
-    style: TextStyle(
-      color: Colors.black,
-      fontSize: 20,
-      fontFamily: 'Inter',
-      fontWeight: FontWeight.w600,
-    ),
+    style: TextStyles.subHeader,
   );
 }
 

@@ -1,35 +1,28 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:im_okay/Models/app_user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:im_okay/Providers/providers.dart';
 import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
-import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/kin/my%20kin/my_kin_tile.dart';
 
-class MyKinPage extends StatefulWidget {
+class MyKinPage extends ConsumerStatefulWidget {
   final IKinInteractionsService kinInteractionsService;
   const MyKinPage({super.key, required this.kinInteractionsService});
 
   @override
-  State<StatefulWidget> createState() => MyKinPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => MyKinPageState();
 }
 
-class MyKinPageState extends State<MyKinPage> {
+class MyKinPageState extends ConsumerState<MyKinPage> {
   @override
   Widget build(BuildContext context) {
-    StreamController<List<AppUser>> streamController = StreamUtils.initStreamController(
-        duration: Duration(seconds: 10), func: widget.kinInteractionsService.getAllKin);
-
-    return StreamBuilder<List<AppUser>>(
-        stream: streamController.stream,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.data!.isEmpty) {
+    final kin = ref.watch(kinProvider);
+    return kin.when(
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Container(),
+        data: (data) {
+          if (data.isEmpty) {
             return EmptyKinPage(
               title: _MyKinPageConsts.title,
               subtitle: _MyKinPageConsts.emptyPageSubtitle,
@@ -38,7 +31,7 @@ class MyKinPageState extends State<MyKinPage> {
             );
           }
 
-          List<MyKinTile> list = snapshot.data!.map((user) => MyKinTile(user: user)).toList();
+          List<MyKinTile> list = data.map((user) => MyKinTile(user: user)).toList();
 
           return KinPageBase(
             title: _MyKinPageConsts.title,

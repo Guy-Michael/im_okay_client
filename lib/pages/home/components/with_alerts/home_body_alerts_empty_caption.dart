@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:im_okay/Styles/text_styles.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 
 enum HomePageCaptionMode { allAccounted, awaitingForUpdates }
@@ -22,7 +23,7 @@ class _HomeBodyAlertsEmptyCaptionState extends State<HomeBodyAlertsEmptyCaption>
         ? _AllKinAccountedForCaptionConsts.allAccountedIcon
         : _AllKinAccountedForCaptionConsts.waitingForUpdateIcon;
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -35,12 +36,7 @@ class _HomeBodyAlertsEmptyCaptionState extends State<HomeBodyAlertsEmptyCaption>
             child: Text(
               caption,
               textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyles.subHeader,
             ),
           ),
           Icon(icon),

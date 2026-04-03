@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/kin_interaction_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/pages/home/home_page.dart';
 import 'package:im_okay/pages/kin/kin management/kin_management_page.dart';
@@ -13,7 +12,6 @@ import 'package:im_okay/pages/new_hub_page.dart';
 import 'package:im_okay/pages/settings.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
-final _kinInteractionService = KinInteractionsApiService();
 
 final GoRouter globalRouter = GoRouter(
   initialLocation: Routes.auth.authRedirectPage,
@@ -22,8 +20,7 @@ final GoRouter globalRouter = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
       path: Routes.auth.authRedirectPage,
-      builder: (context, state) =>
-          AuthRedirectPage(friendInteractionProvider: _kinInteractionService),
+      builder: (context, state) => AuthRedirectPage(),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigationKey,
@@ -33,7 +30,6 @@ final GoRouter globalRouter = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return NewHubPage(
-          kinInteractionProvider: _kinInteractionService,
           child: navigationShell,
         );
       },
@@ -49,22 +45,16 @@ final GoRouter globalRouter = GoRouter(
                   GoRoute(
                       path: Routes.kin.myKin,
                       name: Routes.kin.myKin,
-                      builder: (context, state) => MyKinPage(
-                            kinInteractionsService: _kinInteractionService,
-                          )),
+                      builder: (context, state) => MyKinPage()),
                   GoRoute(
                     path: Routes.kin.addKin,
                     name: Routes.kin.addKin,
-                    builder: (context, state) => AddKinPage(
-                      friendInteractionProvider: _kinInteractionService,
-                    ),
+                    builder: (context, state) => AddKinPage(),
                   ),
                   GoRoute(
                     path: Routes.kin.kinRequests,
                     name: Routes.kin.kinRequests,
-                    builder: (context, state) => IncomingKinRequestsPage(
-                      friendInteractionProvider: _kinInteractionService,
-                    ),
+                    builder: (context, state) => IncomingKinRequestsPage(),
                   ),
                 ]),
           ],
@@ -80,10 +70,7 @@ final GoRouter globalRouter = GoRouter(
           ],
         ),
         StatefulShellBranch(routes: [
-          GoRoute(
-              path: Routes.home,
-              name: Routes.home,
-              builder: (context, state) => HomePage(kinInteractionService: _kinInteractionService))
+          GoRoute(path: Routes.home, name: Routes.home, builder: (context, state) => HomePage())
         ])
       ],
     ),

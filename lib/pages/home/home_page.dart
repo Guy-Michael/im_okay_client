@@ -2,29 +2,34 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
+import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 import 'package:im_okay/pages/home/components/without_alerts/home_body_no_alerts.dart';
 import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 
 class HomePage extends StatefulWidget {
-  IKinInteractionsService kinInteractionService;
-  late AlertsHomePageToggle toggle = AlertsHomePageToggle.kinNotReported;
-  HomePage({super.key, required this.kinInteractionService});
+  const HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
+  late final IKinInteractionsService _kinInteractionService;
   late StreamController<List<AppUser>>? controller;
+
+  late AlertsHomePageToggle toggle = AlertsHomePageToggle.kinNotReported;
 
   @override
   void initState() {
     super.initState();
+
+    _kinInteractionService = serviceInjector.get<IKinInteractionsService>();
+
     controller = StreamUtils.initStreamController(
-        func: widget.kinInteractionService.getAllKin, duration: Duration(seconds: 10));
+        func: _kinInteractionService.getAllKin, duration: Duration(seconds: 10));
   }
 
   @override

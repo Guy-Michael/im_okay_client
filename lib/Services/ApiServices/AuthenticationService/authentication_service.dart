@@ -5,12 +5,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 
-class UserAuthenticationApiService {
-  static final GoogleSignIn googleSignIn = GoogleSignIn(
+class AuthenticationService implements IAuthenticationService {
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
       'openid',
@@ -18,7 +19,8 @@ class UserAuthenticationApiService {
     ],
   );
 
-  static Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
+  @override
+  Future<String> getFirebaseAuthToken({bool forceRefresh = true}) async {
     // return cacheService.getAuthToken() ?? '';
     if (auth.FirebaseAuth.instance.currentUser == null) {
       // await signOut();
@@ -28,9 +30,11 @@ class UserAuthenticationApiService {
     return (await auth.FirebaseAuth.instance.currentUser!.getIdToken())!;
   }
 
-  static Future<AppUser?> get appUser async => await fetchUser();
+  @override
+  Future<AppUser?> get appUser async => await fetchUser();
 
-  static Future<bool> registerNewUser(UserCredential credentials) async {
+  @override
+  Future<bool> registerNewUser(UserCredential credentials) async {
     String endpoint = AuthController.registerEndpoint.endpoint;
     Map<String, dynamic> profile = credentials.additionalUserInfo!.profile!;
 
@@ -52,7 +56,8 @@ class UserAuthenticationApiService {
     return true;
   }
 
-  static Future<AppUser?> fetchUser() async {
+  @override
+  Future<AppUser?> fetchUser() async {
     String endpoint = AuthController.fetchUserEndpoint.endpoint;
 
     try {
@@ -64,14 +69,16 @@ class UserAuthenticationApiService {
     }
   }
 
-  static Future<void> deleteSignedInUserAndSignOut() async {
+  @override
+  Future<void> deleteSignedInUserAndSignOut() async {
     String endpoint = AuthController.deleteUser.endpoint;
 
     bool deletedSuccessfully = await HttpUtils.delete(endpoint: endpoint);
     await signOut();
   }
 
-  static Future<bool> registerOrSignIn() async {
+  @override
+  Future<bool> registerOrSignIn() async {
     UserCredential? cred = await signIn();
     if (cred == null) {
       return false;
@@ -80,23 +87,24 @@ class UserAuthenticationApiService {
     bool authenticationSuccessful = false;
     bool isNewUser = cred.additionalUserInfo?.isNewUser ?? false;
     if (isNewUser) {
-      await UserAuthenticationApiService.registerNewUser(cred);
+      await registerNewUser(cred);
       authenticationSuccessful = true;
     } else {
-      AppUser? user = await UserAuthenticationApiService.fetchUser();
+      AppUser? user = await fetchUser();
       if (user != null) {
         authenticationSuccessful = true;
       } else {
-        await UserAuthenticationApiService.registerNewUser(cred);
+        await registerNewUser(cred);
       }
     }
 
     return authenticationSuccessful;
   }
 
-  static Future<UserCredential?> signIn() async {
-    await googleSignIn.signOut();
-    GoogleSignInAccount? user = await googleSignIn.signIn();
+  @override
+  Future<UserCredential?> signIn() async {
+    await _googleSignIn.signOut();
+    GoogleSignInAccount? user = await _googleSignIn.signIn();
 
     GoogleSignInAuthentication? auth = await user?.authentication;
 
@@ -110,7 +118,8 @@ class UserAuthenticationApiService {
     return firebaseCreds;
   }
 
-  static Future<void> signOut() async {
+  @override
+  Future<void> signOut() async {
     await auth.FirebaseAuth.instance.signOut();
     globalRouter.replace(Routes.auth.authRedirectPage);
   }

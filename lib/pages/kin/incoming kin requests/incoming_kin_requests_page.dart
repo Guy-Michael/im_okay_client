@@ -2,30 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
+import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_request_tile.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 
 class IncomingKinRequestsPage extends StatefulWidget {
-  final IKinInteractionsService friendInteractionProvider;
-
-  const IncomingKinRequestsPage({required this.friendInteractionProvider, super.key});
+  const IncomingKinRequestsPage({super.key});
 
   @override
   IncomingKinRequestsPageState createState() => IncomingKinRequestsPageState();
 }
 
 class IncomingKinRequestsPageState extends State<IncomingKinRequestsPage> {
+  late final IKinInteractionsService _kinInteractionsService;
   late StreamController<List<AppUser>>? friendRequestStreamController;
 
   @override
   void initState() {
     super.initState();
+
+    _kinInteractionsService = serviceInjector.get<IKinInteractionsService>();
+
     friendRequestStreamController = StreamUtils.initStreamController(
-        func: widget.friendInteractionProvider.getIncomingPendingRequests,
-        duration: Duration(seconds: 5));
+        func: _kinInteractionsService.getIncomingPendingRequests, duration: Duration(seconds: 5));
   }
 
   @override
@@ -54,10 +56,8 @@ class IncomingKinRequestsPageState extends State<IncomingKinRequestsPage> {
             list: snapshot.data!
                 .map<IncomingKinRequestTile>((user) => IncomingKinRequestTile(
                       user: user,
-                      onConfirm: () =>
-                          widget.friendInteractionProvider.respondToKinRequest(user, true),
-                      onDeny: () =>
-                          widget.friendInteractionProvider.respondToKinRequest(user, false),
+                      onConfirm: () => _kinInteractionsService.respondToKinRequest(user, true),
+                      onDeny: () => _kinInteractionsService.respondToKinRequest(user, false),
                     ))
                 .toList());
       },

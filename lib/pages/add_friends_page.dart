@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
+import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Widgets/list_tile.dart';
 import 'package:im_okay/Widgets/my_text_field.dart';

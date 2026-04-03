@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/kin_interaction_service.dart';
-import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
 
-final _kinInteractionService = KinInteractionsApiService();
+IKinInteractionsService _kinInteractionService = serviceInjector.get<IKinInteractionsService>();
+IAuthenticationService _authService = serviceInjector.get<IAuthenticationService>();
 
 final userProvider = StreamProvider.autoDispose((_) {
-  return StreamUtils.initStream(
-      func: UserAuthenticationApiService.fetchUser, duration: Duration(seconds: 10));
+  return StreamUtils.initStream(func: _authService.fetchUser, duration: Duration(seconds: 10));
 });
 
 final kinProvider = StreamProvider.autoDispose(

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Services/API%20Services/Friend%20Interaction%20Service/ikin_interaction_service.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 
 class NewHubPage extends StatefulWidget {
-  final IKinInteractionsService kinInteractionProvider;
   final Widget child;
 
-  const NewHubPage({required this.kinInteractionProvider, required this.child, super.key});
+  NewHubPage({required this.child, super.key});
 
   @override
   State<StatefulWidget> createState() => NewHubPageState();

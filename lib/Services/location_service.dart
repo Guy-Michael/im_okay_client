@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:im_okay/Models/alert_area.dart';
-import 'package:im_okay/Services/API%20Services/polygons.dart' as data;
+import 'package:im_okay/Services/ApiServices/polygons.dart' as data;
 import 'package:geolocator/geolocator.dart';
 import 'package:point_in_polygon/point_in_polygon.dart';
 

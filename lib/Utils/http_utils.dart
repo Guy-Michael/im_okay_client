@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:im_okay/Services/API%20Services/User%20Authentication%20Service/user_authentication_api_service.dart';
+import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/Logger/my_logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:im_okay/Services/service_injector.dart';
 
 // var logger = Logger();
 
 class HttpUtils {
+  static final IAuthenticationService _authService = serviceInjector.get<IAuthenticationService>();
+
   static Uri composeUri({required String endpoint, Map<String, Object>? queryParams}) {
     String url = dotenv.get('serverUrl');
     Uri uri = Uri.http(url, endpoint, queryParams);
@@ -16,7 +19,7 @@ class HttpUtils {
   }
 
   static Future<Map<String, String>> _getHeaders() async {
-    String idToken = await UserAuthenticationApiService.getFirebaseAuthToken();
+    String idToken = await _authService.getFirebaseAuthToken();
     var headers = {
       HttpHeaders.contentTypeHeader: 'Application/json',
       HttpHeaders.authorizationHeader: idToken

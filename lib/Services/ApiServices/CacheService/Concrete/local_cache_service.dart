@@ -1,4 +1,4 @@
-import 'package:im_okay/Services/API%20Services/CacheService/Abstract/cache_service.dart';
+import 'package:im_okay/Services/ApiServices/CacheService/Abstract/cache_service.dart';
 import 'package:localstorage/localstorage.dart';
 
 class LocalCacheService implements CacheService {

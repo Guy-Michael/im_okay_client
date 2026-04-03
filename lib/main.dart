@@ -7,12 +7,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Models/alert.dart';
-import 'package:im_okay/Services/API%20Services/Alerts%20Service/alerts_service.dart';
-import 'package:im_okay/Services/API%20Services/CacheService/Abstract/cache_service.dart';
-import 'package:im_okay/Services/API%20Services/CacheService/Concrete/local_cache_service.dart';
+import 'package:im_okay/Services/ApiServices/Alerts%20Service/alerts_service.dart';
+import 'package:im_okay/Services/ApiServices/CacheService/Abstract/cache_service.dart';
+import 'package:im_okay/Services/ApiServices/CacheService/Concrete/local_cache_service.dart';
 import 'package:im_okay/Services/Logger/my_logger.dart';
 import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
 import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/firebase_options.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -71,6 +72,8 @@ void main() async {
   //     cacheService.setAuthToken(token);
   //   },
   // );
+
+  registerServices();
 
   runApp(ProviderScope(
       child: MaterialApp.router(

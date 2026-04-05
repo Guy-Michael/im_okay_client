@@ -37,6 +37,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   riverpod: ^2.6.1
   get_it: ^9.2.1
+  settings_ui: ^2.0.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.1

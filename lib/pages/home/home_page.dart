@@ -8,7 +8,6 @@ import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/home/components/update_status_popup.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 import 'package:im_okay/pages/home/components/without_alerts/home_body_no_alerts.dart';
-import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

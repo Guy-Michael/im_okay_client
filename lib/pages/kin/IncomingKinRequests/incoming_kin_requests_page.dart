@@ -6,7 +6,7 @@ import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interac
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
-import 'package:im_okay/pages/kin/incoming%20kin%20requests/incoming_kin_request_tile.dart';
+import 'package:im_okay/pages/kin/IncomingKinRequests/incoming_kin_request_tile.dart';
 import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 
 class IncomingKinRequestsPage extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:im_okay/Utils/Consts/consts.dart';
 class NewHubPage extends StatefulWidget {
   final Widget child;
 
-  NewHubPage({required this.child, super.key});
+  const NewHubPage({required this.child, super.key});
 
   @override
   State<StatefulWidget> createState() => NewHubPageState();

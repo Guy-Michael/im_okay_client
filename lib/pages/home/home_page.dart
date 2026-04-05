@@ -5,6 +5,7 @@ import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/stream_utils.dart';
+import 'package:im_okay/pages/home/components/update_status_popup.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts.dart';
 import 'package:im_okay/pages/home/components/without_alerts/home_body_no_alerts.dart';
 import 'package:im_okay/pages/home/components/my_status/my_status.dart';
@@ -19,8 +20,9 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   late final IKinInteractionsService _kinInteractionService;
   late StreamController<List<AppUser>>? controller;
-
   late AlertsHomePageToggle toggle = AlertsHomePageToggle.kinNotReported;
+  bool showStatusUpdatePopup = false;
+  bool popupVisible = false;
 
   @override
   void initState() {
@@ -54,24 +56,48 @@ class HomePageState extends State<HomePage> {
             return durationSinceLastAlert < Duration(minutes: 30);
           }).toList();
 
+          Widget body;
+
           if (usersWithAlertsInTheLast30Minutes.isEmpty) {
-            return HomeBodyNoAlerts();
+            body = HomeBodyNoAlerts(
+              onUpdateStatusClicked: () => onUpdateStatusClicked(context),
+            );
+          } else {
+            List<AppUser> safeKin = usersWithAlertsInTheLast30Minutes
+                .where((user) => user.durationSinceLastSeen() < user.durationSinceLastAlert())
+                .toList();
+
+            List<AppUser> kinNotReportedYet = usersWithAlertsInTheLast30Minutes
+                .where((user) => user.durationSinceLastSeen() >= user.durationSinceLastAlert())
+                .toList();
+
+            body = HomeBodyWithAlerts(
+              kinReported: safeKin,
+              kinNotYetReported: kinNotReportedYet,
+              onUpdateStatusClicked: () => onUpdateStatusClicked(context),
+            );
           }
 
-          List<AppUser> safeKin = usersWithAlertsInTheLast30Minutes
-              .where((user) => user.durationSinceLastSeen() < user.durationSinceLastAlert())
-              .toList();
-
-          List<AppUser> kinNotReportedYet = usersWithAlertsInTheLast30Minutes
-              .where((user) => user.durationSinceLastSeen() >= user.durationSinceLastAlert())
-              .toList();
-
           return Scaffold(
-              body: Column(children: [
-            MyStatus(),
-            HomeBodyWithAlerts(kinReported: safeKin, kinNotYetReported: kinNotReportedYet)
+              body: Stack(children: [
+            body,
+            Center(
+                child: Visibility(
+              visible: popupVisible,
+              child: UpdateStatusPopup(
+                onDismiss: onPopupDismiss,
+                onReportOkClicked: _kinInteractionService.reportOkay,
+              ),
+            )),
           ]));
         });
+  }
+
+  void onPopupDismiss() => setState(() => popupVisible = false);
+  void onUpdateStatusClicked(BuildContext context) {
+    setState(() {
+      popupVisible = true;
+    });
   }
 }
 

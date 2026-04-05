@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MyStatusAlarmTriggered extends StatefulWidget {
-  const MyStatusAlarmTriggered({super.key});
+  void Function() onUpdateStatusClicked;
+
+  MyStatusAlarmTriggered({super.key, required this.onUpdateStatusClicked});
 
   @override
   State createState() => MyStatusAlarmTriggeredState();
@@ -30,7 +32,7 @@ class MyStatusAlarmTriggeredState extends State<MyStatusAlarmTriggered> {
                 textAlign: TextAlign.center,
                 style: buttonTextStyle,
               ),
-              onPressed: () {},
+              onPressed: widget.onUpdateStatusClicked,
               icon: buttonIcon,
               style: topComponentButtonStyle),
         ),

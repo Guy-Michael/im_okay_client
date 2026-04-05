@@ -6,7 +6,9 @@ import 'package:im_okay/pages/home/components/my_status/my_status_im_ok.dart';
 import 'package:im_okay/pages/home/components/my_status/my_status_no_status.dart';
 
 class MyStatus extends ConsumerStatefulWidget {
-  const MyStatus({super.key});
+  void Function() onUpdateStatusClicked;
+
+  MyStatus({super.key, required this.onUpdateStatusClicked});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MyStatusState();
@@ -20,13 +22,17 @@ class MyStatusState extends ConsumerState<MyStatus> {
         padding: const EdgeInsets.only(top: 50, bottom: 20),
         decoration: BoxDecoration(color: const Color.fromARGB(255, 244, 244, 244)),
         child: user.when(
-            loading: () => MyStatusNoStatus(),
+            loading: () => MyStatusNoStatus(
+                  onUpdateStatusClicked: widget.onUpdateStatusClicked,
+                ),
             error: (object, stackTrace) => null,
             data: (user) {
               if (user!.isOk) {
                 return MyStatusImOk();
               } else {
-                return MyStatusAlarmTriggered();
+                return MyStatusAlarmTriggered(
+                  onUpdateStatusClicked: widget.onUpdateStatusClicked,
+                );
               }
             }));
   }

@@ -4,7 +4,9 @@ import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 import 'package:im_okay/pages/SharedComponents/go_to_add_kin_page_button.dart';
 
 class HomeBodyNoAlerts extends StatefulWidget {
-  const HomeBodyNoAlerts({super.key});
+  void Function() onUpdateStatusClicked;
+
+  HomeBodyNoAlerts({super.key, required this.onUpdateStatusClicked});
 
   @override
   State<StatefulWidget> createState() => HomeBodyNoAlertsState();
@@ -14,7 +16,9 @@ class HomeBodyNoAlertsState extends State<HomeBodyNoAlerts> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      MyStatus(),
+      MyStatus(
+        onUpdateStatusClicked: widget.onUpdateStatusClicked,
+      ),
       Container(
         width: double.infinity,
         padding: const EdgeInsets.only(top: 28, left: 16, right: 16, bottom: 28),

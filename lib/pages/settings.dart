@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/alert_area.dart';
-import 'package:im_okay/Services/ApiServices/AuthenticationService/authentication_service.dart';
 import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/location_service.dart' as location_service;
 import 'package:im_okay/Services/router_service.dart';

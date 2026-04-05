@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MyStatusNoStatus extends StatefulWidget {
-  const MyStatusNoStatus({super.key});
+  void Function() onUpdateStatusClicked;
+
+  MyStatusNoStatus({super.key, required this.onUpdateStatusClicked});
 
   @override
   State createState() => MyStatusNoStatusState();
@@ -30,7 +32,7 @@ class MyStatusNoStatusState extends State<MyStatusNoStatus> {
                 textAlign: TextAlign.center,
                 style: buttonTextStyle,
               ),
-              onPressed: () {},
+              onPressed: widget.onUpdateStatusClicked,
               icon: buttonIcon,
               style: topComponentButtonStyle),
         ),

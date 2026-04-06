@@ -50,16 +50,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                           interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
                           style: settingNameStyle,
                         );
-                      })
-
-                  // FutureBuilder<String>(
-                  //     future: future(),
-                  //     builder: (context, snapshot) {
-                  //       if (!snapshot.hasData) {
-                  //         return Center(child: CircularProgressIndicator());
-                  //       }
-                  //     })
-                  )),
+                      }))),
         ),
         body: SettingsList(
           applicationType: ApplicationType.both,

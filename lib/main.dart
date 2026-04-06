@@ -11,7 +11,7 @@ import 'package:im_okay/Services/ApiServices/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/ApiServices/CacheService/Abstract/cache_service.dart';
 import 'package:im_okay/Services/ApiServices/CacheService/Concrete/local_cache_service.dart';
 import 'package:im_okay/Services/Logger/my_logger.dart';
-import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
+import 'package:im_okay/Services/NotificationServices/in_app_message_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/firebase_options.dart';

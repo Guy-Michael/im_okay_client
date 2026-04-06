@@ -53,8 +53,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                       }))),
         ),
         body: SettingsList(
-          applicationType: ApplicationType.both,
-          platform: DevicePlatform.iOS,
           sections: [
             SettingsSection(
               title: Text(

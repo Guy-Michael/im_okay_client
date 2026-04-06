@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
+import 'package:im_okay/Services/NotificationServices/in_app_message_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';

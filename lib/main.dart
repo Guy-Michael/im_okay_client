@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Models/alert.dart';
-import 'package:im_okay/Services/ApiServices/Alerts%20Service/alerts_service.dart';
+import 'package:im_okay/Services/ApiServices/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/ApiServices/CacheService/Abstract/cache_service.dart';
 import 'package:im_okay/Services/ApiServices/CacheService/Concrete/local_cache_service.dart';
 import 'package:im_okay/Services/Logger/my_logger.dart';
@@ -94,10 +94,12 @@ Future<void> notifyUserIsInAlertZoneBackground(RemoteMessage event) async {
   if (event == null) {
     return;
   }
+
+  final alertsService = serviceInjector.get<AlertsService>();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   logger.log('intercepting in background');
   Alert alert = Alert.fromJson(event.data);
-  await AlertsService.reportAlertIfNeeded(alert);
+  await alertsService.reportAlertIfNeeded(alert);
   logger.log("done!!");
 }
 
@@ -108,8 +110,9 @@ Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
     return;
   }
 
+  final alertsService = serviceInjector.get<AlertsService>();
   InAppMessageService.showToast(message: "אזעקה באיזורך!");
   Alert alert = Alert.fromJson(event.data);
-  await AlertsService.reportAlertIfNeeded(alert);
+  await alertsService.reportAlertIfNeeded(alert);
   logger.log("done!!");
 }

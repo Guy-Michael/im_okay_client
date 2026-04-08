@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Providers/providers.dart';
-import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Services/router_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
@@ -65,6 +65,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   title: Text("Onboarding Screen", style: _settingNameDangerousStyle),
                   trailing: _iosBackArrowIcon,
                   onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),
+                ),
+                SettingsTile.navigation(
+                  title: Text(""),
                 )
               ],
             ),

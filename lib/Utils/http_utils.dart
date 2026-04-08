@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Services/Logger/my_logger.dart';
+import 'package:im_okay/Logger/my_logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:im_okay/Services/service_injector.dart';
 

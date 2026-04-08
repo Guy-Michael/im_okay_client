@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:im_okay/Providers/providers.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
-import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/string_utils.dart';
@@ -166,7 +166,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
   Future<void> onDeleteUserButtonClicked() async {
     await _authService.deleteSignedInUserAndSignOut();
 
-    globalRouter.go(Routes.auth.authRedirectPage);
+    globalRouter.replaceNamed(Routes.auth.authRedirectPage);
   }
 
   final TextStyle _sectionNameStyle =

@@ -3,8 +3,8 @@ import 'package:im_okay/Enums/friend_query_type_enum.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
+import 'package:im_okay/pages/Kin/KinPageBase/kin_page_base.dart';
 import 'package:im_okay/pages/kin/AddKin/components/add_kin_tile.dart';
-import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 
 class AddKinPage extends StatefulWidget {
   const AddKinPage({super.key});

@@ -6,7 +6,7 @@ import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 

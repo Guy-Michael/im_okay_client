@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:im_okay/Providers/providers.dart';
 import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
@@ -48,7 +49,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                       data: (alertZone) {
                         return Text(
                           interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
-                          style: settingNameStyle,
+                          style: _settingNameStyle,
                         );
                       }))),
         ),
@@ -56,85 +57,98 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           sections: [
             SettingsSection(
               title: Text(
+                "Debug",
+                style: _sectionNameStyle,
+              ),
+              tiles: [
+                SettingsTile.navigation(
+                  title: Text("Onboarding Screen", style: _settingNameDangerousStyle),
+                  trailing: _iosBackArrowIcon,
+                  onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),
+                )
+              ],
+            ),
+            SettingsSection(
+              title: Text(
                 _SettingsPageConsts.sectionNameSettings,
-                style: sectionNameStyle,
+                style: _sectionNameStyle,
               ),
               tiles: <SettingsTile>[
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingNotifications,
-                    style: settingNameStyle,
+                    style: _settingNameStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingLocationServices,
-                    style: settingNameStyle,
+                    style: _settingNameStyle,
                   ),
                   description: Text(
                     _SettingsPageConsts.settingDescriptionLocationServices,
-                    style: settingDescriptionStyle,
+                    style: _settingDescriptionStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
               ],
             ),
             SettingsSection(
               title: Text(
                 _SettingsPageConsts.sectionNameSupport,
-                style: sectionNameStyle,
+                style: _sectionNameStyle,
               ),
               tiles: <SettingsTile>[
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingQAndQ,
-                    style: settingNameStyle,
+                    style: _settingNameStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingContactUS,
-                    style: settingNameStyle,
+                    style: _settingNameStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingTermsOfUse,
-                    style: settingNameStyle,
+                    style: _settingNameStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingPrivacyPolicy,
-                    style: settingNameStyle,
+                    style: _settingNameStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
               ],
             ),
             SettingsSection(
               title: Text(
                 _SettingsPageConsts.sectionNameLogout,
-                style: sectionNameStyle,
+                style: _sectionNameStyle,
               ),
               tiles: <SettingsTile>[
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingLogOut,
-                    style: settingNameDangerousStyle,
+                    style: _settingNameDangerousStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
                   title: Text(
                     _SettingsPageConsts.settingAccountDeletion,
-                    style: settingNameDangerousStyle,
+                    style: _settingNameDangerousStyle,
                   ),
-                  trailing: iosBackArrowIcon,
+                  trailing: _iosBackArrowIcon,
                 ),
               ],
             ),
@@ -152,19 +166,19 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     globalRouter.go(Routes.auth.authRedirectPage);
   }
 
-  TextStyle sectionNameStyle =
+  final TextStyle _sectionNameStyle =
       TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.w700);
 
-  TextStyle settingNameStyle =
+  final TextStyle _settingNameStyle =
       TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700);
 
-  TextStyle settingNameDangerousStyle = TextStyle(
+  final TextStyle _settingNameDangerousStyle = TextStyle(
       color: const Color.fromARGB(255, 142, 14, 5), fontSize: 20, fontWeight: FontWeight.w700);
 
-  TextStyle settingDescriptionStyle =
+  final TextStyle _settingDescriptionStyle =
       TextStyle(color: Colors.grey, fontSize: 15, fontWeight: FontWeight.w900);
 
-  Icon iosBackArrowIcon = Icon(Icons.arrow_forward_ios);
+  final Icon _iosBackArrowIcon = Icon(Icons.arrow_forward_ios);
 }
 
 class _SettingsPageConsts {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/pages/Onboarding/onboarding_page.dart';
 import 'package:im_okay/pages/home/home_page.dart';
 import 'package:im_okay/pages/kin/KinManagement/kin_management_page.dart';
 import 'package:im_okay/pages/auth_redirect_page.dart';
@@ -63,10 +64,16 @@ final GoRouter globalRouter = GoRouter(
           initialLocation: Routes.settings,
           routes: [
             GoRoute(
-              path: Routes.settings,
-              name: Routes.settings,
-              builder: (context, state) => SettingsPage(),
-            )
+                path: Routes.settings,
+                name: Routes.settings,
+                builder: (context, state) => SettingsPage(),
+                routes: [
+                  GoRoute(
+                    path: Routes.onboarding_TEMP,
+                    name: Routes.onboarding_TEMP,
+                    builder: (context, state) => OnboardingPage(),
+                  )
+                ])
           ],
         ),
         StatefulShellBranch(routes: [

@@ -7,6 +7,8 @@ import 'package:im_okay/Services/ApiServices/KinInteractionService/kin_interacti
 import 'package:im_okay/Services/ApiServices/AuthenticationService/authentication_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Services/LocationService/location_service.dart';
+import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
+import 'package:im_okay/Services/NotificationServices/notifications_service.dart';
 
 GetIt serviceInjector = GetIt.instance;
 
@@ -15,4 +17,5 @@ void registerServices() {
   serviceInjector.registerSingleton<IAuthenticationService>(AuthenticationService());
   serviceInjector.registerSingleton<ILocationService>(LocationService());
   serviceInjector.registerSingleton<IAlertsService>(AlertsService());
+  serviceInjector.registerSingleton<INotificationsService>(NotificationsService());
 }

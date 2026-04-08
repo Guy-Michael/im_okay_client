@@ -11,7 +11,7 @@ class LocationService implements ILocationService {
 
   @override
   Future<AlertArea> getUserAlertZone() async {
-    await checkForLocationPermission();
+    await checkOrRequestLocationPermission();
     Position position = await Geolocator.getCurrentPosition();
     List<AlertArea> closestAreas = _getClosestAlertAreas(position);
     for (AlertArea area in closestAreas) {
@@ -24,7 +24,7 @@ class LocationService implements ILocationService {
   }
 
   @override
-  Future<bool> checkForLocationPermission() async {
+  Future<bool> checkOrRequestLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 

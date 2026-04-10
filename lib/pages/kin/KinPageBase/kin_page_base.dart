@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/pages/kin/KinManagement/components/kin_page_title.dart';
 import 'package:im_okay/pages/SharedComponents/user_tile_column.dart';
-// import 'package:im_okay/pages/kin/shared/kin_page_title.dart';
 
 class KinPageBase extends StatefulWidget {
   String title;

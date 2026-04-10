@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/search_query_response.dart';
-import 'package:im_okay/Services/ApiServices/KinInteractionService/i_kin_interaction_service.dart';
+import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'dart:convert';

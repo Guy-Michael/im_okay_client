@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:im_okay/Providers/providers.dart';
+import 'package:im_okay/pages/Kin/KinPageBase/kin_page_base.dart';
 import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
-import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/kin/MyKin/my_kin_tile.dart';
 
 class MyKinPage extends ConsumerStatefulWidget {

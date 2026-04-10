@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
+import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:im_okay/Widgets/purple_button.dart';
@@ -15,12 +15,15 @@ class LoginPage extends StatefulWidget {
 
 class LoginState extends State<LoginPage> {
   late IAuthenticationService _authService;
+  late INotificationsService _notificationsService;
   bool clicked = false;
 
   @override
   void initState() {
     super.initState();
+
     _authService = serviceInjector.get<IAuthenticationService>();
+    _notificationsService = serviceInjector.get<INotificationsService>();
   }
 
   @override
@@ -35,12 +38,12 @@ class LoginState extends State<LoginPage> {
     bool success = await _authService.registerOrSignIn();
     if (success) {
       if (!mounted) return;
-      InAppMessageService.showToast(message: _LoginConsts.loginSuccessfullMessage);
+      _notificationsService.showToast(message: _LoginConsts.loginSuccessfullMessage);
 
       ctx.goNamed(Routes.kin.kinManagement);
     } else {
       if (!mounted) return;
-      InAppMessageService.showToast(message: _LoginConsts.loginFailed);
+      _notificationsService.showToast(message: _LoginConsts.loginFailed);
     }
   }
 }

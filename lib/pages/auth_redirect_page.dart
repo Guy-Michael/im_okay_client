@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Services/ApiServices/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Services/Logger/my_logger.dart';
-import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Logger/my_logger.dart';
+import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 

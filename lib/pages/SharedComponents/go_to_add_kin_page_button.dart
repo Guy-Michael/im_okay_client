@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Services/router_service.dart';
+import 'package:go_router/go_router.dart';
 import 'package:im_okay/Styles/text_styles.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 
@@ -19,7 +19,7 @@ class GoToAddKinPageButtonState extends State<GoToAddKinPageButton> {
           textAlign: TextAlign.center,
           style: TextStyles.subHeader,
         ),
-        onPressed: () => globalRouter.pushReplacement(Routes.kin.addKin),
+        onPressed: () => context.replaceNamed(Routes.kin.addKin),
         icon: Icon(Icons.add_circle, color: Colors.teal),
         style: ButtonStyle(
             backgroundColor: WidgetStateProperty.all(Color.fromARGB(0, 0, 0, 0)),

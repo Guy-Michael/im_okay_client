@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:im_okay/Models/alert_area.dart';
-import 'package:im_okay/Services/ApiServices/polygons.dart' as data;
+import 'package:im_okay/Utils/polygons.dart' as data;
 import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:point_in_polygon/point_in_polygon.dart';
@@ -11,7 +11,7 @@ class LocationService implements ILocationService {
 
   @override
   Future<AlertArea> getUserAlertZone() async {
-    await checkForLocationPermission();
+    await checkOrRequestLocationPermission();
     Position position = await Geolocator.getCurrentPosition();
     List<AlertArea> closestAreas = _getClosestAlertAreas(position);
     for (AlertArea area in closestAreas) {
@@ -24,7 +24,7 @@ class LocationService implements ILocationService {
   }
 
   @override
-  Future<bool> checkForLocationPermission() async {
+  Future<bool> checkOrRequestLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 

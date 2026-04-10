@@ -5,14 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Models/alert.dart';
-import 'package:im_okay/Services/ApiServices/AlertsService/alerts_service.dart';
-import 'package:im_okay/Services/ApiServices/CacheService/Abstract/cache_service.dart';
-import 'package:im_okay/Services/ApiServices/CacheService/Concrete/local_cache_service.dart';
-import 'package:im_okay/Services/Logger/my_logger.dart';
-import 'package:im_okay/Services/Notification%20Services/in_app_message_service.dart';
-import 'package:im_okay/Services/router_service.dart';
+import 'package:im_okay/Services/AlertsService/alerts_service.dart';
+import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
+import 'package:im_okay/Services/CacheService/Abstract/cache_service.dart';
+import 'package:im_okay/Services/CacheService/Concrete/local_cache_service.dart';
+import 'package:im_okay/Logger/my_logger.dart';
+import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
+import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/firebase_options.dart';
 import 'package:localstorage/localstorage.dart';
@@ -25,8 +25,6 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  FirebaseMessaging.instance.requestPermission();
-  await Geolocator.requestPermission();
 
   await initLocalStorage();
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
@@ -110,8 +108,10 @@ Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
     return;
   }
 
-  final alertsService = serviceInjector.get<AlertsService>();
-  InAppMessageService.showToast(message: "אזעקה באיזורך!");
+  final alertsService = serviceInjector.get<IAlertsService>();
+  final notificationsService = serviceInjector.get<INotificationsService>();
+
+  notificationsService.showToast(message: "אזעקה באיזורך!");
   Alert alert = Alert.fromJson(event.data);
   await alertsService.reportAlertIfNeeded(alert);
   logger.log("done!!");

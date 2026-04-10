@@ -1,7 +1,7 @@
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Models/alert_area.dart';
-import 'package:im_okay/Services/ApiServices/AlertsService/i_alerts_service.dart';
+import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/http_utils.dart';

@@ -1,8 +1,8 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:im_okay/pages/Kin/KinPageBase/kin_page_base.dart';
 import 'package:im_okay/pages/kin/KinManagement/components/kin_page_title.dart';
-import 'package:im_okay/pages/kin/kin%20page%20base/kin_page_base.dart';
 import 'package:im_okay/pages/SharedComponents/go_to_add_kin_page_button.dart';
 
 class EmptyKinPage extends StatefulWidget {

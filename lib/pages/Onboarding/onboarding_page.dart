@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/contact.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Services/LocationService/i_location_service.dart';
-import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
+import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
+import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -18,16 +19,16 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   late final IAuthenticationService _authService;
-  late final ILocationService _locationService;
-  late final INotificationsService _notificationsService;
+  late final IPermissionsService _permissionsService;
+  late final IContactsService _contactsService;
 
   @override
   void initState() {
     super.initState();
 
     _authService = serviceInjector.get<IAuthenticationService>();
-    _locationService = serviceInjector.get<ILocationService>();
-    _notificationsService = serviceInjector.get<INotificationsService>();
+    _permissionsService = serviceInjector.get<IPermissionsService>();
+    _contactsService = serviceInjector.get<IContactsService>();
   }
 
   @override
@@ -49,7 +50,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       onDone: () => context.replaceNamed(Routes.home),
       customProgress: null, // TODO: implement this from figma
       pages: [
-        PageViewModel(
+        /* Introduction page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
               titleText: _OnboardingPageConsts.introductionPageTitle,
@@ -59,7 +60,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               imageLink: r"Assets/Onboarding/onboarding_page_1_image.png",
               actions: [],
             )),
-        PageViewModel(
+        /* Register page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
               titleText: _OnboardingPageConsts.registerPageTitle,
@@ -77,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 )
               ],
             )),
-        PageViewModel(
+        /* Post register page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
               titleText: _OnboardingPageConsts.postRegisterPageTitle,
@@ -87,7 +88,38 @@ class _OnboardingPageState extends State<OnboardingPage> {
               nextButtonCaption: _OnboardingPageConsts.postRegisterPageNextButtonCaption,
               actions: [],
             )),
-        PageViewModel(
+        /* Contacts permissions */ PageViewModel(
+            title: "",
+            bodyWidget: OnboardingPageBase(
+              titleText: _OnboardingPageConsts.requestContactAccessPermissionsPageTitle,
+              description: _OnboardingPageConsts.requestContactAccessPermissionsPageDescription,
+              imageLink: r"Assets/Onboarding/onboarding_page_3_image.png",
+              actions: [
+                ElevatedButton.icon(
+                  iconAlignment: IconAlignment.end,
+                  icon: Icon(Icons.location_on_outlined),
+                  onPressed: () async {
+                    await _permissionsService.requestContactsPermission();
+                    List<Contact> contacts = await _contactsService.getAllContacts();
+                    _introScreenKey.currentState!.next();
+                  },
+                  label:
+                      Text(_OnboardingPageConsts.requestContactAccessPermissionsPageButtonCaption),
+                )
+              ],
+            )),
+        // /* Phone number verification page */ PageViewModel(
+        //   title: "",
+        //   bodyWidget: OnboardingPageBase(
+        //     titleText: "",
+        //     description: "",
+        //     imageLink: r"Assets/Onboarding/onboarding_page_3_image.png",
+        //   showNextButton: true,
+        //   nextButtonCaption: _OnboardingPageConsts.postRegisterPageNextButtonCaption,
+        //   actions: [],
+        //   )
+        // ),
+        /* Location permissions page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
               titleText: _OnboardingPageConsts.requestLocationPermissionPageTitle,
@@ -98,14 +130,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   iconAlignment: IconAlignment.end,
                   icon: Icon(Icons.location_on_outlined),
                   onPressed: () async {
-                    await _locationService.checkOrRequestLocationPermission();
+                    await _permissionsService.requestLocationPermissions();
                     _introScreenKey.currentState!.next();
                   },
                   label: Text(_OnboardingPageConsts.requestLocationPermissionPageButtonCaption),
                 )
               ],
             )),
-        PageViewModel(
+        /* Notifications permissions page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
               titleText: _OnboardingPageConsts.requestNotificationsPermissionPageTitle,
@@ -116,7 +148,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   iconAlignment: IconAlignment.end,
                   icon: Icon(Icons.notifications_active_outlined),
                   onPressed: () async {
-                    await _notificationsService.requestNotificationsPermissions();
+                    await _permissionsService.requestNotificationPermissions();
                     _introScreenKey.currentContext!.replaceNamed(Routes.home);
                   },
                   label:
@@ -142,6 +174,11 @@ class _OnboardingPageConsts {
   static const String postRegisterPageTitle = "איזה כיף שהצטרפת!";
   static const String postRegisterPageDescription = "";
   static const String postRegisterPageNextButtonCaption = "הבא";
+
+  static const String requestContactAccessPermissionsPageTitle = "גישה לאנשי קשר";
+  static const String requestContactAccessPermissionsPageDescription =
+      "כדי שתוכלו להזמין בקלות חברים ומשפחה להתחבר";
+  static const String requestContactAccessPermissionsPageButtonCaption = "אישור גישה לאנשי קשר";
 
   static const String requestLocationPermissionPageTitle = "הפרטיות שלך חשובה לנו";
   static const String requestLocationPermissionPageDescription =

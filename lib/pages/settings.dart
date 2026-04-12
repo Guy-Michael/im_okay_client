@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Providers/providers.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
@@ -67,8 +68,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),
                 ),
                 SettingsTile.navigation(
-                  title: Text(""),
-                )
+                    title: Text("Test contact associatio flow"),
+                    onPressed: (context) async => await test())
               ],
             ),
             SettingsSection(
@@ -157,6 +158,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             ),
           ],
         ));
+  }
+
+  Future test() async {
+    IKinInteractionsService kinService = serviceInjector.get<IKinInteractionsService>();
+    var users = await kinService.getContactToAppUserAssociations();
+    debugPrint("");
   }
 
   Future<void> onLogoutButtonClicked() async {

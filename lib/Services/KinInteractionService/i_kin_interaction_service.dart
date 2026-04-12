@@ -17,4 +17,6 @@ abstract class IKinInteractionsService {
   Future<void> unfriendUser({required AppUser friend});
 
   Future<void> reportOkay();
+
+  Future<List<SearchQueryResponse>> getContactToAppUserAssociations();
 }

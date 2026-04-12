@@ -18,10 +18,10 @@ GetIt serviceInjector = GetIt.instance;
 
 void registerServices() {
   serviceInjector.registerSingleton<IPermissionsService>(PermissionsService());
+  serviceInjector.registerSingleton<IContactsService>(ContactsService());
   serviceInjector.registerSingleton<IKinInteractionsService>(KinInteractionsApiService());
   serviceInjector.registerSingleton<IAuthenticationService>(AuthenticationService());
   serviceInjector.registerSingleton<ILocationService>(LocationService());
   serviceInjector.registerSingleton<IAlertsService>(AlertsService());
   serviceInjector.registerSingleton<INotificationsService>(NotificationsService());
-  serviceInjector.registerSingleton<IContactsService>(ContactsService());
 }

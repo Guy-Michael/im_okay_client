@@ -100,7 +100,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   icon: Icon(Icons.location_on_outlined),
                   onPressed: () async {
                     await _permissionsService.requestContactsPermission();
-                    List<Contact> contacts = await _contactsService.getAllContacts();
                     _introScreenKey.currentState!.next();
                   },
                   label:

@@ -1,15 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/search_query_response.dart';
+import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
+import 'package:im_okay/Utils/encryption_utils.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'dart:convert';
 
 class KinInteractionsApiService implements IKinInteractionsService {
+  late final IContactsService _contactsService;
+
+  KinInteractionsApiService() {
+    _contactsService = serviceInjector.get<IContactsService>();
+  }
+
   @override
   Future<void> respondToKinRequest(AppUser userToRespond, bool approveRequest) async {
-    String endpoint = UsersController.responseToRequest.endpoint;
+    String endpoint = SocialController.responseToRequest.endpoint;
     var body = {'uid': userToRespond.uid, 'isApproved': approveRequest};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
@@ -20,7 +29,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
     String uid = auth.FirebaseAuth.instance.currentUser!.uid;
     var body = {'uid': uid};
 
-    String endpoint = UsersController.getFriendRequests.endpoint;
+    String endpoint = SocialController.getFriendRequests.endpoint;
 
     String responseBody = await HttpUtils.post(endpoint: endpoint, body: body);
 
@@ -31,7 +40,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
   @override
   Future<List<SearchQueryResponse>> queryFriends(String searchQuery) async {
-    String endpoint = UsersController.findFriends.endpoint;
+    String endpoint = SocialController.findFriends.endpoint;
     var queryParams = {'query': searchQuery};
 
     String response = await HttpUtils.get(endpoint: endpoint, queryParams: queryParams);
@@ -42,7 +51,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
   @override
   Future<List<AppUser>> getAllKin() async {
-    String endpoint = UsersController.getFriendList.endpoint;
+    String endpoint = SocialController.getFriendList.endpoint;
 
     String responseBody = await HttpUtils.get(endpoint: endpoint);
 
@@ -56,7 +65,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
   @override
   Future<void> sendFriendRequest({required AppUser user}) async {
-    String endpoint = UsersController.sendFriendRequest.endpoint;
+    String endpoint = SocialController.sendFriendRequest.endpoint;
 
     var body = {'uid': user.uid};
 
@@ -65,14 +74,14 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
   @override
   Future<void> reportOkay() async {
-    String endpoint = UsersController.reportOkay.endpoint;
+    String endpoint = SocialController.reportOkay.endpoint;
 
     await HttpUtils.get(endpoint: endpoint);
   }
 
   @override
   Future<void> cancelFriendRequest({required AppUser user}) async {
-    String endpoint = UsersController.cancelFriendRequest.endpoint;
+    String endpoint = SocialController.cancelFriendRequest.endpoint;
 
     var body = {'friendEmail': user.email};
 
@@ -81,9 +90,26 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
   @override
   Future<void> unfriendUser({required AppUser friend}) async {
-    String endpoint = UsersController.unfriend.endpoint;
+    String endpoint = SocialController.unfriend.endpoint;
     var body = {'friendEmail': friend.email};
 
     await HttpUtils.post(endpoint: endpoint, body: body);
+  }
+
+  @override
+  Future<List<SearchQueryResponse>> getContactToAppUserAssociations() async {
+    List<String> phoneNumbers = await _contactsService.getNormalizedContactsPhoneNumbers();
+
+    //TODO: uncomment encryption
+    // List<String> encryptedPhoneNumbers = phoneNumbers.map(EncryptionUtils.encrypt).toList();
+    // var body = {'phoneNumbers': encryptedPhoneNumbers};
+
+    var body = {'phoneNumbers': phoneNumbers};
+    String endpoint = SocialController.associateContactToUser.endpoint;
+
+    String responseBody = await HttpUtils.post(endpoint: endpoint, body: body);
+    List temp = json.decode(responseBody);
+    List<SearchQueryResponse> queryResponses = SearchQueryResponse.parseList(responseBody);
+    return queryResponses;
   }
 }

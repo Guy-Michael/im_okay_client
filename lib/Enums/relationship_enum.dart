@@ -1,17 +1,17 @@
-enum FriendQueryType {
+enum Relationship {
   friendsWith('FRIENDS_WITH'),
   friendshipRequested('FRIENDSHIP_REQUESTED'),
   noRelationship('NO_RELATIONSHIP');
 
-  static FriendQueryType parse(String name) {
-    for (FriendQueryType enumVariant in FriendQueryType.values) {
+  static Relationship parse(String name) {
+    for (Relationship enumVariant in Relationship.values) {
       if (enumVariant.value == name) {
         return enumVariant;
       }
     }
-    return FriendQueryType.noRelationship;
+    return Relationship.noRelationship;
   }
 
   final String value;
-  const FriendQueryType(this.value);
+  const Relationship(this.value);
 }

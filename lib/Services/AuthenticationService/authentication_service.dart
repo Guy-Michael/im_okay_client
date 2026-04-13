@@ -11,7 +11,6 @@ import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/Utils/encryption_utils.dart';
 import 'package:im_okay/Utils/http_utils.dart';
 
 class AuthenticationService implements IAuthenticationService {

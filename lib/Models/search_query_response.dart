@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:im_okay/Enums/friend_query_type_enum.dart';
+import 'package:im_okay/Enums/relationship_enum.dart';
 import 'package:im_okay/Models/app_user.dart';
 
 class SearchQueryResponse {
   AppUser user;
-  FriendQueryType relationship;
+  Relationship relationship;
 
   SearchQueryResponse({required this.user, required this.relationship});
 
@@ -17,7 +17,6 @@ class SearchQueryResponse {
 
   static SearchQueryResponse parseSingle(dynamic obj) {
     return SearchQueryResponse(
-        user: AppUser.fromJson(obj['user']),
-        relationship: FriendQueryType.parse(obj['relationship']));
+        user: AppUser.fromJson(obj['user']), relationship: Relationship.parse(obj['relationship']));
   }
 }

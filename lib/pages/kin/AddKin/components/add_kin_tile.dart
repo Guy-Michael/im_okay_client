@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Enums/friend_query_type_enum.dart';
+import 'package:im_okay/Enums/relationship_enum.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 
@@ -62,9 +62,9 @@ class AddKinTileState extends State<AddKinTile> {
             )));
   }
 
-  ElevatedButton _getActionButton(FriendQueryType type) {
+  ElevatedButton _getActionButton(Relationship type) {
     switch (type) {
-      case FriendQueryType.noRelationship:
+      case Relationship.noRelationship:
         {
           return ElevatedButton(
             onPressed: () => widget.onAddClicked(user: widget.queryResponse.user),
@@ -76,7 +76,7 @@ class AddKinTileState extends State<AddKinTile> {
             ),
           );
         }
-      case FriendQueryType.friendshipRequested:
+      case Relationship.friendshipRequested:
         {
           return ElevatedButton(
             onPressed: () => widget.onCancelClicked(user: widget.queryResponse.user),

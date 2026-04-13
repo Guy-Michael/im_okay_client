@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';

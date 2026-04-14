@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Enums/endpoint_enums.dart';
 import 'package:im_okay/Models/app_contact.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
@@ -98,17 +99,13 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
   @override
   Future<List<SearchQueryResponse>> getContactToAppUserAssociations() async {
-    List<String> phoneNumbers = await _contactsService.getNormalizedContactsPhoneNumbers();
-    /*
-			1. get contacts
-			2. send contacts to backend
-			3. get subset of AppUsers back
-			4. convert to AppContact. But how? (Settle for a dummy function for now)
-		*/
+    List<AppContact> contacts = await _contactsService.getAllContacts();
+    List<String> phoneNumbers = contacts.map((contact) => contact.normalizedPhoneNumber).toList();
 
     //TODO: uncomment encryption
     // List<String> encryptedPhoneNumbers = phoneNumbers.map(EncryptionUtils.encrypt).toList();
     // var body = {'phoneNumbers': encryptedPhoneNumbers};
+
     var body = {'phoneNumbers': phoneNumbers};
 
     String endpoint = SocialController.associateContactToUser.endpoint;
@@ -117,7 +114,8 @@ class KinInteractionsApiService implements IKinInteractionsService {
     List temp = json.decode(responseBody);
     List<SearchQueryResponse> queryResponses = SearchQueryResponse.parseList(responseBody);
 
-    await _contactsService.mapAppUserToAppContact(queryResponses);
+    List<CachedUserData> usersData =
+        await _contactsService.mapAppUserToAppContact(queryResponses, contacts: contacts);
     return queryResponses;
   }
 }

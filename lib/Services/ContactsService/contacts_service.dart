@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:im_okay/Models/app_contact.dart';
-import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
@@ -32,15 +32,6 @@ class ContactsService implements IContactsService {
   }
 
   @override
-  Future<Contact?> getContact(String id) async {
-    bool permissionGranted = await _permissionsService.requestContactsPermission();
-    if (!permissionGranted) {
-      return null;
-    }
-    return await FlutterContacts.getContact(id);
-  }
-
-  @override
   Future<List<String>> getNormalizedContactsPhoneNumbers() async {
     List<String> appContacts = (await getAllContacts())
         .map((contact) => contact.normalizedPhoneNumber)
@@ -65,27 +56,28 @@ class ContactsService implements IContactsService {
   }
 
   @override
-  Future<List<AppContact>> mapAppUserToAppContact(List<SearchQueryResponse> users) async {
-    List<AppContact> contacts = await getAllContacts();
+  Future<List<CachedUserData>> mapAppUserToAppContact(List<SearchQueryResponse> users,
+      {List<AppContact>? contacts}) async {
+    // TODO: comparison between searchQueryResponses and contacts should be made based on
+    // hashed phone numbers and not raw, sinse the returned phone numbers for the BE are hashed.
+    //
+    contacts ??= await getAllContacts();
     List<String> phones = users.map((user) => user.user.phoneNumber).toList();
 
-    // var a = contacts.where((contact) => phones.contains(contact.normalizedPhoneNumber)).toList();
-    List<(AppContact, SearchQueryResponse)> results = [];
-
+    List<CachedUserData> usersData = [];
     for (SearchQueryResponse response in users) {
       String phone = response.user.phoneNumber;
       AppContact contact = contacts.firstWhere((element) => element.normalizedPhoneNumber == phone);
-      var model = {
-        'name': response.user.fullName,
-        'uid': response.user.uid,
-        'phone': contact.normalizedPhoneNumber,
-        'image': response.user.imageUrl,
-        'relationship': response.relationship.value
-      };
-      results.add((contact, response));
+      var model = {};
+      CachedUserData userData = CachedUserData(
+          name: response.user.fullName,
+          uid: response.user.uid,
+          phone: contact.normalizedPhoneNumber,
+          image: response.user.imageUrl,
+          relationship: response.relationship.value);
+      usersData.add(userData);
     }
 
-    // var model = {uid, name, image, relationship};
-    return [];
+    return usersData;
   }
 }

@@ -3,13 +3,14 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Providers/providers.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
+import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/Utils/string_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -33,25 +34,28 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(context) {
-    final alertZone = ref.watch(alertZoneProvider);
+    // final alertZone = ref.watch(alertZoneProvider);
 
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(100),
           child: Center(
               child: Padding(
-                  padding: EdgeInsets.only(top: 30, bottom: 30),
-                  child: alertZone.when(
-                      loading: () => Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                      error: (error, stackTrace) => Container(),
-                      data: (alertZone) {
-                        return Text(
-                          interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
-                          style: _settingNameStyle,
-                        );
-                      }))),
+            padding: EdgeInsets.only(top: 30, bottom: 30),
+            // child:
+            // alertZone.when(
+            //     loading: () => Center(
+            //           child: CircularProgressIndicator(),
+            //         ),
+            //     error: (error, stackTrace) => Container(),
+            //     data: (alertZone) {
+            //       return Text(
+            //         interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
+            //         style: _settingNameStyle,
+            //       );
+            // }
+            // )
+          )),
         ),
         body: SettingsList(
           sections: [
@@ -67,8 +71,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),
                 ),
                 SettingsTile.navigation(
-                  title: Text(""),
-                )
+                    title: Text("Test contact associatio flow"),
+                    onPressed: (context) async => await test())
               ],
             ),
             SettingsSection(
@@ -157,6 +161,17 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             ),
           ],
         ));
+  }
+
+  Future test() async {
+    IKinInteractionsService kinService = serviceInjector.get<IKinInteractionsService>();
+    ICacheService cacheService = serviceInjector.get<ICacheService>();
+
+    var users = await kinService.getContactToAppUserAssociations();
+    cacheService.cacheUsers(users);
+    await Future.delayed(const Duration(seconds: 3));
+    List<CachedUserData> fromCache = cacheService.fetchUsers();
+    debugPrint("");
   }
 
   Future<void> onLogoutButtonClicked() async {

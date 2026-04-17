@@ -8,9 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
-import 'package:im_okay/Services/CacheService/Abstract/cache_service.dart';
-import 'package:im_okay/Services/CacheService/Concrete/local_cache_service.dart';
 import 'package:im_okay/Logger/my_logger.dart';
+import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
@@ -18,15 +17,12 @@ import 'package:im_okay/firebase_options.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-CacheService cacheService = LocalCacheService();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
-  await initLocalStorage();
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   String envFileName = kReleaseMode ? "prod.env" : "local.env";
@@ -71,7 +67,9 @@ void main() async {
   //   },
   // );
 
+  await initLocalStorage();
   registerServices();
+  await serviceInjector.get<IKinInteractionsService>().getContactToAppUserAssociations();
 
   runApp(ProviderScope(
       child: MaterialApp.router(

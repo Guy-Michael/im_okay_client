@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Enums/friend_query_type_enum.dart';
-import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Models/search_query_response.dart';
+import 'package:im_okay/Enums/relationship_enum.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
 
 class AddKinTile extends StatefulWidget {
-  final SearchQueryResponse queryResponse;
+  final CachedUserData cachedUserData;
 
-  Future<void> Function({required AppUser user}) onAddClicked;
-  Future<void> Function({required AppUser user}) onCancelClicked;
+  Future<void> Function({required CachedUserData user}) onAddClicked;
+  Future<void> Function({required CachedUserData user}) onCancelClicked;
 
   AddKinTile(
       {super.key,
-      required this.queryResponse,
+      required this.cachedUserData,
       required this.onAddClicked,
       required this.onCancelClicked});
 
@@ -43,31 +42,30 @@ class AddKinTileState extends State<AddKinTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image:
-                          DecorationImage(image: NetworkImage(widget.queryResponse.user.imageUrl))),
+                      image: DecorationImage(image: NetworkImage(widget.cachedUserData.image))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(
-                    widget.queryResponse.user.fullName,
+                    widget.cachedUserData.name,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   Text(
-                    widget.queryResponse.user.phoneNumber,
+                    widget.cachedUserData.phone,
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),
                 Spacer(),
-                _getActionButton(widget.queryResponse.relationship)
+                _getActionButton(widget.cachedUserData.relationship)
               ],
             )));
   }
 
-  ElevatedButton _getActionButton(FriendQueryType type) {
+  ElevatedButton _getActionButton(Relationship type) {
     switch (type) {
-      case FriendQueryType.noRelationship:
+      case Relationship.noRelationship:
         {
           return ElevatedButton(
-            onPressed: () => widget.onAddClicked(user: widget.queryResponse.user),
+            onPressed: () => widget.onAddClicked(user: widget.cachedUserData),
             style:
                 ElevatedButton.styleFrom(backgroundColor: Colors.teal, minimumSize: Size(112, 35)),
             child: Text(
@@ -76,10 +74,10 @@ class AddKinTileState extends State<AddKinTile> {
             ),
           );
         }
-      case FriendQueryType.friendshipRequested:
+      case Relationship.friendshipRequested:
         {
           return ElevatedButton(
-            onPressed: () => widget.onCancelClicked(user: widget.queryResponse.user),
+            onPressed: () => widget.onCancelClicked(user: widget.cachedUserData),
             style:
                 ElevatedButton.styleFrom(backgroundColor: Colors.grey, minimumSize: Size(112, 35)),
             child: Text(

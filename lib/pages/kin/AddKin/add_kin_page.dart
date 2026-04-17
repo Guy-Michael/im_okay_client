@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Enums/friend_query_type_enum.dart';
-import 'package:im_okay/Models/search_query_response.dart';
+import 'package:im_okay/Enums/relationship_enum.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/pages/Kin/KinPageBase/kin_page_base.dart';
@@ -15,12 +16,13 @@ class AddKinPage extends StatefulWidget {
 
 class AddKinPageState extends State<AddKinPage> {
   late final IKinInteractionsService _kinInteractionService;
-  List<SearchQueryResponse> searchResults = [];
+  late final ICacheService _cacheService;
+  List<CachedUserData> searchResults = [];
 
   @override
   void initState() {
     super.initState();
-
+    _cacheService = serviceInjector.get<ICacheService>();
     _kinInteractionService = serviceInjector.get<IKinInteractionsService>();
   }
 
@@ -31,8 +33,8 @@ class AddKinPageState extends State<AddKinPage> {
       displaySearchBar: true,
       onSubmitSearch: getKinSuggestions,
       list: searchResults
-          .map<AddKinTile>((queryResponse) => AddKinTile(
-                queryResponse: queryResponse,
+          .map<AddKinTile>((cachedUserData) => AddKinTile(
+                cachedUserData: cachedUserData,
                 onAddClicked: (_kinInteractionService.sendFriendRequest),
                 onCancelClicked: (_kinInteractionService.cancelFriendRequest),
               ))
@@ -41,12 +43,12 @@ class AddKinPageState extends State<AddKinPage> {
   }
 
   Future<void> getKinSuggestions(String query) async {
-    if (query.isEmpty) {
-      return;
-    }
-
-    List<SearchQueryResponse> list = (await _kinInteractionService.queryFriends(query))
-        .where((response) => response.relationship != FriendQueryType.friendsWith)
+    List<CachedUserData> list = _cacheService
+        .fetchUsers()
+        .where((response) =>
+            query.isNotEmpty &&
+            response.name.startsWith(query) &&
+            response.relationship != Relationship.friendsWith)
         .toList();
     setState(() {
       searchResults = list;

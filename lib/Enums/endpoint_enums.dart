@@ -11,7 +11,7 @@ enum AuthController {
   }
 }
 
-enum UsersController {
+enum SocialController {
   route('social'),
   reportOkay('report'),
   findFriends('query'),
@@ -20,10 +20,11 @@ enum UsersController {
   cancelFriendRequest('cancel-request'),
   unfriend('unfriend'),
   responseToRequest('respond'),
-  getFriendRequests('get-requests');
+  getFriendRequests('get-requests'),
+  associateContactToUser('query-registered-users');
 
   final String value;
-  const UsersController(this.value);
+  const SocialController(this.value);
   String get endpoint => '${route.value}/$value';
 }
 

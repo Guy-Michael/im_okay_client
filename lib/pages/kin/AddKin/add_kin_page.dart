@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:im_okay/Enums/relationship_enum.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
-import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/service_injector.dart';

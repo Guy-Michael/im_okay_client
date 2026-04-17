@@ -8,8 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
-import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
-import 'package:im_okay/Services/CacheService/Concrete/cache_service.dart';
 import 'package:im_okay/Logger/my_logger.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
@@ -25,7 +23,6 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
-  await initLocalStorage();
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   String envFileName = kReleaseMode ? "prod.env" : "local.env";
@@ -70,6 +67,7 @@ void main() async {
   //   },
   // );
 
+  await initLocalStorage();
   registerServices();
   await serviceInjector.get<IKinInteractionsService>().getContactToAppUserAssociations();
 

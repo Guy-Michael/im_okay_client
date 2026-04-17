@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
-import 'package:im_okay/Providers/providers.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
@@ -12,7 +11,6 @@ import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
-import 'package:im_okay/Utils/string_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {

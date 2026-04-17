@@ -74,7 +74,7 @@ class ContactsService implements IContactsService {
           uid: response.user.uid,
           phone: contact.normalizedPhoneNumber,
           image: response.user.imageUrl,
-          relationship: response.relationship.value);
+          relationship: response.relationship);
       usersData.add(userData);
     }
 

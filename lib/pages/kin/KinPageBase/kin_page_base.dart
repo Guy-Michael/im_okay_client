@@ -32,7 +32,7 @@ class KinPageBaseState extends State<KinPageBase> {
       ),
       if (widget.displaySearchBar)
         SearchBar(
-          onSubmitted: (value) async {
+          onChanged: (value) async {
             await widget.onSubmitSearch!(value);
           },
         ),

@@ -65,7 +65,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<void> sendFriendRequest({required AppUser user}) async {
+  Future<void> sendFriendRequest({required CachedUserData user}) async {
     String endpoint = SocialController.sendFriendRequest.endpoint;
 
     var body = {'uid': user.uid};
@@ -81,12 +81,12 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<void> cancelFriendRequest({required AppUser user}) async {
+  Future<void> cancelFriendRequest({required CachedUserData user}) async {
     String endpoint = SocialController.cancelFriendRequest.endpoint;
+    throw Exception("Change this to uid and not email!");
+    // var body = {'friendEmail': user.email};
 
-    var body = {'friendEmail': user.email};
-
-    await HttpUtils.post(endpoint: endpoint, body: body);
+    // await HttpUtils.post(endpoint: endpoint, body: body);
   }
 
   @override
@@ -98,7 +98,7 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<List<SearchQueryResponse>> getContactToAppUserAssociations() async {
+  Future<List<CachedUserData>> getContactToAppUserAssociations() async {
     List<AppContact> contacts = await _contactsService.getAllContacts();
     List<String> phoneNumbers = contacts.map((contact) => contact.normalizedPhoneNumber).toList();
 
@@ -116,6 +116,6 @@ class KinInteractionsApiService implements IKinInteractionsService {
 
     List<CachedUserData> usersData =
         await _contactsService.mapAppUserToAppContact(queryResponses, contacts: contacts);
-    return queryResponses;
+    return usersData;
   }
 }

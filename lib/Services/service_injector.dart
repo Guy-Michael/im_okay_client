@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:im_okay/Services/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
+import 'package:im_okay/Services/CacheService/Concrete/cache_service.dart';
 import 'package:im_okay/Services/ContactsService/contacts_service.dart';
 import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
@@ -24,4 +26,5 @@ void registerServices() {
   serviceInjector.registerSingleton<ILocationService>(LocationService());
   serviceInjector.registerSingleton<IAlertsService>(AlertsService());
   serviceInjector.registerSingleton<INotificationsService>(NotificationsService());
+  serviceInjector.registerSingleton<ICacheService>(CacheService());
 }

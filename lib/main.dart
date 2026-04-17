@@ -8,17 +8,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
-import 'package:im_okay/Services/CacheService/Abstract/cache_service.dart';
-import 'package:im_okay/Services/CacheService/Concrete/local_cache_service.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
+import 'package:im_okay/Services/CacheService/Concrete/cache_service.dart';
 import 'package:im_okay/Logger/my_logger.dart';
+import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/firebase_options.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-CacheService cacheService = LocalCacheService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +71,7 @@ void main() async {
   // );
 
   registerServices();
+  await serviceInjector.get<IKinInteractionsService>().getContactToAppUserAssociations();
 
   runApp(ProviderScope(
       child: MaterialApp.router(

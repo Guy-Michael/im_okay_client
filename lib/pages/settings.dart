@@ -3,12 +3,16 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:im_okay/Logger/i_logger.dart';
+import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
+import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
+import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -71,8 +75,34 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),
                 ),
                 SettingsTile.navigation(
-                    title: Text("Test contact associatio flow"),
-                    onPressed: (context) async => await test())
+                  title: Text(
+                    "Get FCM token",
+                    style: _settingNameDangerousStyle,
+                  ),
+                  onPressed: (context) async {
+                    INotificationsService notificationService =
+                        serviceInjector.get<INotificationsService>();
+                    ILogger logger = serviceInjector.get<ILogger>();
+                    String fcmToken = await notificationService.getFcmToken();
+                    logger.log("FCM token: $fcmToken");
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text("Simulate alert for user", style: _settingNameDangerousStyle),
+                  onPressed: (context) async {
+                    IAlertsService alertService = serviceInjector.get<IAlertsService>();
+                    Alert alert = Alert.now();
+                    await alertService.reportAlert(alert);
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text("Send Local Notifications", style: _settingNameDangerousStyle),
+                  onPressed: (context) async {
+                    INotificationsService notificationsService =
+                        serviceInjector.get<INotificationsService>();
+                    await notificationsService.sendLocalNotification("Testing", "HELLOOO");
+                  },
+                ),
               ],
             ),
             SettingsSection(

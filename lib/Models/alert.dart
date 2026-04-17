@@ -4,6 +4,10 @@ class Alert {
   int timestamp = 0;
   int type = -1;
 
+  Alert.now() {
+    timestamp = DateTime.now().millisecondsSinceEpoch;
+  }
+
   Alert.fromJson(Map<String, dynamic> json)
       : alertArea = json['alertArea'],
         id = json['id'],

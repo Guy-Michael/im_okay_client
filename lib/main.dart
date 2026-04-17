@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
-import 'package:im_okay/Logger/my_logger.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
@@ -17,26 +17,30 @@ import 'package:im_okay/firebase_options.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+late ILogger _logger;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   String envFileName = kReleaseMode ? "prod.env" : "local.env";
   await dotenv.load(fileName: envFileName);
 
+  await initLocalStorage();
+  await registerServices();
+  _logger = serviceInjector.get<ILogger>();
+
   if (!kReleaseMode) {
     try {
-      debugPrint("Launching authentication emulator");
       String authEmulatorUrl = dotenv.get("authEmulatorUrl");
       int authEmulatorPort = dotenv.getInt("authEmulatorPort");
       await FirebaseAuth.instance.useAuthEmulator(authEmulatorUrl, authEmulatorPort);
       // await FirebaseAuth.instance.useAuthEmulator('192.168.68.105', 9099);
     } catch (e) {
-      logger.log("Auth emulator connection failed!");
+      debugPrint("Auth emulator connection failed!");
     }
   }
 
@@ -48,6 +52,8 @@ void main() async {
       await notifyUserIsInAlertZoneForeground(event);
     },
   );
+
+  // FirebaseMessaging.
 
   // FirebaseAuth.instance.idTokenChanges().listen(
   //   (user) async {
@@ -67,8 +73,6 @@ void main() async {
   //   },
   // );
 
-  await initLocalStorage();
-  registerServices();
   await serviceInjector.get<IKinInteractionsService>().getContactToAppUserAssociations();
 
   runApp(ProviderScope(
@@ -91,8 +95,10 @@ Future<void> notifyUserIsInAlertZoneBackground(RemoteMessage event) async {
     return;
   }
 
-  final alertsService = serviceInjector.get<AlertsService>();
+  await registerServices();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final alertsService = serviceInjector.get<IAlertsService>();
+  final logger = serviceInjector.get<ILogger>();
   logger.log('intercepting in background');
   Alert alert = Alert.fromJson(event.data);
   await alertsService.reportAlertIfNeeded(alert);
@@ -100,7 +106,7 @@ Future<void> notifyUserIsInAlertZoneBackground(RemoteMessage event) async {
 }
 
 Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
-  logger.log('intercepting in foreground');
+  _logger.log('intercepting in foreground');
 
   if (event == null) {
     return;
@@ -109,8 +115,8 @@ Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
   final alertsService = serviceInjector.get<IAlertsService>();
   final notificationsService = serviceInjector.get<INotificationsService>();
 
-  notificationsService.showToast(message: "אזעקה באיזורך!");
+  notificationsService.showToast(message: event.notification!.body!);
   Alert alert = Alert.fromJson(event.data);
   await alertsService.reportAlertIfNeeded(alert);
-  logger.log("done!!");
+  _logger.log("done!!");
 }

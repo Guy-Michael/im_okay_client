@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
-import 'package:im_okay/Logger/my_logger.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:im_okay/Services/service_injector.dart';
 
-// var logger = Logger();
+ILogger _logger = serviceInjector.get<ILogger>();
 
 class HttpUtils {
   static final IAuthenticationService _authService = serviceInjector.get<IAuthenticationService>();
@@ -83,13 +83,13 @@ class HttpUtils {
   }
 
   static void log1(Uri uri, Map<String, String> headers) {
-    logger.log('***********************************');
-    logger.log("uri: $uri");
+    _logger.log('***********************************');
+    _logger.log("uri: $uri");
     // logger.log("headers: $headers");
   }
 
   static void log2(http.Response response) {
-    logger.log("response: ${response.statusCode}: ${response.body}");
-    logger.log('***********************************');
+    _logger.log("response: ${response.statusCode}: ${response.body}");
+    _logger.log('***********************************');
   }
 }

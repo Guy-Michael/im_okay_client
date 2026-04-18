@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
@@ -22,7 +20,7 @@ class NotificationsService implements INotificationsService {
 
     InitializationSettings initSettings = InitializationSettings(android: androidSettings);
     FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
-    await notificationsPlugin.initialize(initSettings);
+    await notificationsPlugin.initialize(settings: initSettings);
 
     NotificationsService service = NotificationsService._(notificationsPlugin: notificationsPlugin);
 
@@ -42,12 +40,12 @@ class NotificationsService implements INotificationsService {
 
   @override
   Future<void> sendLocalNotification(String title, String body) async {
-    // _localNotificationsPlugin.
+    await _permissionsService.requestNotificationPermissions();
     await _localNotificationsPlugin.show(
-        0,
-        title,
-        body,
-        NotificationDetails(
+        id: 0,
+        title: title,
+        body: body,
+        notificationDetails: NotificationDetails(
             android: AndroidNotificationDetails("report_alert_id", "report alert",
                 channelDescription: "Reports and alert",
                 importance: Importance.max,

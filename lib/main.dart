@@ -7,7 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Models/alert.dart';
-import 'package:im_okay/Services/AlertsService/alerts_service.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';

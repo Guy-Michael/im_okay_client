@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:im_okay/Providers/providers.dart';
+import 'package:im_okay/Enums/relationship_enum.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
+import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/pages/Kin/KinPageBase/kin_page_base.dart';
-import 'package:im_okay/pages/kin/empty_kin_page/empty_kin_page.dart';
 import 'package:im_okay/pages/kin/MyKin/my_kin_tile.dart';
 
 class MyKinPage extends ConsumerStatefulWidget {
@@ -13,29 +15,49 @@ class MyKinPage extends ConsumerStatefulWidget {
 }
 
 class MyKinPageState extends ConsumerState<MyKinPage> {
+  late final ICacheService _cacheService;
+
+  @override
+  void initState() {
+    super.initState();
+    _cacheService = serviceInjector.get<ICacheService>();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final kin = ref.watch(kinProvider);
-    return kin.when(
-        loading: () => Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Container(),
-        data: (data) {
-          if (data.isEmpty) {
-            return EmptyKinPage(
-              title: _MyKinPageConsts.title,
-              subtitle: _MyKinPageConsts.emptyPageSubtitle,
-              helpText: _MyKinPageConsts.emptyPageHelpText,
-              showAddKinButton: true,
-            );
-          }
+    List<CachedUserData> users = _cacheService.fetchUsers();
+    List<MyKinTile> tiles = users
+        .where((user) => user.relationship == Relationship.friendsWith)
+        .map((user) => MyKinTile(
+              user: user,
+            ))
+        .toList();
+    return KinPageBase(
+      title: _MyKinPageConsts.title,
+      list: tiles,
+    );
 
-          List<MyKinTile> list = data.map((user) => MyKinTile(user: user)).toList();
+    // final kin = ref.watch(kinProvider);
+    // return kin.when(
+    //     loading: () => Center(child: CircularProgressIndicator()),
+    //     error: (error, stackTrace) => Container(),
+    //     data: (data) {
+    //       if (data.isEmpty) {
+    //         return EmptyKinPage(
+    //           title: _MyKinPageConsts.title,
+    //           subtitle: _MyKinPageConsts.emptyPageSubtitle,
+    //           helpText: _MyKinPageConsts.emptyPageHelpText,
+    //           showAddKinButton: true,
+    //         );
+    //       }
 
-          return KinPageBase(
-            title: _MyKinPageConsts.title,
-            list: list,
-          );
-        });
+    //       List<MyKinTile> list = data.map((user) => MyKinTile(user: user)).toList();
+
+    //       return KinPageBase(
+    //         title: _MyKinPageConsts.title,
+    //         list: list,
+    //       );
+    //     });
   }
 }
 

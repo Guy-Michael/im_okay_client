@@ -24,8 +24,8 @@ Future<void> registerServices() async {
   _registerService<ILogger, Logger>(Logger());
   _registerService<IPermissionsService, PermissionsService>(PermissionsService());
   _registerService<IContactsService, ContactsService>(ContactsService());
-  _registerService<IKinInteractionsService, KinInteractionsApiService>(KinInteractionsApiService());
   _registerService<IAuthenticationService, AuthenticationService>(AuthenticationService());
+  _registerService<IKinInteractionsService, KinInteractionsApiService>(KinInteractionsApiService());
   _registerService<ILocationService, LocationService>(LocationService());
   _registerService<IAlertsService, AlertsService>(AlertsService());
   _registerService<INotificationsService, NotificationsService>(await NotificationsService.init());

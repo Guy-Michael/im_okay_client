@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:im_okay/Enums/app_permissions_enum.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
@@ -39,8 +40,12 @@ class NotificationsService implements INotificationsService {
   }
 
   @override
-  Future<void> sendLocalNotification(String title, String body) async {
-    await _permissionsService.requestNotificationPermissions();
+  Future<void> triggerLocalNotification({required String title, String? body}) async {
+    bool granted = await _permissionsService.checkPermission(AppPermissions.notifications);
+    if (!granted) {
+      return;
+    }
+
     await _localNotificationsPlugin.show(
         id: 0,
         title: title,
@@ -51,4 +56,14 @@ class NotificationsService implements INotificationsService {
                 importance: Importance.max,
                 priority: Priority.high)));
   }
+
+  @override
+  Future<void> triggerFriendRequestNotification() async {
+    await triggerLocalNotification(
+        title: _NotificationServiceConsts.notificationTitleIncomingFriendRequest);
+  }
+}
+
+class _NotificationServiceConsts {
+  static const String notificationTitleIncomingFriendRequest = "קיבלת בקשת חברות";
 }

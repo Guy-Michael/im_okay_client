@@ -70,7 +70,7 @@ class ContactsService implements IContactsService {
       AppContact contact = contacts.firstWhere((element) => element.normalizedPhoneNumber == phone);
       var model = {};
       CachedUserData userData = CachedUserData(
-          name: response.user.fullName,
+          name: "${contact.firstName} ${contact.lastName}",
           uid: response.user.uid,
           phone: contact.normalizedPhoneNumber,
           image: response.user.imageUrl,

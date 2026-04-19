@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
+import 'package:im_okay/Models/cached_user_data.dart';
 
 class MyKinTile extends StatefulWidget {
-  final AppUser user;
+  final CachedUserData user;
 
   const MyKinTile({super.key, required this.user});
 
@@ -32,15 +33,15 @@ class _MyKinTileState extends State<MyKinTile> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       shape: BoxShape.circle,
-                      image: DecorationImage(image: NetworkImage(widget.user.imageUrl))),
+                      image: DecorationImage(image: NetworkImage(widget.user.image))),
                 )),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 16, children: [
                   Text(
-                    widget.user.fullName,
+                    widget.user.name,
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   Text(
-                    widget.user.phoneNumber,
+                    widget.user.phone,
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   )
                 ]),

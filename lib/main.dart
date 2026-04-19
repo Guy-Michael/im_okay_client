@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
@@ -52,6 +53,17 @@ void main() async {
     },
   );
 
+  FirebaseAuth.instance.authStateChanges().listen(
+    (user) async {
+      if (user != null) {
+        var kinService = serviceInjector.get<IKinInteractionsService>();
+        var cacheService = serviceInjector.get<ICacheService>();
+        var contactAssociations = await kinService.getContactToAppUserAssociations();
+        cacheService.cacheUsers(contactAssociations);
+      }
+    },
+  );
+
   // FirebaseMessaging.
 
   // FirebaseAuth.instance.idTokenChanges().listen(
@@ -71,8 +83,6 @@ void main() async {
   //     cacheService.setAuthToken(token);
   //   },
   // );
-
-  await serviceInjector.get<IKinInteractionsService>().getContactToAppUserAssociations();
 
   runApp(ProviderScope(
       child: MaterialApp.router(
@@ -95,13 +105,20 @@ Future<void> notifyUserIsInAlertZoneBackground(RemoteMessage event) async {
   }
 
   await registerServices();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final alertsService = serviceInjector.get<IAlertsService>();
   final logger = serviceInjector.get<ILogger>();
-  logger.log('intercepting in background');
-  Alert alert = Alert.fromJson(event.data);
-  await alertsService.reportAlertIfNeeded(alert);
-  logger.log("done!!");
+  logger.log('intercepted notification');
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final notificationsService = serviceInjector.get<INotificationsService>();
+  await notificationsService.triggerFriendRequestNotification();
+  // await notificationsService.sendLocalNotification(
+  //     event.notification!.title!, event.notification!.body!);
+  // final alertsService = serviceInjector.get<IAlertsService>();
+  // final logger = serviceInjector.get<ILogger>();
+  // logger.log('intercepting in background');
+  // Alert alert = Alert.fromJson(event.data);
+  // await alertsService.reportAlertIfNeeded(alert);
+  // logger.log("done!!");
 }
 
 Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
@@ -114,8 +131,8 @@ Future<void> notifyUserIsInAlertZoneForeground(RemoteMessage event) async {
   final alertsService = serviceInjector.get<IAlertsService>();
   final notificationsService = serviceInjector.get<INotificationsService>();
 
-  notificationsService.showToast(message: event.notification!.body!);
-  Alert alert = Alert.fromJson(event.data);
-  await alertsService.reportAlertIfNeeded(alert);
+  notificationsService.showToast(message: event.notification?.body ?? "No notification");
+  // Alert alert = Alert.fromJson(event.data);
+  // await alertsService.reportAlertIfNeeded(alert);
   _logger.log("done!!");
 }

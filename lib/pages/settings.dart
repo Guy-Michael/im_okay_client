@@ -96,11 +96,15 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   },
                 ),
                 SettingsTile.navigation(
-                  title: Text("Send Local Notifications", style: _settingNameDangerousStyle),
+                  title: Text("Cache Users", style: _settingNameDangerousStyle),
                   onPressed: (context) async {
-                    INotificationsService notificationsService =
-                        serviceInjector.get<INotificationsService>();
-                    await notificationsService.sendLocalNotification("Testing", "HELLOOO");
+                    var kinService = serviceInjector.get<IKinInteractionsService>();
+                    var cacheService = serviceInjector.get<ICacheService>();
+                    var notificationsService = serviceInjector.get<INotificationsService>();
+
+                    var users = await kinService.getContactToAppUserAssociations();
+                    cacheService.cacheUsers(users);
+                    notificationsService.showToast(message: "Cached Users");
                   },
                 ),
               ],
@@ -178,6 +182,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                     _SettingsPageConsts.settingLogOut,
                     style: _settingNameDangerousStyle,
                   ),
+                  onPressed: (context) async => _authService.signOut(),
                   trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(

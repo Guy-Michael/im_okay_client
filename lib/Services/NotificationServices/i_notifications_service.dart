@@ -3,5 +3,7 @@ abstract class INotificationsService {
 
   Future<String> getFcmToken();
 
-  Future<void> sendLocalNotification(String title, String body);
+  Future<void> triggerLocalNotification({required String title, String? body});
+
+  Future<void> triggerFriendRequestNotification();
 }

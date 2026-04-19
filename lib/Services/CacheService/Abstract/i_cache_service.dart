@@ -11,5 +11,5 @@ abstract class ICacheService {
 
   void cacheUsers(List<CachedUserData> users);
 
-  List<CachedUserData> fetchUsers();
+  List<CachedUserData> fetchUsers({bool kinOnly});
 }

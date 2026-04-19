@@ -21,6 +21,7 @@ import 'package:im_okay/Services/PermissionsService/permissions_service.dart';
 GetIt serviceInjector = GetIt.instance;
 
 Future<void> registerServices() async {
+  _registerService<ICacheService, CacheService>(CacheService());
   _registerService<ILogger, Logger>(Logger());
   _registerService<IPermissionsService, PermissionsService>(PermissionsService());
   _registerService<IContactsService, ContactsService>(ContactsService());
@@ -29,7 +30,6 @@ Future<void> registerServices() async {
   _registerService<ILocationService, LocationService>(LocationService());
   _registerService<IAlertsService, AlertsService>(AlertsService());
   _registerService<INotificationsService, NotificationsService>(await NotificationsService.init());
-  _registerService<ICacheService, CacheService>(CacheService());
 }
 
 void _registerService<IT extends Object, T extends IT>(T implementation) {

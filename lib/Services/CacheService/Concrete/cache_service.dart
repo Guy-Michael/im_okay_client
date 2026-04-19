@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:im_okay/Enums/relationship_enum.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Utils/encryption_utils.dart';
@@ -34,7 +35,7 @@ class CacheService implements ICacheService {
   }
 
   @override
-  List<CachedUserData> fetchUsers() {
+  List<CachedUserData> fetchUsers({bool kinOnly = false}) {
     String encrypted = localStorage.getItem(StorageKeys.users.toString()) ?? '';
     if (encrypted == '') {
       return [];
@@ -42,8 +43,11 @@ class CacheService implements ICacheService {
 
     String decrypted = EncryptionUtils.decryptBase64(encrypted);
     List list = jsonDecode(decrypted);
-    List<CachedUserData> users = list.map((item) => CachedUserData.fromJson(item)).toList();
-    return users;
+    var users = list.map((item) => CachedUserData.fromJson(item));
+    if (kinOnly) {
+      users = users.where((user) => user.relationship == Relationship.friendsWith);
+    }
+    return users.toList();
   }
 }
 

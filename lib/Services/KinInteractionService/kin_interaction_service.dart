@@ -4,6 +4,7 @@ import 'package:im_okay/Models/app_contact.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
 import 'package:im_okay/Models/search_query_response.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
+import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
@@ -14,10 +15,12 @@ import 'dart:convert';
 class KinInteractionsApiService implements IKinInteractionsService {
   late final IAuthenticationService _authService;
   late final IContactsService _contactsService;
+  late final ICacheService _cacheService;
 
   KinInteractionsApiService() {
     _authService = serviceInjector.get<IAuthenticationService>();
     _contactsService = serviceInjector.get<IContactsService>();
+    _cacheService = serviceInjector.get<ICacheService>();
   }
 
   @override
@@ -63,6 +66,14 @@ class KinInteractionsApiService implements IKinInteractionsService {
     List<AppUser> users = temp.map((u) {
       return AppUser.fromJson(u);
     }).toList();
+
+    List<CachedUserData> cachedUsers = _cacheService.fetchUsers(kinOnly: true);
+
+    for (AppUser user in users) {
+      CachedUserData u = cachedUsers.firstWhere((u) => u.uid == user.uid);
+      user.firstName = u.name;
+      user.lastName = '';
+    }
 
     return users;
   }

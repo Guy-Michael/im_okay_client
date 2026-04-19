@@ -63,12 +63,12 @@ class AppUser extends Equatable {
   }
 
   Duration durationSinceLastAlert() {
-    DateTime lastAlertDate = DateTime.fromMillisecondsSinceEpoch(lastAlertTime * 1000);
+    DateTime lastAlertDate = DateTime.fromMillisecondsSinceEpoch(lastAlertTime);
     return DateTime.now().difference(lastAlertDate);
   }
 
   Duration durationSinceLastSeen() {
-    DateTime lastSeenDate = DateTime.fromMillisecondsSinceEpoch(lastSeen * 1000);
+    DateTime lastSeenDate = DateTime.fromMillisecondsSinceEpoch(lastSeen);
     return DateTime.now().difference(lastSeenDate);
   }
 

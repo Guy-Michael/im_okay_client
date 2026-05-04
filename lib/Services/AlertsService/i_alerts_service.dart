@@ -1,7 +1,7 @@
 import 'package:im_okay/Models/alert.dart';
 
 abstract class IAlertsService {
-  reportAlertIfNeeded(Alert alert);
+  Future<bool> isAlertHere(Alert alert);
 
   reportAlert(Alert alert);
 }

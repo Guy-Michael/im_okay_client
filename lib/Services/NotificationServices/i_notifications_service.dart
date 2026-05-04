@@ -6,4 +6,6 @@ abstract class INotificationsService {
   Future<void> triggerLocalNotification({required String title, String? body});
 
   Future<void> triggerFriendRequestNotification();
+
+  Future<void> triggerActiveAlertNotification();
 }

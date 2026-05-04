@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im_okay/Enums/app_permissions_enum.dart';
+import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
@@ -62,8 +63,15 @@ class NotificationsService implements INotificationsService {
     await triggerLocalNotification(
         title: _NotificationServiceConsts.notificationTitleIncomingFriendRequest);
   }
+
+  @override
+  Future<void> triggerActiveAlertNotification() async {
+    await triggerLocalNotification(
+        title: _NotificationServiceConsts.notificationTitleActiveAlertHere);
+  }
 }
 
 class _NotificationServiceConsts {
   static const String notificationTitleIncomingFriendRequest = "קיבלת בקשת חברות";
+  static const String notificationTitleActiveAlertHere = 'התראה באיזורך!';
 }

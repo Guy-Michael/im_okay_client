@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
 
 abstract class ICacheService {
@@ -12,4 +13,8 @@ abstract class ICacheService {
   void cacheUsers(List<CachedUserData> users);
 
   List<CachedUserData> fetchUsers({bool kinOnly});
+
+  void cacheDotEnvData();
+
+  String? getServerUrl();
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Models/alert.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
+import 'package:im_okay/Providers/providers.dart';
 import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
@@ -15,6 +16,7 @@ import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/string_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -38,28 +40,27 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(context) {
-    // final alertZone = ref.watch(alertZoneProvider);
+    final alertZone = ref.watch(alertZoneProvider);
 
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(100),
           child: Center(
               child: Padding(
-            padding: EdgeInsets.only(top: 30, bottom: 30),
-            // child:
-            // alertZone.when(
-            //     loading: () => Center(
-            //           child: CircularProgressIndicator(),
-            //         ),
-            //     error: (error, stackTrace) => Container(),
-            //     data: (alertZone) {
-            //       return Text(
-            //         interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
-            //         style: _settingNameStyle,
-            //       );
-            // }
-            // )
-          )),
+                  padding: EdgeInsets.only(top: 30, bottom: 30),
+                  child: alertZone.when(
+                      loading: () => Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                      error: (error, stackTrace) => Container(),
+                      data: (alertZone) {
+                        return Text(
+                          interpolateString(
+                                  _SettingsPageConsts.alertZoneCaption, [alertZone.name]) +
+                              "\n id: ${alertZone.id}",
+                          style: _settingNameStyle,
+                        );
+                      }))),
         ),
         body: SettingsList(
           sections: [

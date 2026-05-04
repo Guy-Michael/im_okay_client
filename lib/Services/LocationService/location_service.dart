@@ -6,6 +6,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:point_in_polygon/point_in_polygon.dart';
 
+class _Borders {
+  static const double north = 33.328038;
+  static const double east = 35.597238;
+  static const double south = 29.397914;
+  static const double west = 34.065926;
+}
+
 class LocationService implements ILocationService {
   List<AlertArea> polygons = data.polygons;
 
@@ -15,7 +22,22 @@ class LocationService implements ILocationService {
     if (!hasPermissions) {
       return AlertArea.none();
     }
+
+    bool locationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!locationEnabled) {
+      return AlertArea.none();
+    }
+
     Position position = await Geolocator.getCurrentPosition();
+    bool positionInTheCountry = position.longitude > _Borders.west &&
+        position.longitude < _Borders.east &&
+        position.latitude > _Borders.south &&
+        position.latitude < _Borders.north;
+
+    if (!positionInTheCountry) {
+      return AlertArea.none();
+    }
+
     List<AlertArea> closestAreas = _getClosestAlertAreas(position);
     for (AlertArea area in closestAreas) {
       if (_locationInPolygon(position, area.coordinates)) {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:im_okay/Enums/relationship_enum.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
@@ -7,7 +8,11 @@ import 'package:im_okay/Utils/encryption_utils.dart';
 import 'package:localstorage/localstorage.dart';
 
 class CacheService implements ICacheService {
-  CacheService();
+  static Future<CacheService> init() async {
+    await initLocalStorage();
+    return CacheService();
+  }
+
   @override
   String? getValue(String name) {
     String? key = localStorage.getItem(name);
@@ -49,6 +54,21 @@ class CacheService implements ICacheService {
     }
     return users.toList();
   }
+
+  @override
+  void cacheDotEnvData() {
+    if (!dotenv.isInitialized) {
+      return;
+    }
+
+    String serverUrl = dotenv.get('serverUrl');
+    setValue(StorageKeys.serverUrl.toString(), serverUrl);
+  }
+
+  @override
+  String? getServerUrl() {
+    return getValue(StorageKeys.serverUrl.toString());
+  }
 }
 
-enum StorageKeys { authToken, users }
+enum StorageKeys { authToken, users, serverUrl }

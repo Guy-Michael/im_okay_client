@@ -60,6 +60,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - prod.env
     - local.env
     - Assets/
     - Assets/Kin/

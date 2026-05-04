@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 

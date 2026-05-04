@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:im_okay/Models/app_user.dart';
 import 'package:im_okay/Models/cached_user_data.dart';
 
 class MyKinTile extends StatefulWidget {

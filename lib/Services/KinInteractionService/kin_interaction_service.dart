@@ -46,17 +46,6 @@ class KinInteractionsApiService implements IKinInteractionsService {
   }
 
   @override
-  Future<List<SearchQueryResponse>> queryFriends(String searchQuery) async {
-    String endpoint = SocialController.findFriends.endpoint;
-    var queryParams = {'query': searchQuery};
-
-    String response = await HttpUtils.get(endpoint: endpoint, queryParams: queryParams);
-    List<SearchQueryResponse> queryResponse = SearchQueryResponse.parseList(response);
-
-    return queryResponse;
-  }
-
-  @override
   Future<List<AppUser>> getAllKin() async {
     String endpoint = SocialController.getFriendList.endpoint;
 

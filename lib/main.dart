@@ -15,7 +15,6 @@ import 'package:im_okay/Services/NotificationServices/i_notifications_service.da
 import 'package:im_okay/Routers/global_router.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/firebase_options.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 late ILogger _logger;

@@ -3,14 +3,20 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:im_okay/Models/cached_user_data.dart';
+import 'package:im_okay/Logger/i_logger.dart';
+import 'package:im_okay/Models/alert.dart';
+import 'package:im_okay/Providers/providers.dart';
+import 'package:im_okay/Services/AlertsService/i_alerts_service.dart';
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
 import 'package:im_okay/Services/CacheService/Abstract/i_cache_service.dart';
 import 'package:im_okay/Services/KinInteractionService/i_kin_interaction_service.dart';
 import 'package:im_okay/Services/LocationService/i_location_service.dart';
 import 'package:im_okay/Routers/global_router.dart';
+import 'package:im_okay/Services/NotificationServices/i_notifications_service.dart';
+import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/Utils/string_utils.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -23,6 +29,10 @@ class SettingsPage extends ConsumerStatefulWidget {
 class SettingsPageState extends ConsumerState<SettingsPage> {
   late IAuthenticationService _authService;
   late ILocationService _locationService;
+  late IKinInteractionsService _kinService;
+  late ICacheService _cacheService;
+  late INotificationsService _notificationsService;
+  late IPermissionsService _permissionsService;
 
   @override
   void initState() {
@@ -30,32 +40,32 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     _authService = serviceInjector.get<IAuthenticationService>();
     _locationService = serviceInjector.get<ILocationService>();
+    _kinService = serviceInjector.get<IKinInteractionsService>();
+    _cacheService = serviceInjector.get<ICacheService>();
+    _notificationsService = serviceInjector.get<INotificationsService>();
+    _permissionsService = serviceInjector.get<IPermissionsService>();
   }
 
   @override
   Widget build(context) {
-    // final alertZone = ref.watch(alertZoneProvider);
-
+    final alertZone = ref.watch(alertZoneProvider);
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(100),
           child: Center(
               child: Padding(
-            padding: EdgeInsets.only(top: 30, bottom: 30),
-            // child:
-            // alertZone.when(
-            //     loading: () => Center(
-            //           child: CircularProgressIndicator(),
-            //         ),
-            //     error: (error, stackTrace) => Container(),
-            //     data: (alertZone) {
-            //       return Text(
-            //         interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
-            //         style: _settingNameStyle,
-            //       );
-            // }
-            // )
-          )),
+                  padding: EdgeInsets.only(top: 30, bottom: 30),
+                  child: alertZone.when(
+                      loading: () => Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                      error: (error, stackTrace) => Container(),
+                      data: (alertZone) {
+                        return Text(
+                          interpolateString(_SettingsPageConsts.alertZoneCaption, [alertZone.name]),
+                          style: _settingNameStyle,
+                        );
+                      }))),
         ),
         body: SettingsList(
           sections: [
@@ -71,8 +81,34 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),
                 ),
                 SettingsTile.navigation(
-                    title: Text("Test contact associatio flow"),
-                    onPressed: (context) async => await test())
+                  title: Text(
+                    "Get FCM token",
+                    style: _settingNameDangerousStyle,
+                  ),
+                  onPressed: (context) async {
+                    INotificationsService notificationService =
+                        serviceInjector.get<INotificationsService>();
+                    ILogger logger = serviceInjector.get<ILogger>();
+                    String fcmToken = await notificationService.getFcmToken();
+                    logger.log("FCM token: $fcmToken");
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text("Simulate alert for user", style: _settingNameDangerousStyle),
+                  onPressed: (context) async {
+                    IAlertsService alertService = serviceInjector.get<IAlertsService>();
+                    Alert alert = Alert.now();
+                    await alertService.reportAlert(alert);
+                  },
+                ),
+                SettingsTile.navigation(
+                  title: Text("Cache Users", style: _settingNameDangerousStyle),
+                  onPressed: (context) async {
+                    var users = await _kinService.getContactToAppUserAssociations();
+                    _cacheService.cacheUsers(users);
+                    _notificationsService.showToast(message: "Cached Users");
+                  },
+                ),
               ],
             ),
             SettingsSection(
@@ -86,6 +122,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                     _SettingsPageConsts.settingNotifications,
                     style: _settingNameStyle,
                   ),
+                  onPressed: (context) async {
+                    await _permissionsService.requestNotificationPermissions();
+                  },
                   trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
@@ -93,10 +132,27 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                     _SettingsPageConsts.settingLocationServices,
                     style: _settingNameStyle,
                   ),
+                  onPressed: (context) async {
+                    await _permissionsService.requestLocationPermissions();
+                  },
                   description: Text(
                     _SettingsPageConsts.settingDescriptionLocationServices,
                     style: _settingDescriptionStyle,
                   ),
+                  trailing: _iosBackArrowIcon,
+                ),
+                SettingsTile.navigation(
+                  title: Text(
+                    _SettingsPageConsts.settingContacts,
+                    style: _settingNameStyle,
+                  ),
+                  description: Text(
+                    _SettingsPageConsts.settingDescriptionLocationServices,
+                    style: _settingDescriptionStyle,
+                  ),
+                  onPressed: (context) async {
+                    await _permissionsService.requestContactsPermission();
+                  },
                   trailing: _iosBackArrowIcon,
                 ),
               ],
@@ -148,6 +204,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                     _SettingsPageConsts.settingLogOut,
                     style: _settingNameDangerousStyle,
                   ),
+                  onPressed: (context) async => _authService.signOut(),
                   trailing: _iosBackArrowIcon,
                 ),
                 SettingsTile.navigation(
@@ -161,17 +218,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             ),
           ],
         ));
-  }
-
-  Future test() async {
-    IKinInteractionsService kinService = serviceInjector.get<IKinInteractionsService>();
-    ICacheService cacheService = serviceInjector.get<ICacheService>();
-
-    var users = await kinService.getContactToAppUserAssociations();
-    cacheService.cacheUsers(users);
-    await Future.delayed(const Duration(seconds: 3));
-    List<CachedUserData> fromCache = cacheService.fetchUsers();
-    debugPrint("");
   }
 
   Future<void> onLogoutButtonClicked() async {
@@ -203,6 +249,7 @@ class _SettingsPageConsts {
   static const String alertZoneCaption = "איזור ההתרעה שלך: {0}";
 
   static const String sectionNameSettings = "הגדרות";
+  static const String settingContacts = 'גישה לאנשי קשר';
   static const String settingNotifications = "התראות";
   static const String settingLocationServices = "שירותי מיקום";
   static const String settingDescriptionLocationServices =

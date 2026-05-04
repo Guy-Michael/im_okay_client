@@ -1,3 +1,4 @@
+import 'package:im_okay/Enums/app_permissions_enum.dart';
 import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -25,5 +26,19 @@ class PermissionsService implements IPermissionsService {
   Future<bool> requestNotificationPermissions() async {
     PermissionStatus notificationsPermissionStatus = await Permission.notification.request();
     return notificationsPermissionStatus.isGranted;
+  }
+
+  @override
+  Future<bool> checkPermission(AppPermissions permission) async {
+    switch (permission) {
+      case AppPermissions.contacts:
+        return await Permission.contacts.isGranted;
+
+      case AppPermissions.location:
+        return await Permission.location.isGranted;
+
+      case AppPermissions.notifications:
+        return await Permission.notification.isGranted;
+    }
   }
 }

@@ -49,7 +49,7 @@ class AuthenticationService implements IAuthenticationService {
 
     //TODO: Remove generation of phone numbers and use actual user phone number.
     Random random = Random();
-    String tempPhoneNumber = "0" + List.generate(9, (index) => random.nextInt(10)).join('');
+    String tempPhoneNumber = "+972" + List.generate(9, (index) => random.nextInt(10)).join('');
     tempPhoneNumber = _contactsService.normalizePhoneNumber(tempPhoneNumber);
     // tempPhoneNumber = EncryptionUtils.encrypt(tempPhoneNumber);
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:im_okay/Models/app_user.dart';
-import 'package:im_okay/Logger/my_logger.dart';
 import 'package:im_okay/pages/home/components/kin_update_toggle.dart';
 import 'package:im_okay/pages/home/components/my_status/my_status.dart';
 import 'package:im_okay/pages/home/components/with_alerts/home_body_alerts_empty_caption.dart';
@@ -65,7 +64,6 @@ class HomeBodyWithAlertsState extends State<HomeBodyWithAlerts> {
   }
 
   void onToggle(AlertsHomePageToggle toggle) {
-    logger.log("Got mode $toggle");
     setState(() => widget.toggle = toggle);
   }
 }

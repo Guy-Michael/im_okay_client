@@ -10,7 +10,7 @@ import 'package:im_okay/pages/kin/AddKin/add_kin_page.dart';
 import 'package:im_okay/pages/kin/MyKin/my_kin_page.dart';
 import 'package:im_okay/pages/login_page.dart';
 import 'package:im_okay/pages/new_hub_page.dart';
-import 'package:im_okay/pages/settings.dart';
+import 'package:im_okay/pages/settings_page.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
 

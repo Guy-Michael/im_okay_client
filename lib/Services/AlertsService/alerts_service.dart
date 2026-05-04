@@ -14,21 +14,16 @@ class AlertsService implements IAlertsService {
   }
 
   @override
-  Future<bool> checkIfAlertIsHere(Alert alert) async {
+  Future<bool> isAlertHere(Alert alert) async {
     AlertArea currentAlertZone = await _locationService.getUserAlertZone();
     return alert.id == currentAlertZone.id;
   }
 
   @override
-  reportAlertIfNeeded(Alert alert) async {
-    if (!await checkIfAlertIsHere(alert)) {
-      return;
-    }
-
+  reportAlert(Alert alert) async {
     String endpoint = AlertsController.reportActiveAlert.endpoint;
     var body = {'timestamp': alert.timestamp};
 
     var response = await HttpUtils.post(endpoint: endpoint, body: body);
-    // String response = await HttpUtils.post(endpoint: endpoint, body: body);
   }
 }

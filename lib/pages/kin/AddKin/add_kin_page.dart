@@ -47,7 +47,7 @@ class AddKinPageState extends State<AddKinPage> {
         .fetchUsers()
         .where((response) =>
             query.isNotEmpty &&
-            response.name.startsWith(query) &&
+            response.name.toLowerCase().startsWith(query.toLowerCase()) &&
             response.relationship != Relationship.friendsWith)
         .toList();
     setState(() {

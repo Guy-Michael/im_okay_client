@@ -76,6 +76,14 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               tiles: [
                 SettingsTile.navigation(
+                    title: Text("Get Auth Token", style: _settingNameDangerousStyle),
+                    trailing: _iosBackArrowIcon,
+                    onPressed: (context) async {
+                      ILogger logger = serviceInjector.get<ILogger>();
+                      String authToken = await _authService.getFirebaseAuthToken();
+                      logger.log("authToken: $authToken");
+                    }),
+                SettingsTile.navigation(
                   title: Text("Onboarding Screen", style: _settingNameDangerousStyle),
                   trailing: _iosBackArrowIcon,
                   onPressed: (context) => context.pushNamed(Routes.onboarding_TEMP),

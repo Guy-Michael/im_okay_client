@@ -2,7 +2,9 @@ enum AuthController {
   route('auth'),
   registerEndpoint('register'),
   fetchUserEndpoint('fetch-user'),
-  deleteUser('delete');
+  deleteUser('delete'),
+  sendOtp('send-otp'),
+  verifyOtp('verify-otp');
 
   final String value;
   const AuthController(this.value);

@@ -5,6 +5,7 @@ import 'package:im_okay/Services/ContactsService/i_contacts_service.dart';
 import 'package:im_okay/Services/PermissionsService/i_permissions_service.dart';
 import 'package:im_okay/Services/service_injector.dart';
 import 'package:im_okay/Utils/Consts/consts.dart';
+import 'package:im_okay/pages/Onboarding/otp_onboarding_widget.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 GlobalKey<IntroductionScreenState> _introScreenKey = GlobalKey<IntroductionScreenState>();
@@ -77,6 +78,26 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 )
               ],
             )),
+        /* Phone Verification page */ PageViewModel(
+            title: "",
+            bodyWidget: OnboardingPageBase(
+              titleText: _OnboardingPageConsts.phoneVerificationPageTitle,
+              description: _OnboardingPageConsts.phoneVerificationPageDescription,
+              imageLink: r"Assets/Onboarding/onboarding_page_2_image.png", //TODO: Change image
+              additionalComponent: OtpOnboardingWidget(),
+              actions: [],
+              // actions: [
+              //   ElevatedButton.icon(
+              //     iconAlignment: IconAlignment.end,
+              //     icon: Icon(Icons.g_mobiledata_sharp),
+              //     onPressed: () async {
+              //       await _authService.verifyPhone();
+              //       _introScreenKey.currentState!.next();
+              //     },
+              //     label: Text(_OnboardingPageConsts.phoneVerificationPageActionVerifyPhone),
+              //   )
+              // ],
+            )),
         /* Post register page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
@@ -106,17 +127,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 )
               ],
             )),
-        // /* Phone number verification page */ PageViewModel(
-        //   title: "",
-        //   bodyWidget: OnboardingPageBase(
-        //     titleText: "",
-        //     description: "",
-        //     imageLink: r"Assets/Onboarding/onboarding_page_3_image.png",
-        //   showNextButton: true,
-        //   nextButtonCaption: _OnboardingPageConsts.postRegisterPageNextButtonCaption,
-        //   actions: [],
-        //   )
-        // ),
         /* Location permissions page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
@@ -169,6 +179,11 @@ class _OnboardingPageConsts {
   static const String registerPageDescription = " בכדי להשתמש באפליקציה, יש צורך ליצור פרופיל";
   static const String registerPageActionGoogleSignIn = "לכניסה באמצעות Google";
 
+  static const String phoneVerificationPageTitle = "אימות מספר טלפון";
+  static const String phoneVerificationPageDescription =
+      "יש לאמת את מספר הטלפון כדי למצוא חברים ומשפחה בקלות";
+  static const String phoneVerificationPageActionVerifyPhone = "אימות";
+
   static const String postRegisterPageTitle = "איזה כיף שהצטרפת!";
   static const String postRegisterPageDescription = "";
   static const String postRegisterPageNextButtonCaption = "הבא";
@@ -198,6 +213,7 @@ class OnboardingPageBase extends StatefulWidget {
   bool showNextButton;
   String imageLink;
   List<Widget> actions;
+  Widget? additionalComponent;
   OnboardingPageBase(
       {super.key,
       required this.titleText,
@@ -205,6 +221,7 @@ class OnboardingPageBase extends StatefulWidget {
       required this.imageLink,
       required this.actions,
       this.nextButtonCaption,
+      this.additionalComponent,
       this.showNextButton = false});
 
   @override
@@ -232,6 +249,7 @@ class _OnboardingPageBaseState extends State<OnboardingPageBase> {
         Image(
           image: AssetImage(widget.imageLink),
         ),
+        if (widget.additionalComponent != null) widget.additionalComponent!,
         ...widget.actions,
         if (widget.showNextButton) nextButton(widget.nextButtonCaption!)
       ],

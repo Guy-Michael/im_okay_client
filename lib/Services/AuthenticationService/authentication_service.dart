@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:im_okay/Enums/endpoint_enums.dart';
+import 'package:im_okay/Logger/i_logger.dart';
 import 'package:im_okay/Models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:im_okay/Services/AuthenticationService/i_authentication_service.dart';
@@ -15,9 +16,11 @@ import 'package:im_okay/Utils/http_utils.dart';
 
 class AuthenticationService implements IAuthenticationService {
   late final IContactsService _contactsService;
+  late final ILogger _logger;
 
   AuthenticationService() {
     _contactsService = serviceInjector.get<IContactsService>();
+    _logger = serviceInjector.get<ILogger>();
   }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -138,5 +141,25 @@ class AuthenticationService implements IAuthenticationService {
   Future<void> signOut() async {
     await auth.FirebaseAuth.instance.signOut();
     globalRouter.replace(Routes.auth.authRedirectPage);
+  }
+
+  @override
+  Future sendOtp() async {
+    String endpoint = AuthController.sendOtp.endpoint;
+
+    await HttpUtils.get(endpoint: endpoint);
+  }
+
+  @override
+  Future<bool> validateOtp(String code) async {
+    String endpoint = AuthController.verifyOtp.endpoint;
+    var body = {'otp': code};
+
+    try {
+      await HttpUtils.post(endpoint: endpoint, body: body);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

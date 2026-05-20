@@ -17,4 +17,8 @@ abstract class IAuthenticationService {
   Future<UserCredential?> signIn();
 
   Future<void> signOut();
+
+  Future<void> sendOtp();
+
+  Future<bool> validateOtp(String code);
 }

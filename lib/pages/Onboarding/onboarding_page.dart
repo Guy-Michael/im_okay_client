@@ -78,26 +78,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 )
               ],
             )),
-        /* Phone Verification page */ PageViewModel(
-            title: "",
-            bodyWidget: OnboardingPageBase(
-              titleText: _OnboardingPageConsts.phoneVerificationPageTitle,
-              description: _OnboardingPageConsts.phoneVerificationPageDescription,
-              imageLink: r"Assets/Onboarding/onboarding_page_2_image.png", //TODO: Change image
-              additionalComponent: OtpOnboardingWidget(),
-              actions: [],
-              // actions: [
-              //   ElevatedButton.icon(
-              //     iconAlignment: IconAlignment.end,
-              //     icon: Icon(Icons.g_mobiledata_sharp),
-              //     onPressed: () async {
-              //       await _authService.verifyPhone();
-              //       _introScreenKey.currentState!.next();
-              //     },
-              //     label: Text(_OnboardingPageConsts.phoneVerificationPageActionVerifyPhone),
-              //   )
-              // ],
-            )),
         /* Post register page */ PageViewModel(
             title: "",
             bodyWidget: OnboardingPageBase(
@@ -106,6 +86,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
               imageLink: r"Assets/Onboarding/onboarding_page_3_image.png",
               showNextButton: true,
               nextButtonCaption: _OnboardingPageConsts.postRegisterPageNextButtonCaption,
+              actions: [],
+            )),
+        /* Phone Verification page */ PageViewModel(
+            title: "",
+            bodyWidget: OnboardingPageBase(
+              titleText: _OnboardingPageConsts.phoneVerificationPageTitle,
+              description: _OnboardingPageConsts.phoneVerificationPageDescription,
+              imageLink: r"Assets/Onboarding/onboarding_page_2_image.png", //TODO: Change image
+              additionalComponent:
+                  OtpOnboardingWidget(navigateToNextPage: _introScreenKey.currentState!.next),
               actions: [],
             )),
         /* Contacts permissions */ PageViewModel(
@@ -238,9 +228,7 @@ class _OnboardingPageBaseState extends State<OnboardingPageBase> {
           widget.titleText,
           style: _headerStyle,
           textAlign: TextAlign.center,
-        )
-        // )
-        ,
+        ),
         Text(
           textAlign: TextAlign.center,
           widget.description,

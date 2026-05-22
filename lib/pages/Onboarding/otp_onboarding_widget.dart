@@ -3,7 +3,9 @@ import 'package:im_okay/Services/AuthenticationService/i_authentication_service.
 import 'package:im_okay/Services/service_injector.dart';
 
 class OtpOnboardingWidget extends StatefulWidget {
-  const OtpOnboardingWidget({super.key});
+  Function() navigateToNextPage;
+
+  OtpOnboardingWidget({super.key, required this.navigateToNextPage});
 
   @override
   State<OtpOnboardingWidget> createState() => _OtpOnboardingWidgetState();
@@ -28,44 +30,15 @@ class _OtpOnboardingWidgetState extends State<OtpOnboardingWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (!isCodePhase) ...[
-            TextField(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                labelText: 'Phone Number',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                await _authService.sendOtp();
-                setState(() {
-                  isCodePhase = true;
-                });
-              },
-              child: Text('Approve'),
-            ),
-          ] else ...[
-            TextField(
-              controller: codeController,
-              keyboardType: TextInputType.number,
-              maxLength: 6,
-              decoration: InputDecoration(
-                labelText: '6-digit Code',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                String code = codeController.value.text.toString();
-                bool val = await _authService.validateOtp(code);
-              },
-              child: Text('Submit'),
-            ),
-          ],
+          if (!isCodePhase)
+            ...enterPhoneNumber(
+                phoneController,
+                _authService,
+                () => setState(
+                      () => isCodePhase = true,
+                    ))
+          else
+            ...enterCode(codeController, _authService, widget.navigateToNextPage),
         ],
       ),
     );
@@ -77,4 +50,52 @@ class _OtpOnboardingWidgetState extends State<OtpOnboardingWidget> {
     codeController.dispose();
     super.dispose();
   }
+}
+
+List<Widget> enterPhoneNumber(
+    TextEditingController phoneController, IAuthenticationService authService, Function setState) {
+  return [
+    TextField(
+      controller: phoneController,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        labelText: 'Phone Number',
+        border: OutlineInputBorder(),
+      ),
+    ),
+    SizedBox(height: 16),
+    ElevatedButton(
+      onPressed: () async {
+        await authService.sendOtp();
+        setState();
+      },
+      child: Text('Approve'),
+    ),
+  ];
+}
+
+List<Widget> enterCode(TextEditingController codeController, IAuthenticationService authService,
+    Function() navigateToNextPage) {
+  return [
+    TextField(
+      controller: codeController,
+      keyboardType: TextInputType.number,
+      maxLength: 6,
+      decoration: InputDecoration(
+        labelText: '6-digit Code',
+        border: OutlineInputBorder(),
+      ),
+    ),
+    SizedBox(height: 16),
+    ElevatedButton(
+      onPressed: () async {
+        String code = codeController.value.text.toString();
+        bool val = await authService.validateOtp(code);
+        if (val) {
+          navigateToNextPage();
+        }
+      },
+      child: Text('Submit'),
+    ),
+  ];
 }
